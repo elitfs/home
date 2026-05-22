@@ -383,10 +383,10 @@ tbody tr:hover{background:var(--sf)}
   <div class="login-card">
     <div class="login-brand">
       <div class="login-mark">EIS</div>
-      <div class="login-brand-name">EIS Bank<span> Recon</span></div>
+      <div class="login-brand-name">Elites BankRecon<span> App</span></div>
     </div>
 
-    <div class="login-title">Welcome back</div>
+    <div class="login-title">Welcome...</div>
     <div class="login-sub">Sign in to access the reconciliation system</div>
 
     <div class="login-error" id="login-err">
@@ -518,11 +518,11 @@ tbody tr:hover{background:var(--sf)}
   <div id="bar">
     <div class="logo">
       <div class="lm">EIS</div>
-      EIS Bank<span class="la"> Reconciliation</span>
+      Elites BankRecon<span class="la"> App</span>
     </div>
     <div id="br">
       <span id="sd"></span>
-      <span id="stx">EIS Bank Recon — Ready</span>
+      <span id="stx">Elites BankRecon App — Ready</span>
       <div class="user-chip">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         <span id="user-display">User</span>
@@ -647,7 +647,7 @@ tbody tr:hover{background:var(--sf)}
     </div>
   </div>
 
-  <div id="ft">&copy; <span id="yr"></span> <span class="hl">Michael Felix Happy</span> &nbsp;·&nbsp; EIS Bank Recon &nbsp;·&nbsp; All rights reserved</div>
+  <div id="ft">&copy; <span id="yr"></span> <span class="hl">Michael Felix Happy</span> &nbsp;·&nbsp; IBRAP &nbsp;·&nbsp; All rights reserved</div>
   <div id="ld"><div class="spn"></div><div class="ldt" id="ldm">Processing...</div></div>
 
 </div><!-- /#app -->
@@ -758,7 +758,7 @@ eyeBtn.addEventListener('click', () => {
 
 // Logout
 document.getElementById('logout-btn').addEventListener('click', () => {
-  if (!confirm('Sign out of EIS Bank Recon?')) return;
+  if (!confirm('Sign out of EBRAP?')) return;
   clearToken();
   currentUser = null;
   ST.bsFile = ST.glFile = ST.result = null;
@@ -774,7 +774,7 @@ document.getElementById('logout-btn').addEventListener('click', () => {
   usrInput.value = ''; pwdInput.value = '';
   loginErr.classList.remove('show');
   goStep(1);
-  setSt('EIS Bank Recon — Ready');
+  setSt('EBRAP — Ready');
   appDiv.style.display = 'none';
   loginPage.style.display = 'flex';
   usrInput.focus();
@@ -1236,8 +1236,8 @@ function exportXLSX(d) {
     XLSX.utils.book_append_sheet(wb,ws,name);
   }
 
-  sht('Recon Summary',[
-    {'ITEM':'EIS BANK RECONCILIATION SUMMARY','VALUE':''},{'ITEM':'','VALUE':''},
+  sht('Reconciliation Summary',[
+    {'ITEM':'BANK RECONCILIATION SUMMARY','VALUE':''},{'ITEM':'','VALUE':''},
     {'ITEM':'BANK STATEMENT','VALUE':''},
     {'ITEM':'Total Transactions','VALUE':s.bsN},
     {'ITEM':'Total Debit (Outflows)','VALUE':N(s.bsTotDr)},
@@ -1306,7 +1306,7 @@ function exportXLSX(d) {
 
   const auR=d.audit.map(a=>({'Sheet':a.sheet,'Row':a.row,'Original Value':a.original,'Parsed Date':a.parsed||'—','Comment':a.comment}));
   sht('Date Audit Log',auR.length?auR:[{'Sheet':'No data','Row':'','Original Value':'','Parsed Date':'','Comment':''}],[16,6,22,14,28]);
-  XLSX.writeFile(wb,`EIS-BankRecon-${ts}.xlsx`);
+  XLSX.writeFile(wb,`IBRAP-${ts}.xlsx`);
 }
 
 // ═══════════════════════════════════════════════════════════════════
@@ -1325,7 +1325,7 @@ function exportPDF(d) {
     doc.setFillColor(10,22,40); doc.rect(0,0,W,48,'F');
     doc.setFillColor(0,201,167); doc.rect(0,0,6,48,'F');
     doc.setFont('helvetica','bold'); doc.setFontSize(15); doc.setTextColor(232,237,245);
-    doc.text('EIS Bank Recon',22,30);
+    doc.text('IBRAP',22,30);
     doc.setFont('helvetica','normal'); doc.setFontSize(11); doc.setTextColor(143,163,191);
     doc.text(title,22,43);
     doc.setFontSize(9); doc.text(`Generated: ${ts}`,W-20,30,{align:'right'});
@@ -1425,7 +1425,7 @@ function exportPDF(d) {
       alternateRowStyles:{fillColor:[15,31,61]},
       styles:{fillColor:[10,22,40],lineColor:[255,255,255,15],lineWidth:0.3}});
   }
-  doc.save(`EIS-BankRecon-${ts}.pdf`);
+  doc.save(`IBRAP-${ts}.pdf`);
 }
 
 // ═══════════════════════════════════════════════════════════════════
@@ -1510,7 +1510,7 @@ $('bnw').addEventListener('click',()=>{
   ['bn','gn','bc','gc'].forEach(id=>$(id).textContent='');
   ['bpv','gpv'].forEach(id=>$(id).innerHTML='');
   $('nxt').disabled=true; $('res').style.display='none';
-  goStep(1); setSt('EIS Bank Recon — Ready');
+  goStep(1); setSt('IBRAP — Ready');
 });
 
 $('bca').addEventListener('click',e=>{e.stopPropagation();$('dmn').classList.toggle('op');});
