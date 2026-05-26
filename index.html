@@ -414,7 +414,6 @@ tbody tr:hover{background:var(--sf)}
     </div>
   </div>
 
-  <!-- ── SIGNUP CARD ─────────────────────────────────── -->
   <div class="login-card" id="signup-card" style="display:none;margin-top:1.5rem;max-width:420px;width:100%;">
     <div class="login-brand">
       <div class="login-mark">EIS</div>
@@ -454,7 +453,6 @@ tbody tr:hover{background:var(--sf)}
     </div>
   </div>
 
-  <!-- ── SET PASSWORD CARD ───────────────────────────── -->
   <div class="login-card" id="setpwd-card" style="display:none;margin-top:1.5rem;max-width:420px;width:100%;">
     <div class="login-brand">
       <div class="login-mark">EIS</div>
@@ -1191,10 +1189,6 @@ const wb=XLSX.utils.book_new();
 const s=d.summary; const ts=new Date().toISOString().slice(0,10);
 const N=n=>(n==null||isNaN(+n))?0:+n;
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   RECON SUMMARY SHEET — structured AOA layout matching PDF report format
-   Three columns: A = Label (wide), B = Value (numeric), C = Unit/Note
-   ═══════════════════════════════════════════════════════════════════════════ */
 (function(){
   var vari=Math.round((N(s.adjBal)-N(s.cashbookBal))*100)/100;
   var rec=Math.abs(vari)<0.01;
@@ -1272,7 +1266,6 @@ const N=n=>(n==null||isNaN(+n))?0:+n;
   XLSX.utils.book_append_sheet(wb,ws,'Recon Summary');
 })();
 
-/* ─── remaining sheets (unchanged) ──────────────────────────────────────── */
 function sht(name,rows,widths) {
 const ws=XLSX.utils.json_to_sheet(rows.length?rows:[{'':' No entries'}]);
 if (widths) ws['!cols']=widths.map(w=>({wch:w}));
@@ -1600,10 +1593,8 @@ function _0x2561(m){return`<div class="ep"><div class="ei">✓</div>${m}</div>`;
 document.getElementById('yr').textContent=new Date().getFullYear();
 _0x3a45.focus();
 
-// ── BACKEND WAKE-UP PING ───────────────────────────────────
 (function(){fetch('https://eis-recbackend.onrender.com/api/auth/me',{method:'GET',headers:{'Content-Type':'application/json'}}).catch(function(){});})();
 
-// ── SIGNUP / CONFIRM / SET-PASSWORD FLOW ──────────────────
 (function(){
   var API='https://eis-recbackend.onrender.com/api';
 
@@ -1620,7 +1611,6 @@ _0x3a45.focus();
   if(showSignup) showSignup.addEventListener('click',function(){showCard('signup-card');});
   if(showLogin)  showLogin.addEventListener('click',function(){showCard('login-card');});
 
-  // ── SIGNUP SUBMIT ──────────────────────────────────────
   var signupBtn=document.getElementById('signup-btn');
   if(signupBtn){
     signupBtn.addEventListener('click',async function(){
@@ -1666,13 +1656,11 @@ _0x3a45.focus();
     });
   }
 
-  // ── CHECK FOR CONFIRM TOKEN IN URL ─────────────────────
   (async function(){
     var params=new URLSearchParams(window.location.search);
     var token=params.get('confirm');
     if(!token) return;
 
-    // Show set-password card immediately
     showCard('setpwd-card');
     var errEl=document.getElementById('setpwd-err');
     var btn=document.getElementById('setpwd-btn');
@@ -1691,7 +1679,6 @@ _0x3a45.focus();
     }
   })();
 
-  // ── SET PASSWORD SUBMIT ────────────────────────────────
   var setpwdBtn=document.getElementById('setpwd-btn');
   if(setpwdBtn){
     setpwdBtn.addEventListener('click',async function(){
