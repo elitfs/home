@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>IFRS 9 ECL Computation App</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script async src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">IFRS 9 expected credit loss engine</p>
+        <h1>ECL Computation App</h1>
+      </div>
+      <div class="topbar-actions">
+        <button id="downloadTemplateBtn" class="secondary" type="button">Download template</button>
+        <button id="loadSampleBtn" class="secondary" type="button">Load sample data</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="control-panel" aria-label="Computation controls">
+        <div class="upload-panel">
+          <label for="fileInput" class="dropzone" id="dropzone">
+            <span class="drop-icon">+</span>
+            <span class="drop-title">Upload loan schedule</span>
+            <span class="drop-copy">Customer, dates, amount, class, DPD, collateral</span>
+          </label>
+          <input id="fileInput" type="file" accept=".xlsx,.xlsm,.csv" />
+          <p id="fileStatus" class="status-text">No file loaded yet.</p>
+        </div>
+
+        <div class="upload-panel">
+          <label for="scorecardInput" class="dropzone small" id="scorecardDropzone">
+            <span class="drop-icon">%</span>
+            <span class="drop-title">Optional scorecard</span>
+            <span class="drop-copy">Weights and max scores by criterion</span>
+          </label>
+          <input id="scorecardInput" type="file" accept=".xlsx,.xlsm,.csv" />
+          <p id="scorecardStatus" class="status-text">Default scorecard will be used.</p>
+        </div>
+
+        <div class="settings-grid">
+          <label>
+            Country of operation
+            <select id="countrySelect">
+              <option value="NG">Nigeria</option>
+              <option value="GH">Ghana</option>
+              <option value="KE">Kenya</option>
+              <option value="ZA">South Africa</option>
+              <option value="US">United States</option>
+              <option value="GB">United Kingdom</option>
+              <option value="IN">India</option>
+              <option value="CA">Canada</option>
+            </select>
+          </label>
+          <label>
+            Inflation (%)
+            <input id="inflationRate" type="number" step="0.01" value="10.00" />
+          </label>
+          <label>
+            GDP growth (%)
+            <input id="gdpGrowthRate" type="number" step="0.01" value="3.00" />
+          </label>
+          <label>
+            Stage 2 days-past-due trigger
+            <input id="stage2Dpd" type="number" min="1" step="1" value="30" />
+          </label>
+          <label>
+            Stage 3 default trigger
+            <input id="stage3Dpd" type="number" min="1" step="1" value="90" />
+          </label>
+          <label>
+            Fallback discount rate / EIR (%)
+            <input id="defaultDiscount" type="number" min="0" step="0.01" value="12.00" />
+          </label>
+        </div>
+
+        <div class="switch-row">
+          <label class="switch">
+            <input id="autoStage" type="checkbox" checked />
+            <span>Auto-stage when stage is missing</span>
+          </label>
+          <label class="switch">
+            <input id="simplifiedApproach" type="checkbox" checked />
+            <span>Use lifetime ECL for trade, lease, and contract receivables</span>
+          </label>
+          <label class="switch">
+            <input id="undrawnExposure" type="checkbox" checked />
+            <span>Include undrawn limits using CCF</span>
+          </label>
+        </div>
+
+        <div class="action-row">
+          <button id="fetchMacroBtn" class="secondary" type="button">Fetch macro data</button>
+          <button id="computeBtn" type="button">Compute ECL</button>
+          <button id="exportBtn" class="secondary" type="button" disabled>Export results</button>
+          <button id="clearBtn" class="ghost" type="button">Clear</button>
+        </div>
+        <p id="macroStatus" class="status-text macro-status">Macro defaults are editable. Use Fetch macro data for World Bank inflation and GDP growth.</p>
+      </section>
+
+      <section class="metrics" aria-label="Portfolio summary">
+        <article>
+          <span>Total exposure</span>
+          <strong id="totalExposure">0</strong>
+        </article>
+        <article>
+          <span>Total ECL</span>
+          <strong id="totalEcl">0</strong>
+        </article>
+        <article>
+          <span>Coverage ratio</span>
+          <strong id="coverageRatio">0.00%</strong>
+        </article>
+        <article>
+          <span>Rows processed</span>
+          <strong id="rowsProcessed">0</strong>
+        </article>
+      </section>
+
+      <section class="content-grid">
+        <article class="panel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Portfolio</p>
+              <h2>Computed assets</h2>
+            </div>
+            <input id="searchInput" type="search" placeholder="Search results" aria-label="Search results" />
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Customer</th>
+                  <th>Class</th>
+                  <th>Stage</th>
+                  <th>EAD/EOD</th>
+                  <th>12M PD</th>
+                  <th>Lifetime PD</th>
+                  <th>LGD</th>
+                  <th>ECL</th>
+                  <th>How calculated</th>
+                </tr>
+              </thead>
+              <tbody id="resultsBody">
+                <tr>
+                  <td colspan="9" class="empty-state">Upload a file or load sample data, then click Compute ECL.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+
+        <aside class="panel side-panel">
+          <p class="eyebrow">Guidance</p>
+          <h2>What the app needs</h2>
+          <div id="mappingList" class="mapping-list">
+            <p class="muted">Mappings will appear after a file is loaded.</p>
+          </div>
+
+          <div class="notice">
+            <h3>Model basis</h3>
+            <p>
+              Upload a loan schedule. The app estimates PD from classification,
+              scorecard, DPD, and macro data; LGD from collateral or recoveries;
+              and EAD/EOD from outstanding plus CCF-adjusted undrawn exposure.
+            </p>
+          </div>
+
+          <div class="notice warning">
+            <h3>Model note</h3>
+            <p>
+              This tool is a configurable computation engine. Final IFRS 9 policy choices,
+              model governance, overlays, and audit approval remain management responsibilities.
+            </p>
+          </div>
+        </aside>
+      </section>
+    </main>
+
+    <div id="toast" role="status" aria-live="polite"></div>
+    <script src="app.js"></script>
+  </body>
+</html>
