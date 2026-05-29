@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>EIS BankRecon — Reconciliation Engine</title>
+<title>MFH — Bank Reconciliation Engine</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Syne:wght@500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
@@ -260,7 +260,7 @@ tbody tr:hover{background:var(--sf)}
 
 <div id="bar">
   <div class="logo">
-    <div class="lm">EIS</div>
+    <div class="lm">MFH</div>
     EIS BankRecon<span class="la"> App</span>
   </div>
   <div id="br">
@@ -852,7 +852,7 @@ const N=n=>(n==null||isNaN(+n))?0:+n;
     /* 46 */ ['  Date Gaps Noted',s.gap||0,'flags'],
     /* 47 */ ['  Total Date Entries Audited',(s.totalAudit||(s.ok+s.fail)),'rows'],
     /* 48 */ ['','',''],
-    /* 49 */ ['System: EIS Financial Tools  |  IBRAP  |  v4.1  |  All rights reserved','',''],
+    /* 49 */ ['System: MFH Financial Tools  |  IBRAP  |  v4.1  |  All rights reserved','',''],
   ];
 
   var ws=XLSX.utils.aoa_to_sheet(aoa);
