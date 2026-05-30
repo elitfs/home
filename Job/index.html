@@ -404,7 +404,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 <script>
 /* ─── CONFIG ────────────────────────────────────────────────── */
 // After deploying your Cloudflare Worker, paste your Worker URL here:
-const WORKER_URL = "https://jobpulse-proxy.elitesprince.workers.dev";
+const WORKER_URL = "https://jobpulse-proxy.elitesprince.workers.dev/";
 
 /* ─── STATE ─────────────────────────────────────────────────── */
 let debounceTimer = null;
@@ -666,7 +666,7 @@ async function doSearch(query) {
     hideStatus();
     renderJobs(jobs, query, loc);
   } catch(err) {
-    showStatus("⚠ "+err.message, true);
+    showStatus("⚠ " + err.message, true);
     showEmpty();
   } finally {
     isSearching = false;
