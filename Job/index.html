@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>JobPortal — Live Job Intelligence</title>
+<title>JobPulse — Live Job Intelligence</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Syne:wght@400;600;700;800&family=Figtree:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <style>
@@ -232,14 +232,8 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 
 <header class="topbar">
   <div class="topbar-left">
-    <a href="../" class="home-btn">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-            <polyline points="9 22 9 12 15 12 15 22"/>
-          </svg>
-        </a>
-    <div class="logo-mark">FM</div>
-    <div class="logo-text">Job<span>Portal</span></div>
+    <div class="logo-mark">JP</div>
+    <div class="logo-text">Job<span>Pulse</span></div>
   </div>
   <div class="topbar-right">
     <button class="analytics-btn" onclick="openAnalytics()">
@@ -255,7 +249,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 
 <section class="hero">
   <p class="hero-eyebrow">AI-Powered Job Intelligence</p>
-  <h1 class="hero-headline">Find every opportunity, <em>every day.</em></h1>
+  <h1 class="hero-headline">Find every<br>opportunity,<br><em>every day.</em></h1>
   <p class="hero-sub">Type any job title, skill, or keyword and we'll instantly scan LinkedIn, Indeed, Jobberman, Glassdoor, and 10+ platforms for today's listings.</p>
 </section>
 
@@ -310,7 +304,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
       <button class="cat-pill" data-query="Operations Manager Supply Chain Logistics Procurement"       onclick="setCategory(this)"><span>⬡</span> Operations</button>
       <button class="cat-pill" data-query="Executive Assistant Personal Assistant Office Manager"       onclick="setCategory(this)"><span>◗</span> Admin</button>
       <button class="cat-pill" data-query="Remote Finance Accounting CFO full remote work from home"    onclick="setCategory(this)"><span>◉</span> Remote Jobs</button>
-      <button class="cat-pill" data-query="Fintech Banking Operations Financial Services"  onclick="setCategory(this)"><span>◈</span> Fintech &amp; Banking</button>
+      <button class="cat-pill" data-query="Fintech Banking Operations Financial Services CBN licensed"  onclick="setCategory(this)"><span>◈</span> Fintech &amp; Banking</button>
       <button class="cat-pill" data-query="Sales Executive Business Development Account Manager B2B"    onclick="setCategory(this)"><span>▲</span> Sales &amp; BizDev</button>
     </div>
   </div>
@@ -347,7 +341,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 </div>
 
 <footer class="footer">
-  <div class="footer-left"><strong>JobPortal</strong> — AI-powered live job intelligence<br>Aggregates today's listings from 10+ platforms via web search</div>
+  <div class="footer-left"><strong>JobPulse</strong> — AI-powered live job intelligence<br>Aggregates today's listings from 10+ platforms via web search</div>
   <div class="footer-platforms">
     <span class="fp">LinkedIn</span><span class="fp">Indeed</span><span class="fp">Jobberman</span>
     <span class="fp">MyJobMag</span><span class="fp">Glassdoor</span><span class="fp">HotNigerianJobs</span>
@@ -404,7 +398,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 <script>
 /* ─── CONFIG ────────────────────────────────────────────────── */
 // After deploying your Cloudflare Worker, paste your Worker URL here:
-const WORKER_URL = "https://jobpulse-proxy.elitesprince.workers.dev/";
+const WORKER_URL = "https://jobpulse-proxy.YOUR-SUBDOMAIN.workers.dev";
 
 /* ─── STATE ─────────────────────────────────────────────────── */
 let debounceTimer = null;
@@ -640,7 +634,7 @@ async function doSearch(query) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        model: "claude-sonnet-4-20250514",
+        model: "claude-sonnet-4-6",
         max_tokens: 4000,
         system: system,
         tools: [{ type: "web_search_20250305", name: "web_search" }],
@@ -651,7 +645,13 @@ async function doSearch(query) {
     if (!res.ok) {
       var err = {};
       try { err = await res.json(); } catch(e) {}
-      throw new Error(err.error || err.message || ("Server error "+res.status+". Check your Worker is deployed."));
+      // Anthropic returns { error: { type: "...", message: "..." } }
+      var msg = (err.error && err.error.message)
+        ? err.error.message
+        : (typeof err.error === "string" ? err.error : null)
+        || err.message
+        || ("Server error " + res.status + ". Check your Worker is deployed and API key is set.");
+      throw new Error(msg);
     }
 
     var data = await res.json();
@@ -666,7 +666,7 @@ async function doSearch(query) {
     hideStatus();
     renderJobs(jobs, query, loc);
   } catch(err) {
-    showStatus("⚠ " + err.message, true);
+    showStatus("⚠ "+err.message, true);
     showEmpty();
   } finally {
     isSearching = false;
