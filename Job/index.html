@@ -232,7 +232,13 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 
 <header class="topbar">
   <div class="topbar-left">
-    <div class="logo-mark">JP</div>
+    <a href="../" class="home-btn">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+    </a>
+    <div class="logo-mark">FM</div>
     <div class="logo-text">Job<span>Portal</span></div>
   </div>
   <div class="topbar-right">
@@ -248,7 +254,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 </header>
 
 <section class="hero">
-  <p class="hero-eyebrow">AI-Powered Job Intelligence</p>
+  <p class="hero-eyebrow">FM 360 Live Job Update</p>
   <h1 class="hero-headline">Find every opportunity, <em>every day.</em></h1>
   <p class="hero-sub">Type any job title, skill, or keyword and we'll instantly scan LinkedIn, Indeed, Jobberman, Glassdoor, and 10+ platforms for today's listings.</p>
 </section>
@@ -341,7 +347,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 </div>
 
 <footer class="footer">
-  <div class="footer-left"><strong>Job Portal</strong> — AI-powered live job intelligence<br>Aggregates today's listings from 10+ platforms via web search</div>
+  <div class="footer-left"><strong>Job Portal</strong> — FM 360 Live Job Update<br>Aggregates today's listings from 10+ platforms via web search</div>
   <div class="footer-platforms">
     <span class="fp">LinkedIn</span><span class="fp">Indeed</span><span class="fp">Jobberman</span>
     <span class="fp">MyJobMag</span><span class="fp">Glassdoor</span><span class="fp">HotNigerianJobs</span>
@@ -423,7 +429,7 @@ document.getElementById("live-date").textContent =
   new Date().toLocaleDateString("en-NG",{weekday:"short",day:"numeric",month:"short",year:"numeric"});
 
 /* ─── ANALYTICS / STATS ─────────────────────────────────────── */
-const SK = "jp_stats", VK = "jp_vid";
+const SK = "FM_stats", VK = "FM_vid";
 
 function loadStats() {
   try { return JSON.parse(localStorage.getItem(SK)) || blankStats(); }
