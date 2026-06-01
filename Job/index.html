@@ -3,30 +3,19 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>FM 360 Live Job Update</title>
+<title>JobPulse — Live Job Intelligence</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Syne:wght@400;600;700;800&family=Figtree:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <style>
-
 :root {
-  --bg:#0B1D3A;     /* main background (navy) */
-  --bg2:#10264D;    /* panels */
-  --bg3:#162F5F;    /* deeper layers */
-
-  --border:rgba(255,255,255,0.07);
-  --border-hi:rgba(88,196,140,0.35);
-  --accent:#58C48C;
-  --accent2:#3BA870;
-  --gold:#D4A853;
-  --text:#E4E2DC;
-  --dim:rgba(228,226,220,0.45);
-  --faint:rgba(228,226,220,0.22);
-  --red:#E06C75;
-  --blue:#6CB4E4;
-  --purple:#C383DB;
+  --bg:#07080C; --bg2:#0F1117; --bg3:#171921;
+  --border:rgba(255,255,255,0.07); --border-hi:rgba(88,196,140,0.35);
+  --accent:#58C48C; --accent2:#3BA870;
+  --gold:#D4A853; --text:#E4E2DC;
+  --dim:rgba(228,226,220,0.45); --faint:rgba(228,226,220,0.22);
+  --red:#E06C75; --blue:#6CB4E4; --purple:#C383DB;
   --r:3px;
 }
-
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--text);font-family:'Figtree',sans-serif;font-size:14px;line-height:1.6;min-height:100vh;overflow-x:hidden}
@@ -39,7 +28,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .shell{position:relative;z-index:1}
 
 /* TOPBAR */
-.topbar{display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:56px;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(11,29,58,0.93);backdrop-filter:blur(16px);z-index:200}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:56px;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(7,8,12,0.93);backdrop-filter:blur(16px);z-index:200}
 .topbar-left{display:flex;align-items:center;gap:12px}
 .logo-mark{width:28px;height:28px;background:var(--accent);border-radius:4px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:14px;color:#07080C}
 .logo-text{font-family:'Syne',sans-serif;font-weight:700;font-size:16px;letter-spacing:-.02em}
@@ -62,7 +51,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .hero-eyebrow::before{content:'';display:inline-block;width:20px;height:1px;background:var(--accent)}
 .hero-headline{font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(38px,5vw,64px);font-weight:700;line-height:1.0;letter-spacing:-.02em;margin-bottom:16px}
 .hero-headline em{font-style:italic;color:var(--accent)}
-.hero-sub{font-size:14px;color:var(--dim);line-height:1.7}
+.hero-sub{font-size:14px;color:var(--dim);max-width:500px;line-height:1.7}
 
 /* SEARCH PANEL */
 .search-panel{padding:0 40px;position:relative;z-index:10}
@@ -235,7 +224,18 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
   .kpi-row{grid-template-columns:repeat(2,1fr)}
   .analytics-overlay{padding:16px 12px}
   .ap-head,.ap-body,.ap-footer{padding-left:18px;padding-right:18px}
+  .setup-banner{padding-left:20px;padding-right:20px;margin-left:0;margin-right:0}
 }
+
+/* SETUP BANNER */
+.setup-banner{margin:16px 40px 0;animation:fadeSlide .35s ease both}
+.setup-banner-inner{display:flex;align-items:center;gap:12px;padding:14px 18px;background:rgba(212,168,83,.08);border:1px solid rgba(212,168,83,.3);border-radius:var(--r)}
+.setup-banner-icon{font-size:18px;flex-shrink:0}
+.setup-banner-text{flex:1;font-size:12px;color:rgba(228,226,220,.75);line-height:1.6}
+.setup-banner-text strong{color:var(--gold)}
+.setup-banner-text a{color:var(--gold);text-decoration:underline;text-underline-offset:2px;margin-left:4px;font-weight:600}
+.setup-banner-close{background:none;border:none;color:var(--faint);cursor:pointer;font-size:14px;padding:4px;flex-shrink:0;transition:color .15s}
+.setup-banner-close:hover{color:var(--text)}
 </style>
 </head>
 <body>
@@ -243,8 +243,8 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 
 <header class="topbar">
   <div class="topbar-left">
-    <div class="logo-mark">FM</div>
-    <div class="logo-text">Job<span>Portal</span></div>
+    <div class="logo-mark">JP</div>
+    <div class="logo-text">Job<span>Pulse</span></div>
   </div>
   <div class="topbar-right">
     <button class="analytics-btn" onclick="openAnalytics()">
@@ -255,25 +255,12 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
       <span class="live-dot">Live Feed</span>
       <strong id="live-date"></strong>
     </div>
-      <a href="../" class="back-btn" title="Back to Homepage">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-      Home
-      </a>
-      <a href="../portal/" class="back-btn">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
-      Portal
-      </a>
-      <button class="logout-btn" id="logout-btn">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-      Sign out
-    </button>
-    </div>
   </div>
 </header>
 
 <section class="hero">
-  <p class="hero-eyebrow">FM 360 Live Job Update</p>
-  <h1 class="hero-headline">Find every opportunity, <em>every day.</em></h1>
+  <p class="hero-eyebrow">AI-Powered Job Intelligence</p>
+  <h1 class="hero-headline">Find every<br>opportunity,<br><em>every day.</em></h1>
   <p class="hero-sub">Type any job title, skill, or keyword and we'll instantly scan LinkedIn, Indeed, Jobberman, Glassdoor, and 10+ platforms for today's listings.</p>
 </section>
 
@@ -315,21 +302,21 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 
     <div class="cats-scroll">
       <span class="cats-label">Quick:</span>
-      <button class="cat-pill" data-query="Chief Financial Officer CFO Finance Director Head of Finance" onclick="setCategory(this)"><span>◈</span> Finance</button>
-      <button class="cat-pill" data-query="Investment Banking Analyst Associate M&A Corporate Finance"   onclick="setCategory(this)"><span>◆</span> Investment Banking</button>
-      <button class="cat-pill" data-query="Treasury Manager Risk ERM ALM"                               onclick="setCategory(this)"><span>◇</span> Treasury &amp; Risk</button>
-      <button class="cat-pill" data-query="Accountant Senior Accountant Management Accountant ACCA ACA" onclick="setCategory(this)"><span>◉</span> Accounting</button>
-      <button class="cat-pill" data-query="HR Manager Human Resources Talent Acquisition HRBP"          onclick="setCategory(this)"><span>▣</span> HR &amp; People</button>
-      <button class="cat-pill" data-query="Software Engineer Backend Frontend Full Stack Developer"      onclick="setCategory(this)"><span>▶</span> Tech / Engineering</button>
-      <button class="cat-pill" data-query="Product Manager Product Owner Scrum Agile"                   onclick="setCategory(this)"><span>⬡</span> Product</button>
-      <button class="cat-pill" data-query="Data Analyst Data Scientist Business Intelligence Power BI"  onclick="setCategory(this)"><span>◎</span> Data &amp; Analytics</button>
-      <button class="cat-pill" data-query="Marketing Manager Digital Marketing Brand SEO Growth"        onclick="setCategory(this)"><span>★</span> Marketing</button>
-      <button class="cat-pill" data-query="Legal Counsel Lawyer Corporate Compliance Officer"           onclick="setCategory(this)"><span>⚖</span> Legal &amp; Compliance</button>
-      <button class="cat-pill" data-query="Operations Manager Supply Chain Logistics Procurement"       onclick="setCategory(this)"><span>⬡</span> Operations</button>
-      <button class="cat-pill" data-query="Executive Assistant Personal Assistant Office Manager"       onclick="setCategory(this)"><span>◗</span> Admin</button>
-      <button class="cat-pill" data-query="Remote Finance Accounting CFO full remote work from home"    onclick="setCategory(this)"><span>◉</span> Remote Jobs</button>
-      <button class="cat-pill" data-query="Fintech Banking Operations Financial Services CBN licensed"  onclick="setCategory(this)"><span>◈</span> Fintech &amp; Banking</button>
-      <button class="cat-pill" data-query="Sales Executive Business Development Account Manager B2B"    onclick="setCategory(this)"><span>▲</span> Sales &amp; BizDev</button>
+      <button class="cat-pill" data-query="Finance Director CFO"                    onclick="setCategory(this)"><span>◈</span> Finance</button>
+      <button class="cat-pill" data-query="Investment Banking Analyst"              onclick="setCategory(this)"><span>◆</span> Investment Banking</button>
+      <button class="cat-pill" data-query="Treasury Manager"                        onclick="setCategory(this)"><span>◇</span> Treasury &amp; Risk</button>
+      <button class="cat-pill" data-query="Accountant ACCA ACA"                     onclick="setCategory(this)"><span>◉</span> Accounting</button>
+      <button class="cat-pill" data-query="HR Manager Talent Acquisition"           onclick="setCategory(this)"><span>▣</span> HR &amp; People</button>
+      <button class="cat-pill" data-query="Software Engineer Developer"             onclick="setCategory(this)"><span>▶</span> Tech / Engineering</button>
+      <button class="cat-pill" data-query="Product Manager"                         onclick="setCategory(this)"><span>⬡</span> Product</button>
+      <button class="cat-pill" data-query="Data Analyst Business Intelligence"      onclick="setCategory(this)"><span>◎</span> Data &amp; Analytics</button>
+      <button class="cat-pill" data-query="Marketing Manager Digital Marketing"     onclick="setCategory(this)"><span>★</span> Marketing</button>
+      <button class="cat-pill" data-query="Legal Counsel Compliance Officer"        onclick="setCategory(this)"><span>⚖</span> Legal &amp; Compliance</button>
+      <button class="cat-pill" data-query="Operations Manager Supply Chain"         onclick="setCategory(this)"><span>⬡</span> Operations</button>
+      <button class="cat-pill" data-query="Executive Assistant Office Manager"      onclick="setCategory(this)"><span>◗</span> Admin</button>
+      <button class="cat-pill" data-query="Remote Finance Accounting"               onclick="setCategory(this)"><span>◉</span> Remote Jobs</button>
+      <button class="cat-pill" data-query="Fintech Banking CBN"                     onclick="setCategory(this)"><span>◈</span> Fintech &amp; Banking</button>
+      <button class="cat-pill" data-query="Sales Business Development"              onclick="setCategory(this)"><span>▲</span> Sales &amp; BizDev</button>
     </div>
   </div>
 </section>
@@ -338,12 +325,27 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
   <div class="spin" id="s-spin"></div>
   <div id="s-text">Scanning platforms…</div>
   <div class="plat-chips" id="s-chips">
-    <span class="plat-chip">JSearch</span>
-    <span class="plat-chip">Remotive</span>
-    <span class="plat-chip">Jobicy</span>
-    <span class="plat-chip">The Muse</span>
-    <span class="plat-chip">Himalayas</span>
-    <span class="plat-chip">Arbeitnow</span>
+    <span class="plat-chip">LinkedIn</span>
+    <span class="plat-chip">Indeed</span>
+    <span class="plat-chip">Glassdoor</span>
+    <span class="plat-chip">Jobberman</span>
+    <span class="plat-chip">MyJobMag</span>
+    <span class="plat-chip">NGCareers</span>
+  </div>
+</div>
+
+<!-- JSearch setup banner (shown when API key not configured) -->
+<div class="setup-banner" id="setup-banner" style="display:none">
+  <div class="setup-banner-inner">
+    <span class="setup-banner-icon">🔑</span>
+    <div class="setup-banner-text">
+      <strong>Unlock Nigerian job boards</strong> — Add your free JSearch API key to search
+      LinkedIn, Indeed, Glassdoor, Jobberman, MyJobMag and NGCareers.
+      <a href="https://rapidapi.com/letscrape-6bfed1765432/api/jsearch" target="_blank" rel="noopener">
+        Get free key →
+      </a>
+    </div>
+    <button class="setup-banner-close" onclick="hideBanner()">✕</button>
   </div>
 </div>
 
@@ -363,14 +365,15 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 <div class="empty-state" id="empty-state">
   <div class="empty-glyph">◈</div>
   <div class="empty-title">Start your search</div>
-  <p class="empty-body">Type any job title or keyword above — results appear automatically after you stop typing. Or tap a <strong>quick category</strong> to load today's listings instantly.</p>
+  <p class="empty-body">Type any job title or tap a <strong>quick category</strong> — we scan LinkedIn, Indeed, Glassdoor, Jobberman, MyJobMag, NGCareers and more for jobs posted in the last 48 hours.</p>
 </div>
 
 <footer class="footer">
-  <div class="footer-left"><strong>Job Portal</strong> — Multi-source live job intelligence<br>Aggregates listings from 6 platforms simultaneously · Results cached 30 min</div>
+  <div class="footer-left"><strong>JobPulse</strong> — Multi-source live job intelligence<br>Searches LinkedIn · Indeed · Glassdoor · Jobberman · MyJobMag · NGCareers · HotNigerianJobs · Remotive · Jobicy · Himalayas</div>
   <div class="footer-platforms">
-    <span class="fp">JSearch</span><span class="fp">Remotive</span><span class="fp">Jobicy</span>
-    <span class="fp">The Muse</span><span class="fp">Himalayas</span><span class="fp">Arbeitnow</span>
+    <span class="fp">LinkedIn</span><span class="fp">Indeed</span><span class="fp">Glassdoor</span>
+    <span class="fp">Jobberman</span><span class="fp">MyJobMag</span><span class="fp">NGCareers</span>
+    <span class="fp">HotNigerianJobs</span><span class="fp">Remotive</span><span class="fp">Jobicy</span>
   </div>
 </footer>
 
@@ -631,8 +634,8 @@ async function doSearch(query) {
   var typeNote = selectedType==="Any" ? "" : " Return only "+selectedType+" roles.";
 
   recordSearch(query);
-  showStatus("Scanning for \""+query+"\""+(selectedType!=="Any"?" · "+selectedType:"")+" in "+loc+"…", false);
-  hideEmpty(); hideResHeader(); clearGrid();
+  showStatus("Scanning LinkedIn · Indeed · Glassdoor · Jobberman · MyJobMag · NGCareers…", false);
+  hideEmpty(); hideResHeader(); clearGrid(); hideBanner();
 
   try {
     var res = await fetch(WORKER_URL, {
@@ -648,18 +651,15 @@ async function doSearch(query) {
     }
 
     var data = await res.json();
-
     if (data.error) throw new Error(data.error);
 
     var jobs = data.jobs || [];
 
-    // Show notice if JSearch key not configured
-    if (data.notice) {
-      showStatus("ℹ " + data.notice, false);
-    }
+    // Show setup banner if JSearch key not configured
+    if (data.notice) { showBanner(data.notice); }
 
     if (!jobs.length) {
-      var msg = data.message || "No jobs found for that search. Try different keywords.";
+      var msg = data.message || "No recent jobs found. Try broader keywords.";
       showStatus("⚠ " + msg, true);
       showEmpty();
       isSearching = false;
@@ -702,18 +702,26 @@ function renderJobs(jobs, query, loc, fromCache) {
     card.className = "job-card";
     card.style.animationDelay = (i*55)+"ms";
 
-    var color = platColor(job.platform);
-    var salary = job.salary ? '<span class="tag salary">💰 '+esc(job.salary)+'</span>' : "";
+    var color  = platColor(job.platform);
+    var salary = job.salary ? '<span class="tag salary">💰 '+esc(String(job.salary))+'</span>' : "";
 
     var typeBadge = "";
-    if (job.type) {
-      var t = (job.type||"").toLowerCase();
-      var tc = t.includes("remote") ? "var(--purple)"
-             : t.includes("hybrid") ? "var(--blue)"
-             : t.includes("part")   ? "var(--gold)"
-             : t.includes("full")   ? "var(--accent)"
+    var rawType   = job.type;
+    // Safely coerce type to string regardless of what the API returned
+    var typeStr   = (rawType === null || rawType === undefined) ? ""
+                  : Array.isArray(rawType) ? String(rawType[0] || "")
+                  : typeof rawType === "object" ? String(rawType.name || rawType.label || "")
+                  : String(rawType);
+    if (typeStr) {
+      var t  = typeStr.toLowerCase();
+      var tc = t.includes("remote")   ? "var(--purple)"
+             : t.includes("hybrid")   ? "var(--blue)"
+             : t.includes("part")     ? "var(--gold)"
+             : t.includes("full")     ? "var(--accent)"
+             : t.includes("contract") ? "var(--gold)"
+             : t.includes("freelance")? "var(--gold)"
              : "var(--dim)";
-      typeBadge = '<span class="tag" style="color:'+tc+';border-color:'+tc+'33;background:'+tc+'11">'+esc(job.type)+'</span>';
+      typeBadge = '<span class="tag" style="color:'+tc+';border-color:'+tc+'33;background:'+tc+'11">'+esc(typeStr)+'</span>';
     }
 
     var reqs = (job.requirements||[]).slice(0,4).map(function(r){ return "<li>"+esc(r)+"</li>"; }).join("");
@@ -748,12 +756,42 @@ function renderJobs(jobs, query, loc, fromCache) {
 
 /* ─── HELPERS ───────────────────────────────────────────────── */
 function esc(s) {
-  return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+  return String(s == null ? "" : s)
+    .replace(/&/g,"&amp;").replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+function platColor(name) {
+  const k = String(name||"").toLowerCase().replace(/[^a-z]/g,"");
+  const MAP = {
+    linkedin:"#0A66C2", indeed:"#003A9B", glassdoor:"#0CAA41",
+    jobberman:"#1E3A5F", myjobmag:"#C0392B", hotnigerianjobs:"#F39C12",
+    jobboardng:"#E35205", ngcareers:"#6C3483", remotive:"#1DBF73",
+    jobicy:"#FF6B35", themuse:"#5B4EE5", himalayas:"#3B82F6",
+    arbeitnow:"#059669", ziprecruiter:"#4A90D9"
+  };
+  for (var key in MAP) if (k.includes(key)) return MAP[key];
+  return "#444";
 }
 function clearGrid()    { document.getElementById("jobs-grid").innerHTML=""; }
 function showEmpty()    { document.getElementById("empty-state").style.display="block"; }
 function hideEmpty()    { document.getElementById("empty-state").style.display="none"; }
 function hideResHeader(){ document.getElementById("results-header").classList.remove("visible"); }
+function showBanner(msg) {
+  var b = document.getElementById("setup-banner");
+  if (!b) return;
+  b.style.display = "block";
+  // Update the text if it contains a custom message
+  if (msg) {
+    var t = b.querySelector(".setup-banner-text");
+    if (t) t.innerHTML = '<strong>Nigerian job boards not connected</strong> — '
+      + 'Add your free JSearch API key to search LinkedIn, Indeed, Glassdoor, Jobberman, MyJobMag and NGCareers. '
+      + '<a href="https://rapidapi.com/letscrape-6bfed1765432/api/jsearch" target="_blank" rel="noopener">Get free key →</a>';
+  }
+}
+function hideBanner() {
+  var b = document.getElementById("setup-banner");
+  if (b) b.style.display = "none";
+}
 
 function showStatus(msg, isErr) {
   var t=document.getElementById("status-ticker");
