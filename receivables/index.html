@@ -401,21 +401,23 @@ let currentUser = null;
 
 async function api(endpoint, opts = {}) {
   const tok = sessionStorage.getItem('mfh_token');
-  const authHeader = tok ? {'Authorization': 'Bearer ' + tok} : {};
-  const res = await fetch(API_BASE + endpoint, {
-    ...opts,
-    headers: Object.assign({}, opts.headers||{}, authHeader, opts.body instanceof FormData ? {} : {'Content-Type':'application/json'}),
-    headers: { 'Content-Type':'application/json', ...(opts.headers||{}) }
-  });
+  const isFormData = opts.body instanceof FormData;
+  const headers = { 'Authorization': tok ? 'Bearer ' + tok : '' };
+  // Do NOT set Content-Type for FormData — browser sets it with boundary automatically
+  if (!isFormData) headers['Content-Type'] = 'application/json';
+  const res = await fetch(API_BASE + endpoint, { ...opts, headers });
   const data = await res.json().catch(() => ({ success:false, message:'No response from server.' }));
-  if (!res.ok) throw new Error(data.message || 'Server error ' + res.status);
+  if (!res.ok) throw new Error(data.message || data.error || 'Server error ' + res.status);
   return data;
 }
 
 async function apiForm(endpoint, formData) {
-  const res = await fetch(API_BASE + endpoint, { method:'POST', body: formData });
+  const tok = sessionStorage.getItem('mfh_token');
+  // Do NOT set Content-Type — let browser set multipart/form-data with boundary
+  const headers = { 'Authorization': tok ? 'Bearer ' + tok : '' };
+  const res = await fetch(API_BASE + endpoint, { method:'POST', body: formData, headers });
   const data = await res.json().catch(() => ({ success:false, message:'No response.' }));
-  if (!res.ok) throw new Error(data.message || 'Upload failed');
+  if (!res.ok) throw new Error(data.message || data.error || 'Upload failed');
   return data;
 }
 
