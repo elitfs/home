@@ -12,8 +12,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
 <style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
-<style>
+
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --n:#0a1628;--n2:#0f1f3d;--n3:#162747;--n4:#1c3057;
@@ -183,11 +182,7 @@ select.finput{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xm
 .cb:hover{color:var(--tx)}
 
 
-</style>
-</head>
-<body>
 
-<!-- ═══════════════ MAIN APP ═══════════════ -->
 
 /* MFH NAV OVERRIDES */
 #topbar{background:var(--n2);border-bottom:1px solid var(--b);padding:0 1.75rem;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;flex-shrink:0}
@@ -198,6 +193,7 @@ select.finput{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xm
 .nav-btn-link{display:flex;align-items:center;gap:6px;background:transparent;border:1px solid var(--b2);border-radius:10px;padding:6px 12px;font-size:11.5px;font-family:var(--mo);color:var(--tx3);cursor:pointer;transition:all .2s;text-decoration:none}
 .nav-btn-link:hover{background:var(--sf2);color:var(--tx)}
 .user-chip-top{display:flex;align-items:center;gap:6px;background:var(--sf);border:1px solid var(--b2);border-radius:20px;padding:4px 11px;font-size:11.5px;color:var(--tx2);font-family:var(--mo)}
+
 </style>
 </head>
 <body>
@@ -217,10 +213,13 @@ select.finput{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xm
         <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
         Home
       </a>
-      <button class="nav-btn-link" id="logout-btn" style="cursor:pointer;border-color:rgba(224,82,82,.3)" onmouseover="this.style.color='var(--rd)'" onmouseout="this.style.color='var(--tx3)'">Sign out</button>
+      <button class="nav-btn-link" id="logout-btn" style="cursor:pointer;border-color:rgba(224,82,82,.3)">Sign out</button>
     </div>
   </div>
   <div id="layout">
+    <!-- Sidebar -->
+    <nav id="sidebar">
+      <div class="nav-item active" data-view="dashboard">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
         Dashboard
       </div>
@@ -372,15 +371,7 @@ select.finput{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xm
 <div id="toast"></div>
 
 
-<script>
-'use strict';
-// ════════════════════════════════════════════════════
-// CONFIG — replace with your Render.com backend URL
-// ════════════════════════════════════════════════════
-  </div><!-- #layout -->
-</div><!-- #app -->
 
-<!-- AUTH GUARD -->
 <script>
 'use strict';
 (function(){
@@ -413,7 +404,8 @@ async function api(endpoint, opts = {}) {
   const authHeader = tok ? {'Authorization': 'Bearer ' + tok} : {};
   const res = await fetch(API_BASE + endpoint, {
     ...opts,
-    headers: Object.assign({'Content-Type':'application/json'}, opts.headers||{}, authHeader)
+    headers: Object.assign({}, opts.headers||{}, authHeader, opts.body instanceof FormData ? {} : {'Content-Type':'application/json'}),
+    headers: { 'Content-Type':'application/json', ...(opts.headers||{}) }
   });
   const data = await res.json().catch(() => ({ success:false, message:'No response from server.' }));
   if (!res.ok) throw new Error(data.message || 'Server error ' + res.status);
@@ -421,11 +413,7 @@ async function api(endpoint, opts = {}) {
 }
 
 async function apiForm(endpoint, formData) {
-  const tok = sessionStorage.getItem('mfh_token');
-  const res = await fetch(API_BASE + endpoint, {
-    method:'POST', body: formData,
-    headers: tok ? {'Authorization': 'Bearer ' + tok} : {}
-  });
+  const res = await fetch(API_BASE + endpoint, { method:'POST', body: formData });
   const data = await res.json().catch(() => ({ success:false, message:'No response.' }));
   if (!res.ok) throw new Error(data.message || 'Upload failed');
   return data;
@@ -1115,6 +1103,10 @@ async function exportAgeingPDF() {
 // INIT
 // ════════════════════════════════════════════════════
 window.addEventListener('load', () => { loadDashboard(); });
+</script>
+</body>
+</html>
+
 </script>
 </body>
 </html>
