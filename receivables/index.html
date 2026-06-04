@@ -386,7 +386,7 @@ select.finput{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xm
 
   function verifyToken() {
     _attempts++;
-    fetch(_API + '/auth/me', {
+    fetch(_API + '/me', {
       headers: { 'Authorization': 'Bearer ' + tok, 'Content-Type': 'application/json' }
     })
     .then(function(r) { return r.json().then(function(d) { return { status: r.status, data: d }; }); })
