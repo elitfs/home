@@ -286,6 +286,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
         <option value="Global / Remote">🌍 Remote / Global</option>
       </select>
       <button class="search-submit" onclick="triggerSearch()">Search</button>
+      <button class="search-submit" style="background:var(--bg3);color:var(--dim);border-left:1px solid var(--border);font-size:10px;padding:0 14px;" onclick="triggerDebug()" title="Show what each source returns">🔍 Debug</button>
     </div>
 
     <div class="typing-bar" id="typing-bar">
@@ -380,6 +381,22 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 </footer>
 
 </div><!-- /shell -->
+
+<!-- DEBUG MODAL -->
+<div class="analytics-overlay" id="debug-overlay" onclick="if(event.target===this)closeDebug()" style="display:none">
+  <div class="analytics-panel" style="max-width:640px">
+    <div class="ap-head">
+      <div>
+        <div class="ap-eyebrow">Diagnostics</div>
+        <div class="ap-title">Source Debug Report</div>
+      </div>
+      <button class="ap-close" onclick="closeDebug()">✕</button>
+    </div>
+    <div class="ap-body" id="debug-body" style="font-family:monospace;font-size:12px;line-height:1.7;max-height:70vh;overflow-y:auto">
+      <div style="color:var(--faint)">Running debug search…</div>
+    </div>
+  </div>
+</div>
 
 <!-- ANALYTICS OVERLAY -->
 <div class="analytics-overlay" id="analytics-overlay" onclick="overlayClick(event)">
@@ -810,6 +827,65 @@ function showStatus(msg, isErr) {
   t.className = "status-ticker visible"+(isErr?" err":"");
 }
 function hideStatus() { document.getElementById("status-ticker").className="status-ticker"; }
+
+/* ─── DEBUG MODE ────────────────────────────────────────────── */
+function closeDebug() {
+  document.getElementById("debug-overlay").style.display = "none";
+  document.body.style.overflow = "";
+}
+
+async function triggerDebug() {
+  var val = document.getElementById("search-input").value.trim() || "Accountant";
+  var loc = document.getElementById("loc-select").value;
+  var el  = document.getElementById("debug-body");
+  var ov  = document.getElementById("debug-overlay");
+
+  ov.style.display = "flex";
+  document.body.style.overflow = "hidden";
+  el.innerHTML = '<div style="color:var(--accent)">⟳ Querying all sources for "'+esc(val)+'" in '+esc(loc)+'…</div>';
+
+  try {
+    var r = await fetch(WORKER_URL, {
+      method: "POST",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify({query:val, location:loc, type:selectedType, debug:true})
+    });
+    var d = await r.json();
+
+    var html = "";
+    html += '<div style="color:var(--gold);margin-bottom:10px">Query: <strong>"'+esc(d.query)+'"</strong> | Keywords: ['+esc((d.kw||[]).join(", "))+'] | Primary: "'+esc(d.pk)+'"</div>';
+    html += '<div style="color:var(--gold);margin-bottom:16px">Total fetched: '+d.total_fetched+' | Title matched: '+d.title_matched+' | Soft matched: '+d.soft_matched+'</div>';
+
+    var sources = d.sources || {};
+    for (var src in sources) {
+      var s = sources[src];
+      var color = s.status==="ok" ? "var(--accent)" : s.status==="no_key" ? "var(--gold)" : "var(--red)";
+      html += '<div style="margin-bottom:8px;padding:10px 12px;background:var(--bg3);border-radius:3px;border-left:3px solid '+color+'">';
+      html += '<strong style="color:'+color+'">'+(src.toUpperCase())+'</strong>';
+      if (s.status==="ok")       html += ' ✓ — fetched '+s.raw+', after date filter: '+s.after_date;
+      else if (s.status==="no_key") html += ' — <span style="color:var(--gold)">No API key set in Worker secrets</span>';
+      else if (s.status==="rate_limit") html += ' — <span style="color:var(--red)">Monthly limit reached</span>';
+      else if (s.status==="error")  html += ' — <span style="color:var(--red)">HTTP '+s.code+'</span>';
+      else if (s.status==="exception") html += ' — <span style="color:var(--red)">Error: '+esc(s.message)+'</span>';
+      html += '</div>';
+    }
+
+    if (d.sample_titles && d.sample_titles.length) {
+      html += '<div style="color:var(--dim);margin-top:14px;margin-bottom:6px">Sample titles fetched (before relevance filter):</div>';
+      d.sample_titles.forEach(function(j){
+        html += '<div style="color:var(--faint);padding:2px 0">· <span style="color:var(--text)">'+esc(j.title)+'</span> <span style="color:var(--faint);font-size:10px">['+esc(j.platform)+']</span></div>';
+      });
+    }
+
+    if (d.pool_size===0) {
+      html += '<div style="margin-top:14px;padding:10px 12px;background:rgba(224,108,117,0.08);border:1px solid rgba(224,108,117,0.2);border-radius:3px;color:var(--red)">⚠ No results passed the relevance filter. If JSearch returned results, the title filter may be too strict for your query keywords.</div>';
+    }
+
+    el.innerHTML = html;
+  } catch(e) {
+    el.innerHTML = '<div style="color:var(--red)">Error: '+esc(String(e))+'</div>';
+  }
+}
 </script>
 </body>
 </html>
