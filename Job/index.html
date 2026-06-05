@@ -304,21 +304,20 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 
     <div class="cats-scroll">
       <span class="cats-label">Quick:</span>
-      <button class="cat-pill" data-query="Finance"                                 onclick="setCategory(this)"><span>◈</span> Finance</button>
-      <button class="cat-pill" data-query="Bank"                                    onclick="setCategory(this)"><span>◆</span> Banking</button>
-      <button class="cat-pill" data-query="Treasury"                                onclick="setCategory(this)"><span>◇</span> Treasury</button>
-      <button class="cat-pill" data-query="Control"                                 onclick="setCategory(this)"><span>◇</span> Internal Control</button>
-      <button class="cat-pill" data-query="Account"                                 onclick="setCategory(this)"><span>◉</span> Accounting</button>
-      <button class="cat-pill" data-query="Human Resources (HR)"                    onclick="setCategory(this)"><span>▣</span> HR &amp; Talent Acquisition</button>
+      <button class="cat-pill" data-query="Finance Director CFO"                    onclick="setCategory(this)"><span>◈</span> Finance</button>
+      <button class="cat-pill" data-query="Investment Banking Analyst"              onclick="setCategory(this)"><span>◆</span> Investment Banking</button>
+      <button class="cat-pill" data-query="Treasury Manager"                        onclick="setCategory(this)"><span>◇</span> Treasury &amp; Risk</button>
+      <button class="cat-pill" data-query="Accountant ACCA ACA"                     onclick="setCategory(this)"><span>◉</span> Accounting</button>
+      <button class="cat-pill" data-query="HR Manager Talent Acquisition"           onclick="setCategory(this)"><span>▣</span> HR &amp; People</button>
       <button class="cat-pill" data-query="Software Engineer Developer"             onclick="setCategory(this)"><span>▶</span> Tech / Engineering</button>
       <button class="cat-pill" data-query="Product Manager"                         onclick="setCategory(this)"><span>⬡</span> Product</button>
-      <button class="cat-pill" data-query="Data Analyst"                            onclick="setCategory(this)"><span>◎</span> Data &amp; Analytics</button>
-      <button class="cat-pill" data-query="Digital Marketing"                       onclick="setCategory(this)"><span>★</span> Marketing</button>
+      <button class="cat-pill" data-query="Data Analyst Business Intelligence"      onclick="setCategory(this)"><span>◎</span> Data &amp; Analytics</button>
+      <button class="cat-pill" data-query="Marketing Manager Digital Marketing"     onclick="setCategory(this)"><span>★</span> Marketing</button>
       <button class="cat-pill" data-query="Legal Counsel Compliance Officer"        onclick="setCategory(this)"><span>⚖</span> Legal &amp; Compliance</button>
-      <button class="cat-pill" data-query="Operations Manager"                      onclick="setCategory(this)"><span>⬡</span> Operations</button>
+      <button class="cat-pill" data-query="Operations Manager Supply Chain"         onclick="setCategory(this)"><span>⬡</span> Operations</button>
       <button class="cat-pill" data-query="Executive Assistant Office Manager"      onclick="setCategory(this)"><span>◗</span> Admin</button>
       <button class="cat-pill" data-query="Remote Finance Accounting"               onclick="setCategory(this)"><span>◉</span> Remote Jobs</button>
-      <button class="cat-pill" data-query="Fintech"                                 onclick="setCategory(this)"><span>◈</span> Fintech &amp; Banking</button>
+      <button class="cat-pill" data-query="Fintech Banking CBN"                     onclick="setCategory(this)"><span>◈</span> Fintech &amp; Banking</button>
       <button class="cat-pill" data-query="Sales Business Development"              onclick="setCategory(this)"><span>▲</span> Sales &amp; BizDev</button>
     </div>
   </div>
@@ -328,12 +327,12 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
   <div class="spin" id="s-spin"></div>
   <div id="s-text">Scanning platforms…</div>
   <div class="plat-chips" id="s-chips">
+    <span class="plat-chip">HotNigerianJobs</span>
+    <span class="plat-chip">NGCareers</span>
     <span class="plat-chip">LinkedIn</span>
     <span class="plat-chip">Indeed</span>
     <span class="plat-chip">Glassdoor</span>
-    <span class="plat-chip">Jobberman</span>
-    <span class="plat-chip">MyJobMag</span>
-    <span class="plat-chip">NGCareers</span>
+    <span class="plat-chip">Remotive</span>
   </div>
 </div>
 
@@ -745,9 +744,14 @@ function renderJobs(jobs, query, loc, fromCache) {
     }
 
     var reqs = (job.requirements||[]).slice(0,4).map(function(r){ return "<li>"+esc(r)+"</li>"; }).join("");
-    var applyBtn = job.url
-      ? '<a class="apply-link" href="'+esc(job.url)+'" target="_blank" rel="noopener">Apply Now <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></a>'
-      : '<span style="font-size:11px;color:var(--faint)">Search on platform to apply</span>';
+
+    // Always show an apply button — use job URL, or fallback to Google Jobs search
+    var applyUrl = job.url ||
+      "https://www.google.com/search?q="+encodeURIComponent('"'+job.title+'" "'+job.company+'" job apply');
+    var applyLabel = job.url ? "Apply Now" : "Find on Google →";
+    var applyBtn = '<a class="apply-link" href="'+esc(applyUrl)+'" target="_blank" rel="noopener">'
+      + applyLabel
+      + ' <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></a>';
 
     card.innerHTML =
       '<div class="card-row1">'+
@@ -784,8 +788,8 @@ function platColor(name) {
   const k = String(name||"").toLowerCase().replace(/[^a-z]/g,"");
   const MAP = {
     linkedin:"#0A66C2", indeed:"#003A9B", glassdoor:"#0CAA41",
-    jobberman:"#1E3A5F", myjobmag:"#C0392B", hotnigerianjobs:"#F39C12",
-    jobboardng:"#E35205", ngcareers:"#6C3483", remotive:"#1DBF73",
+    jobberman:"#1E3A5F", myjobmag:"#C0392B", hotnigerianjobs:"#E67E22",
+    ngcareers:"#6C3483", jobboardng:"#E35205", remotive:"#1DBF73",
     jobicy:"#FF6B35", themuse:"#5B4EE5", himalayas:"#3B82F6",
     arbeitnow:"#059669", ziprecruiter:"#4A90D9"
   };
@@ -854,20 +858,39 @@ async function triggerDebug() {
     var d = await r.json();
 
     var html = "";
-    html += '<div style="color:var(--gold);margin-bottom:10px">Query: <strong>"'+esc(d.query)+'"</strong> | Keywords: ['+esc((d.kw||[]).join(", "))+'] | Primary: "'+esc(d.pk)+'"</div>';
-    html += '<div style="color:var(--gold);margin-bottom:16px">Total fetched: '+d.total_fetched+' | Title matched: '+d.title_matched+' | Soft matched: '+d.soft_matched+'</div>';
+    html += '<div style="color:var(--gold);margin-bottom:10px">';
+    html += 'Query: <strong>"'+esc(d.query)+'"</strong><br>';
+    html += 'Searched as: <strong>"'+esc(d.search_phrase)+'"</strong><br>';
+    html += 'Filter terms: <strong>['+esc((d.filter_terms||[]).join(", "))+']</strong>';
+    html += '</div>';
+    html += '<div style="color:var(--dim);margin-bottom:16px;font-size:11px">';
+    html += 'Total fetched: '+d.total_fetched+' &nbsp;|&nbsp; Title matched: '+d.title_matched+' &nbsp;|&nbsp; Soft matched: '+d.soft_matched;
+    html += '</div>';
 
     var sources = d.sources || {};
     for (var src in sources) {
       var s = sources[src];
-      var color = s.status==="ok" ? "var(--accent)" : s.status==="no_key" ? "var(--gold)" : "var(--red)";
+      var color = s.status==="ok"             ? "var(--accent)"
+                : s.status==="no_key"         ? "var(--gold)"
+                : s.status==="not_subscribed" ? "var(--gold)"
+                : "var(--red)";
       html += '<div style="margin-bottom:8px;padding:10px 12px;background:var(--bg3);border-radius:3px;border-left:3px solid '+color+'">';
-      html += '<strong style="color:'+color+'">'+(src.toUpperCase())+'</strong>';
-      if (s.status==="ok")       html += ' ✓ — fetched '+s.raw+', after date filter: '+s.after_date;
-      else if (s.status==="no_key") html += ' — <span style="color:var(--gold)">No API key set in Worker secrets</span>';
-      else if (s.status==="rate_limit") html += ' — <span style="color:var(--red)">Monthly limit reached</span>';
-      else if (s.status==="error")  html += ' — <span style="color:var(--red)">HTTP '+s.code+'</span>';
-      else if (s.status==="exception") html += ' — <span style="color:var(--red)">Error: '+esc(s.message)+'</span>';
+      html += '<strong style="color:'+color+'">'+esc(src.toUpperCase().replace(/_/g," "))+'</strong>';
+      if (s.status==="ok") {
+        html += ' ✓ &nbsp; fetched: <strong>'+s.raw+'</strong>';
+        if (s.matched!=null) html += ' &nbsp;|&nbsp; keyword matched: <strong>'+s.matched+'</strong>';
+        html += ' &nbsp;|&nbsp; after date filter: <strong>'+s.after_date+'</strong>';
+      } else if (s.status==="no_key") {
+        html += ' <span style="color:var(--gold)">— No API key in Worker secrets</span>';
+      } else if (s.status==="not_subscribed") {
+        html += ' <span style="color:var(--gold)">— 403: Not subscribed.<br>&nbsp;&nbsp;&nbsp;Go to <a href="https://rapidapi.com/letscrape-6bfed1765432/api/jsearch" target="_blank" style="color:var(--gold)">rapidapi.com → JSearch</a> → Subscribe to Test → FREE plan</span>';
+      } else if (s.status==="rate_limit") {
+        html += ' <span style="color:var(--red)">— Monthly limit reached (200/mo)</span>';
+      } else if (s.status==="error") {
+        html += ' <span style="color:var(--red)">— HTTP '+s.code+'</span>';
+      } else if (s.status==="exception") {
+        html += ' <span style="color:var(--red)">— Error: '+esc(s.message||"unknown")+'</span>';
+      }
       html += '</div>';
     }
 
