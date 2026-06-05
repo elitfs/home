@@ -481,27 +481,6 @@ function bucketPill(key, days) {
 
 function empty(msg) { return `<div class="ep"><div class="ei">📭</div>${msg}</div>`; }
 
-// ════════════════════════════════════════════════════
-// NAVIGATION
-// ════════════════════════════════════════════════════
-function initNav() {
-  document.querySelectorAll('.nav-item').forEach(item => {
-    item.addEventListener('click', () => {
-      const view = item.dataset.view;
-      document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-      document.querySelectorAll('.view').forEach(v => v.classList.remove('on'));
-      item.classList.add('active');
-      const viewEl = $('view-'+view);
-      if (viewEl) viewEl.classList.add('on');
-      if (view==='dashboard') loadDashboard();
-      else if (view==='debtors') loadDebtors();
-      else if (view==='ageing') loadAgeing();
-      else if (view==='reminders') loadReminders();
-      else if (view==='logs') loadLogs();
-      else if (view==='settings') loadSettings();
-    });
-  });
-}
 
 // ════════════════════════════════════════════════════
 // DASHBOARD
@@ -1128,19 +1107,37 @@ async function exportAgeingPDF() {
 // INIT
 // ════════════════════════════════════════════════════
 window.addEventListener('load', () => {
-  // Attach logout
+  // Logout
   var logoutBtn = document.getElementById('logout-btn');
-  if(logoutBtn) logoutBtn.addEventListener('click', function(){
-    if(!confirm('Sign out?'))return;
-    sessionStorage.removeItem('FM_token');
-    window.location.href='../portal/';
+  if (logoutBtn) logoutBtn.addEventListener('click', function() {
+    if (!confirm('Sign out?')) return;
+    sessionStorage.removeItem('mfh_token');
+    window.location.href = '../portal/';
   });
-  // Attach modal backdrop
-  const modalBg = $('modal-bg');
-  if(modalBg) modalBg.addEventListener('click', e => { if(e.target===modalBg) closeModal(); });
-  // Init sidebar navigation
-  initNav();
-  // Load initial view
+  // Modal backdrop
+  var modalBg = document.getElementById('modal-bg');
+  if (modalBg) modalBg.addEventListener('click', function(e) {
+    if (e.target === modalBg) closeModal();
+  });
+  // Nav items
+  var navItems = document.querySelectorAll('.nav-item');
+  navItems.forEach(function(item) {
+    item.addEventListener('click', function() {
+      var view = item.getAttribute('data-view');
+      document.querySelectorAll('.nav-item').forEach(function(i) { i.classList.remove('active'); });
+      document.querySelectorAll('.view').forEach(function(v) { v.classList.remove('on'); });
+      item.classList.add('active');
+      var viewEl = document.getElementById('view-' + view);
+      if (viewEl) viewEl.classList.add('on');
+      if (view === 'dashboard') loadDashboard();
+      else if (view === 'debtors') loadDebtors();
+      else if (view === 'ageing') loadAgeing();
+      else if (view === 'reminders') loadReminders();
+      else if (view === 'logs') loadLogs();
+      else if (view === 'settings') loadSettings();
+    });
+  });
+  // Initial load
   loadDashboard();
 });
 </script>
