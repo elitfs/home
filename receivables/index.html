@@ -172,6 +172,37 @@ select.finput{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xm
 .ecl-row-saved{animation:eclsave .6s ease}
 @keyframes eclsave{0%{background:rgba(0,201,167,.2)}100%{background:transparent}}
 
+/* ── IFRS 9 improvements ── */
+.ecl-provision-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:1rem}
+.ecl-provision-fld label{display:block;font-size:10px;font-family:var(--mo);color:var(--tx2);margin-bottom:5px;letter-spacing:.04em;text-transform:uppercase}
+.ecl-provision-fld input{width:100%;padding:6px 10px;background:var(--n4);border:1px solid var(--b2);border-radius:7px;color:var(--tx);font-family:var(--mo);font-size:12px;outline:none}
+.ecl-provision-fld input:focus{border-color:var(--t)}
+.ecl-scenario-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:1rem}
+.ecl-scenario-card{background:var(--n4);border:1px solid var(--b);border-radius:var(--r);padding:12px 14px}
+.ecl-scenario-card.base{border-color:rgba(99,179,237,.3)}
+.ecl-scenario-card.up{border-color:rgba(34,197,94,.3)}
+.ecl-scenario-card.down{border-color:rgba(224,82,82,.3)}
+.ecl-scenario-lbl{font-size:10px;font-family:var(--mo);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;font-weight:600}
+.ecl-scenario-card.base .ecl-scenario-lbl{color:var(--bl)}
+.ecl-scenario-card.up .ecl-scenario-lbl{color:var(--gr)}
+.ecl-scenario-card.down .ecl-scenario-lbl{color:var(--rd)}
+.ecl-scenario-fld{margin-bottom:7px}
+.ecl-scenario-fld label{display:block;font-size:9px;font-family:var(--mo);color:var(--tx3);margin-bottom:3px;text-transform:uppercase;letter-spacing:.04em}
+.ecl-scenario-fld input{width:100%;padding:4px 8px;background:var(--n3);border:1px solid var(--b2);border-radius:6px;color:var(--tx);font-family:var(--mo);font-size:11px;outline:none}
+.ecl-scenario-fld input:focus{border-color:var(--t)}
+.ecl-weighted-result{background:rgba(0,201,167,.08);border:1px solid rgba(0,201,167,.25);border-radius:var(--r);padding:14px 18px;margin-bottom:1rem;display:flex;align-items:center;gap:2rem;flex-wrap:wrap}
+.ecl-weighted-result .wlbl{font-size:10px;font-family:var(--mo);color:var(--tx3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.ecl-weighted-result .wval{font-family:var(--di);font-size:20px;font-weight:700;color:var(--t)}
+.ecl-weighted-result .wsub{font-size:10px;font-family:var(--mo);color:var(--tx2);margin-top:2px}
+.sicr-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(245,166,35,.12);color:var(--am);border:1px solid rgba(245,166,35,.3);border-radius:20px;padding:2px 8px;font-size:9px;font-family:var(--mo);font-weight:600}
+.impaired-badge{background:rgba(224,82,82,.12);color:var(--rd);border-color:rgba(224,82,82,.3)}
+.writeoff-badge{background:rgba(74,96,128,.15);color:var(--tx3);border:1px solid var(--b2);border-radius:20px;padding:2px 8px;font-size:9px;font-family:var(--mo)}
+.ecl-writeoff-row td{opacity:.55;font-style:italic}
+.ecl-tab-bar{display:flex;gap:4px;margin-bottom:1rem;border-bottom:1px solid var(--b);padding-bottom:0}
+.ecl-tab{padding:7px 16px;font-size:12px;font-family:var(--mo);color:var(--tx3);cursor:pointer;border-radius:var(--r) var(--r) 0 0;border:1px solid transparent;border-bottom:none;transition:all .2s;margin-bottom:-1px}
+.ecl-tab:hover{color:var(--tx);background:var(--sf)}
+.ecl-tab.active{color:var(--t);background:var(--n2);border-color:var(--b);border-bottom-color:var(--n2)}
+
 /* ── MISC ── */
 .ep{text-align:center;padding:3rem 1rem;color:var(--tx3);font-family:var(--mo);font-size:12px}
 .ei{font-size:2rem;margin-bottom:10px}
@@ -349,88 +380,178 @@ select.finput{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xm
           </div>
         </div>
 
-        <!-- Macro settings panel -->
-        <div class="ecl-panel" id="ecl-macro-panel">
-          <div class="ecl-panel-title">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
-            Macro-Economic Parameters
-          </div>
-          <div class="ecl-macro-grid">
-            <div class="ecl-macro-fld fld" style="margin:0">
-              <label>Country</label>
-              <select class="finput" id="ecl-country" style="font-size:12px;padding:7px 32px 7px 10px">
-                <option value="NG">Nigeria</option><option value="GH">Ghana</option><option value="KE">Kenya</option>
-                <option value="ZA">South Africa</option><option value="US">United States</option>
-                <option value="GB">United Kingdom</option><option value="IN">India</option><option value="CA">Canada</option>
-              </select>
-            </div>
-            <div class="ecl-macro-fld fld" style="margin:0">
-              <label>Inflation Rate (%)</label>
-              <input type="number" class="finput" id="ecl-inflation" value="10.00" step="0.01" style="font-size:12px;padding:7px 10px">
-            </div>
-            <div class="ecl-macro-fld fld" style="margin:0">
-              <label>GDP Growth (%)</label>
-              <input type="number" class="finput" id="ecl-gdp" value="3.00" step="0.01" style="font-size:12px;padding:7px 10px">
-            </div>
-            <div class="ecl-macro-fld fld" style="margin:0">
-              <label>Stage 2 DPD Trigger</label>
-              <input type="number" class="finput" id="ecl-s2dpd" value="30" min="1" step="1" style="font-size:12px;padding:7px 10px">
-            </div>
-            <div class="ecl-macro-fld fld" style="margin:0">
-              <label>Stage 3 DPD Trigger</label>
-              <input type="number" class="finput" id="ecl-s3dpd" value="90" min="1" step="1" style="font-size:12px;padding:7px 10px">
-            </div>
-            <div class="ecl-macro-fld fld" style="margin:0">
-              <label>Fallback EIR (%)</label>
-              <input type="number" class="finput" id="ecl-eir-default" value="12.00" step="0.01" style="font-size:12px;padding:7px 10px">
-            </div>
-          </div>
-          <div style="display:flex;gap:1rem;flex-wrap:wrap">
-            <label class="cb" style="font-size:12px"><input type="checkbox" id="ecl-simplified" checked><span>Use lifetime ECL for trade/lease receivables (Simplified Approach)</span></label>
-            <label class="cb" style="font-size:12px"><input type="checkbox" id="ecl-undrawn" checked><span>Include undrawn limits using CCF</span></label>
-            <label class="cb" style="font-size:12px"><input type="checkbox" id="ecl-autostage" checked><span>Auto-stage when stage is missing</span></label>
-          </div>
-          <div style="font-size:11px;color:var(--tx3);font-family:var(--mo);margin-top:8px" id="ecl-macro-status">Macro defaults are editable. Click "Fetch Macro" for live World Bank data.</div>
+        <!-- Tab bar -->
+        <div class="ecl-tab-bar">
+          <div class="ecl-tab active" onclick="switchEclTab('portfolio',this)">Portfolio</div>
+          <div class="ecl-tab" onclick="switchEclTab('provision',this)">Provision Matrix</div>
+          <div class="ecl-tab" onclick="switchEclTab('scenarios',this)">Scenarios</div>
+          <div class="ecl-tab" onclick="switchEclTab('writeoffs',this)">Write-offs</div>
         </div>
 
-        <!-- KPI metrics row -->
-        <div class="kpi-grid" id="ecl-kpis" style="margin-bottom:1rem"></div>
+        <!-- TAB: Portfolio -->
+        <div id="ecl-tab-portfolio">
+          <!-- Macro settings panel -->
+          <div class="ecl-panel" id="ecl-macro-panel">
+            <div class="ecl-panel-title">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+              Macro-Economic Parameters
+            </div>
+            <div class="ecl-macro-grid">
+              <div class="ecl-macro-fld fld" style="margin:0">
+                <label>Country</label>
+                <select class="finput" id="ecl-country" style="font-size:12px;padding:7px 32px 7px 10px">
+                  <option value="NG">Nigeria</option><option value="GH">Ghana</option><option value="KE">Kenya</option>
+                  <option value="ZA">South Africa</option><option value="US">United States</option>
+                  <option value="GB">United Kingdom</option><option value="IN">India</option><option value="CA">Canada</option>
+                </select>
+              </div>
+              <div class="ecl-macro-fld fld" style="margin:0">
+                <label>Base Inflation (%)</label>
+                <input type="number" class="finput" id="ecl-inflation" value="10.00" step="0.01" style="font-size:12px;padding:7px 10px">
+              </div>
+              <div class="ecl-macro-fld fld" style="margin:0">
+                <label>Base GDP Growth (%)</label>
+                <input type="number" class="finput" id="ecl-gdp" value="3.00" step="0.01" style="font-size:12px;padding:7px 10px">
+              </div>
+              <div class="ecl-macro-fld fld" style="margin:0">
+                <label>Stage 2 DPD Trigger</label>
+                <input type="number" class="finput" id="ecl-s2dpd" value="30" min="1" step="1" style="font-size:12px;padding:7px 10px">
+              </div>
+              <div class="ecl-macro-fld fld" style="margin:0">
+                <label>Stage 3 DPD Trigger</label>
+                <input type="number" class="finput" id="ecl-s3dpd" value="90" min="1" step="1" style="font-size:12px;padding:7px 10px">
+              </div>
+              <div class="ecl-macro-fld fld" style="margin:0">
+                <label>Fallback EIR (%)</label>
+                <input type="number" class="finput" id="ecl-eir-default" value="12.00" step="0.01" style="font-size:12px;padding:7px 10px">
+              </div>
+            </div>
+            <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:6px">
+              <label class="cb" style="font-size:12px"><input type="checkbox" id="ecl-simplified" checked><span>Simplified Approach — use lifetime ECL for trade receivables (IFRS 9 §5.5.15)</span></label>
+              <label class="cb" style="font-size:12px"><input type="checkbox" id="ecl-usematrix" checked><span>Use Provision Matrix rates for PD estimation</span></label>
+              <label class="cb" style="font-size:12px"><input type="checkbox" id="ecl-undrawn"><span>Include undrawn limits using CCF</span></label>
+            </div>
+            <div style="font-size:11px;color:var(--tx3);font-family:var(--mo)" id="ecl-macro-status">Macro defaults are editable. Click "Fetch Macro" for live World Bank data.</div>
+          </div>
 
-        <!-- Stage breakdown -->
-        <div class="ecl-stage-bar" id="ecl-stages" style="display:none"></div>
+          <!-- KPI metrics row -->
+          <div class="kpi-grid" id="ecl-kpis" style="margin-bottom:1rem"></div>
 
-        <!-- Portfolio table with inline ECL field editing -->
-        <div class="nt-info" style="margin-bottom:1rem">
-          <strong style="color:var(--t)">Editing ECL parameters inline:</strong> Each row shows live receivables data. You can edit Loan Classification, Collateral Type/Value, and EIR directly in the table — changes are saved to the database immediately. The source badge shows where the value came from:
-          <span class="ecl-source-badge invoice">invoice</span> = saved on this invoice,
-          <span class="ecl-source-badge debtor">debtor</span> = inherited from debtor defaults,
-          <span class="ecl-source-badge default">default</span> = system default.
-          To set defaults for all of a debtor's invoices at once, click the debtor name.
-        </div>
+          <!-- Weighted ECL result banner (shown after compute) -->
+          <div id="ecl-weighted-banner" style="display:none"></div>
 
-        <div id="ecl-portfolio-table"></div>
+          <!-- Stage breakdown -->
+          <div class="ecl-stage-bar" id="ecl-stages" style="display:none"></div>
 
-        <!-- Results section (shown after compute) -->
-        <div id="ecl-results-section" style="display:none;margin-top:1.5rem">
-          <div class="vhdr" style="margin-bottom:1rem">
-            <div class="section-ttl" style="margin:0">Computed ECL Results</div>
-            <div style="display:flex;gap:.5rem">
+          <!-- Info bar -->
+          <div class="nt-info" style="margin-bottom:1rem">
+            <strong style="color:var(--t)">Inline editing:</strong> Edit Classification, Collateral, EIR and Stage Override directly — click Save on each row to persist. Click a debtor name to set ECL defaults for all their invoices at once, or to update SICR indicators and credit-impaired status.
+            <span class="ecl-source-badge invoice">invoice</span> = invoice-level override &nbsp;
+            <span class="ecl-source-badge debtor">debtor</span> = debtor default &nbsp;
+            <span class="ecl-source-badge default">default</span> = system default
+          </div>
+
+          <div id="ecl-portfolio-table"></div>
+
+          <!-- Results section (shown after compute) -->
+          <div id="ecl-results-section" style="display:none;margin-top:1.5rem">
+            <div class="vhdr" style="margin-bottom:1rem">
+              <div class="section-ttl" style="margin:0">Computed ECL Results</div>
               <button onclick="saveEclSnapshot()">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Save Snapshot
               </button>
             </div>
+            <div id="ecl-results-table"></div>
           </div>
-          <div id="ecl-results-table"></div>
+
+          <!-- Snapshots -->
+          <div style="margin-top:1.5rem">
+            <div class="vhdr" style="margin-bottom:.75rem">
+              <div class="section-ttl" style="margin:0">Saved ECL Snapshots</div>
+              <button onclick="loadEclSnapshots()" style="font-size:11px;padding:5px 12px">Refresh</button>
+            </div>
+            <div id="ecl-snapshots"></div>
+          </div>
         </div>
 
-        <!-- Snapshots -->
-        <div style="margin-top:1.5rem">
-          <div class="vhdr" style="margin-bottom:.75rem">
-            <div class="section-ttl" style="margin:0">Saved ECL Snapshots</div>
-            <button onclick="loadEclSnapshots()" style="font-size:11px;padding:5px 12px">Refresh</button>
+        <!-- TAB: Provision Matrix -->
+        <div id="ecl-tab-provision" style="display:none">
+          <div class="ecl-panel">
+            <div class="ecl-panel-title">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg>
+              Provision Matrix — Loss Rates by Ageing Bucket (IFRS 9 §5.5.15)
+            </div>
+            <div class="nt-info" style="margin-bottom:1rem">
+              These are the historical loss rates applied per ageing bucket under the Simplified Approach. They represent the percentage of the outstanding balance expected to be lost, net of recoveries. Enter rates based on your own historical default experience or use published industry benchmarks. <strong style="color:var(--am)">These rates must be reviewed and documented periodically for audit purposes.</strong>
+            </div>
+            <div class="ecl-provision-grid">
+              <div class="ecl-provision-fld"><label>Current (0 days)</label><input type="number" id="pm-current" min="0" max="100" step="0.1" value="0.5"><span style="font-size:10px;color:var(--tx3);font-family:var(--mo)">% of balance</span></div>
+              <div class="ecl-provision-fld"><label>1–30 Days</label><input type="number" id="pm-1_30" min="0" max="100" step="0.1" value="2.0"><span style="font-size:10px;color:var(--tx3);font-family:var(--mo)">% of balance</span></div>
+              <div class="ecl-provision-fld"><label>31–60 Days</label><input type="number" id="pm-31_60" min="0" max="100" step="0.1" value="5.0"><span style="font-size:10px;color:var(--tx3);font-family:var(--mo)">% of balance</span></div>
+              <div class="ecl-provision-fld"><label>61–90 Days</label><input type="number" id="pm-61_90" min="0" max="100" step="0.1" value="15.0"><span style="font-size:10px;color:var(--tx3);font-family:var(--mo)">% of balance</span></div>
+              <div class="ecl-provision-fld"><label>91–180 Days</label><input type="number" id="pm-91_180" min="0" max="100" step="0.1" value="35.0"><span style="font-size:10px;color:var(--tx3);font-family:var(--mo)">% of balance</span></div>
+              <div class="ecl-provision-fld"><label>180+ Days</label><input type="number" id="pm-180plus" min="0" max="100" step="0.1" value="75.0"><span style="font-size:10px;color:var(--tx3);font-family:var(--mo)">% of balance</span></div>
+            </div>
+            <div style="display:flex;gap:.75rem;align-items:center;margin-top:.75rem">
+              <button class="bp" onclick="saveProvisionMatrix()"><span id="pm-save-txt">Save Matrix</span></button>
+              <span style="font-size:11px;color:var(--tx3);font-family:var(--mo)" id="pm-status"></span>
+            </div>
           </div>
-          <div id="ecl-snapshots"></div>
+          <div class="nt" style="margin-top:1rem">
+            <strong>Calibration note:</strong> The default rates shown are indicative only and based on general emerging market receivables benchmarks. For IFRS 9 audit compliance, you must replace these with rates derived from your own historical data (invoices that progressed to write-off by ageing bucket) or from a documented external source (e.g. CBN published NPL statistics, industry credit bureau data).
+          </div>
         </div>
+
+        <!-- TAB: Scenarios -->
+        <div id="ecl-tab-scenarios" style="display:none">
+          <div class="ecl-panel">
+            <div class="ecl-panel-title">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m22 12-4-4v3H3v2h15v3l4-4z"/></svg>
+              Forward-Looking Scenario Weights (IFRS 9 §5.5.17)
+            </div>
+            <div class="nt-info" style="margin-bottom:1rem">
+              IFRS 9 requires ECL to be a probability-weighted estimate considering multiple future economic outcomes. Define three scenarios — Base, Upside, and Downside — with their probability weights (must sum to 100%) and macro adjustments relative to your base case. The final weighted ECL = (Base ECL × base%) + (Upside ECL × upside%) + (Downside ECL × downside%).
+            </div>
+            <div class="ecl-scenario-grid">
+              <div class="ecl-scenario-card base">
+                <div class="ecl-scenario-lbl">Base Case</div>
+                <div class="ecl-scenario-fld"><label>Probability Weight (%)</label><input type="number" id="sc-base-wt" value="50" min="0" max="100" step="1"></div>
+                <div style="font-size:10px;color:var(--tx3);font-family:var(--mo);margin-top:6px">Uses macro values entered in the Portfolio tab exactly as entered.</div>
+              </div>
+              <div class="ecl-scenario-card up">
+                <div class="ecl-scenario-lbl">Upside Scenario</div>
+                <div class="ecl-scenario-fld"><label>Probability Weight (%)</label><input type="number" id="sc-up-wt" value="20" min="0" max="100" step="1"></div>
+                <div class="ecl-scenario-fld"><label>Inflation Adjustment (%)</label><input type="number" id="sc-up-infl" value="-3" step="0.5" placeholder="e.g. -3"></div>
+                <div class="ecl-scenario-fld"><label>GDP Adjustment (%)</label><input type="number" id="sc-up-gdp" value="2" step="0.5" placeholder="e.g. +2"></div>
+              </div>
+              <div class="ecl-scenario-card down">
+                <div class="ecl-scenario-lbl">Downside Scenario</div>
+                <div class="ecl-scenario-fld"><label>Probability Weight (%)</label><input type="number" id="sc-dn-wt" value="30" min="0" max="100" step="1"></div>
+                <div class="ecl-scenario-fld"><label>Inflation Adjustment (%)</label><input type="number" id="sc-dn-infl" value="5" step="0.5" placeholder="e.g. +5"></div>
+                <div class="ecl-scenario-fld"><label>GDP Adjustment (%)</label><input type="number" id="sc-dn-gdp" value="-3" step="0.5" placeholder="e.g. -3"></div>
+              </div>
+            </div>
+            <div style="display:flex;gap:.75rem;align-items:center">
+              <button class="bp" onclick="saveScenarios()"><span id="sc-save-txt">Save Scenarios</span></button>
+              <span style="font-size:11px;color:var(--tx3);font-family:var(--mo)" id="sc-status"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB: Write-offs -->
+        <div id="ecl-tab-writeoffs" style="display:none">
+          <div class="vhdr" style="margin-bottom:1rem">
+            <div>
+              <div class="section-ttl" style="margin:0">Written-Off Invoices</div>
+              <div style="font-size:11px;color:var(--tx3);font-family:var(--mo);margin-top:3px">Retained for historical calibration of provision matrix rates (IFRS 9 §5.4.4)</div>
+            </div>
+            <button onclick="loadWriteoffs()">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.18-5.5"/></svg>Refresh
+            </button>
+          </div>
+          <div id="ecl-writeoffs-table"></div>
+        </div>
+
       </div>
 
       <!-- Settings -->
@@ -751,43 +872,15 @@ async function deleteInvoice(id, no) {
   try { await api('/invoices/'+id, { method:'DELETE' }); toast('Invoice deleted.'); }
   catch(e) { toast(e.message,'err'); }
 }
-function downloadImportTemplate() {
-  const headers = ['Debtor Name','Email','Phone','Invoice Number','Invoice Date','Due Date','Amount','Amount Paid','Description','Credit Limit'];
-  const samples = [
-    ['ABC Company Ltd','abc@company.com','+2348012345678','INV-2025-001','2025-01-15','2025-02-15','500000','0','Supply of goods','1000000'],
-    ['XYZ Enterprises','xyz@enterprise.com','+2348098765432','INV-2025-002','2025-02-01','2025-03-01','250000','100000','Consulting services','500000'],
-    ['Demo Client','demo@client.com','','INV-2025-003','2025-03-10','2025-04-10','750000','0','Equipment supply',''],
-  ];
-  const rows = [headers, ...samples];
-  const csv  = rows.map(r => r.map(v => v.includes(',') ? `"${v}"` : v).join(',')).join('\r\n');
-  const blob = new Blob([csv], { type:'text/csv' });
-  const url  = URL.createObjectURL(blob);
-  const a    = document.createElement('a');
-  a.href = url; a.download = 'FM-Import-Template.csv'; a.click();
-  URL.revokeObjectURL(url);
-  toast('Template downloaded.');
-}
-
 function openImportModal() {
   openModal('Import from Excel / CSV', `
     <div class="merr" id="imp-err"></div>
     <div class="mok"  id="imp-ok"></div>
-    <div class="nt-info" style="margin-bottom:1rem">
-      <strong style="color:var(--t)">Required columns:</strong> Debtor Name, Email, Invoice Number, Invoice Date, Due Date, Amount, Amount Paid<br>
-      <strong style="color:var(--tx2)">Optional:</strong> Phone, Credit Limit, Description<br>
-      <strong style="color:var(--tx2)">Date format:</strong> YYYY-MM-DD &nbsp;(e.g. 2025-11-27)<br>
-      <strong style="color:var(--tx2)">Amount format:</strong> Numbers only, no commas or currency symbols &nbsp;(e.g. 500000)
-    </div>
-    <div style="margin-bottom:1rem">
-      <button onclick="downloadImportTemplate()" style="width:100%;justify-content:center;gap:8px;background:var(--tg);border-color:rgba(0,201,167,.3);color:var(--t);padding:10px">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Download CSV Template (with sample rows)
-      </button>
-    </div>
+    <div class="nt">File must have columns: <strong>Debtor Name, Email, Invoice Number, Invoice Date, Due Date, Amount, Amount Paid</strong><br>Optional: Phone, Credit Limit, Description/Narration</div>
     <div style="border:1.5px dashed var(--b2);border-radius:var(--r);padding:2rem;text-align:center;cursor:pointer;background:var(--tg);position:relative" id="imp-drop">
       <input type="file" accept=".csv,.xlsx,.xls" id="imp-file" style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%">
       <div style="font-size:1.5rem;margin-bottom:8px">📂</div>
-      <div style="font-size:13px;font-weight:500">Click or drop your completed file here</div>
+      <div style="font-size:13px;font-weight:500">Click or drop your Excel/CSV file</div>
       <div style="font-size:11px;color:var(--tx3);margin-top:4px" id="imp-fname">Accepts .xlsx, .xls, .csv</div>
     </div>`,
     `<button onclick="closeModal()">Cancel</button>
@@ -796,7 +889,6 @@ function openImportModal() {
     if (e.target.files[0]) { $('imp-fname').textContent = e.target.files[0].name; $('imp-btn').disabled = false; }
   });
 }
-
 async function doImport() {
   const file = $('imp-file').files[0]; if (!file) return;
   const errEl = $('imp-err'), okEl = $('imp-ok');
@@ -923,14 +1015,15 @@ async function loadLogs() {
 }
 
 // ─────────────────────────────────────────────────────────────────
-// ECL MODEL
-// Full IFRS 9 ECL engine — data comes from /api/ecl/portfolio
-// ECL fields persisted per invoice and per debtor via PUT endpoints
+// ECL MODEL — IFRS 9 Enhanced
+// Improvements: Provision Matrix, 3-Scenario Probability Weighting,
+//               Write-off Workflow, SICR Qualitative Indicators
 // ─────────────────────────────────────────────────────────────────
-let eclPortfolioRows = [];   // raw rows from API (inc ECL fields)
-let eclResults       = [];   // computed rows after Compute ECL
+let eclPortfolioRows = [];
+let eclResults       = [];
+let eclModelSettings = { provisionMatrix:{}, eclScenarios:{} };
 
-// ECL engine constants (mirrors original standalone app)
+// ── Constants ──────────────────────────────────────────────────
 const ECL_PROFILES = [
   {key:'overdraft',basePd:.07,lgd:.55,ccf:.75,stage:1},
   {key:'watch',basePd:.08,lgd:.5,ccf:.1,stage:2},
@@ -963,6 +1056,7 @@ const ECL_COLLATERAL_TYPES = [
   'Vehicle','Equipment','Inventory','Receivable','Guarantee'
 ];
 
+// ── ECL Engine helpers ─────────────────────────────────────────
 function eclNorm(v){ return String(v||'').trim().toLowerCase().replace(/[%()]/g,'').replace(/[_-]+/g,' ').replace(/\s+/g,' '); }
 function eclClamp(v,min,max){ return Math.min(Math.max(v,min),max); }
 function eclProfile(cls){
@@ -973,92 +1067,216 @@ function eclHaircut(type){
   const n = eclNorm(type);
   return ECL_COLLATERAL_HAIRCUTS.find(([k]) => n.includes(k))?.[1] ?? 0;
 }
-function eclMacroMult(infl, gdp){
-  return eclClamp(1 + ((infl*100-10)*.025) - ((gdp*100-3)*.04), .7, 1.8);
+function eclMacroMult(inflPct, gdpPct){
+  // inflPct and gdpPct already as percentage numbers (e.g. 10, 3)
+  return eclClamp(1 + ((inflPct - 10) * .025) - ((gdpPct - 3) * .04), .7, 1.8);
 }
 
-function eclComputeRow(row, settings) {
-  const prof = eclProfile(row.loanClassification);
-  const dpd  = row.daysPastDue || 0;
-  const ead  = Math.max(row.balance + (settings.includeUndrawn ? Math.max((row.creditLimit||0)-row.balance,0)*prof.ccf : 0), 0);
+// Provision matrix bucket key → settings key mapping
+function pmRate(bk, matrix) {
+  const map = { current:'current', '1_30':'days1_30', '31_60':'days31_60', '61_90':'days61_90', '91_180':'days91_180', '180_plus':'days180plus' };
+  return (matrix[map[bk]] ?? 5) / 100;  // convert % to decimal
+}
 
-  // Stage determination
-  let stage = row.stage; // explicit from DB
+// Core per-row ECL computation for one macro scenario
+function eclComputeRow(row, settings, inflOverride, gdpOverride) {
+  const prof   = eclProfile(row.loanClassification);
+  const dpd    = row.daysPastDue || 0;
+  const ead    = Math.max(row.balance + (settings.includeUndrawn ? Math.max((row.creditLimit||0)-row.balance,0)*prof.ccf : 0), 0);
+  const matrix = eclModelSettings.provisionMatrix || {};
+
+  // ── Stage determination ──────────────────────────────────
+  let stage = row.stage;  // explicit DB override
   if (!stage) {
-    if (dpd > settings.stage3Dpd || prof.stage === 3) stage = 3;
-    else if (dpd > settings.stage2Dpd || prof.stage === 2) stage = 2;
-    else if (settings.simplifiedApproach && /trade|receivable/i.test(row.loanClassification)) stage = 2;
-    else stage = 1;
+    // Credit-impaired debtor → always Stage 3
+    if (row.creditImpaired) { stage = 3; }
+    // SICR qualitative indicators → at least Stage 2
+    else if (row.sicrIndicators && (row.sicrIndicators.restructured || row.sicrIndicators.financialDifficulty || row.sicrIndicators.breachedCovenants || row.sicrIndicators.sectorStress)) {
+      stage = dpd > settings.stage3Dpd ? 3 : 2;
+    }
+    else if (dpd > settings.stage3Dpd || prof.stage === 3) { stage = 3; }
+    else if (dpd > settings.stage2Dpd || prof.stage === 2) { stage = 2; }
+    else if (settings.simplifiedApproach && /trade|receivable/i.test(row.loanClassification)) { stage = 2; }
+    else { stage = 1; }
   }
 
-  const macroMult  = eclMacroMult(settings.inflationRate/100, settings.gdpGrowthRate/100);
-  const dpdMult    = dpd<=0?.8:dpd<=30?1:dpd<=60?2:dpd<=90?4:12;
-  const scoreRatio = Math.max(0, Math.min(1, 1 - dpd/120));
-  const pd12 = stage===3 ? 1 : eclClamp(prof.basePd*(1+(1-scoreRatio)*2)*dpdMult*macroMult, .001, .95);
+  // ── PD estimation ────────────────────────────────────────
+  const infl = inflOverride !== undefined ? inflOverride : settings.inflationRate;
+  const gdp  = gdpOverride  !== undefined ? gdpOverride  : settings.gdpGrowthRate;
+  const macroMult = eclMacroMult(infl, gdp);
 
-  const dueDate     = new Date(row.dueDate);
-  const lifeMonths  = isNaN(dueDate.getTime()) ? 12 : Math.max((dueDate.getFullYear()-new Date().getFullYear())*12+dueDate.getMonth()-new Date().getMonth(), 1);
-  const lifetimePd  = stage===3 ? 1 : eclClamp(1-Math.pow(1-pd12, Math.max(lifeMonths/12, 1/12)), 0, 1);
+  let pd12, lifetimePd, pdBasis;
+  const bk = dpd<=0?'current':dpd<=30?'1_30':dpd<=60?'31_60':dpd<=90?'61_90':dpd<=180?'91_180':'180_plus';
 
-  const collVal   = row.collateralValue || 0;
-  const haircut   = eclHaircut(row.collateralType);
-  const lgd       = collVal>0 && ead>0 ? eclClamp(1-Math.min(collVal*haircut,ead)/ead, .02, 1) : prof.lgd;
+  if (stage === 3) {
+    pd12 = 1; lifetimePd = 1; pdBasis = 'Stage 3 default — PD = 100%';
+  } else if (settings.useMatrix && Object.keys(matrix).length) {
+    // ── PROVISION MATRIX approach (IFRS 9 §5.5.15) ──────
+    const baseRate = pmRate(bk, matrix);
+    // Apply macro multiplier to matrix rate as a forward-looking overlay
+    pd12       = eclClamp(baseRate * macroMult, .001, .99);
+    lifetimePd = pd12;  // simplified approach uses lifetime horizon
+    pdBasis    = `Provision matrix (${(baseRate*100).toFixed(1)}%) × macro (${macroMult.toFixed(2)})`;
+  } else {
+    // ── Formula-based PD fallback ────────────────────────
+    const dpdMult    = dpd<=0?.8:dpd<=30?1:dpd<=60?2:dpd<=90?4:12;
+    const scoreRatio = Math.max(0, Math.min(1, 1 - dpd/120));
+    pd12       = eclClamp(prof.basePd*(1+(1-scoreRatio)*2)*dpdMult*macroMult, .001, .95);
+    const dueDate    = new Date(row.dueDate);
+    const lifeMonths = isNaN(dueDate.getTime()) ? 12 : Math.max((dueDate.getFullYear()-new Date().getFullYear())*12+dueDate.getMonth()-new Date().getMonth(), 1);
+    lifetimePd = eclClamp(1-Math.pow(1-pd12, Math.max(lifeMonths/12, 1/12)), 0, 1);
+    pdBasis    = 'Formula-based (classification + DPD + macro)';
+  }
 
-  const eir            = (row.eir || settings.defaultDiscount) / 100;
-  const horizonMonths  = stage===1 ? Math.min(12,lifeMonths) : lifeMonths;
-  const pdUsed         = stage===1 ? pd12 : lifetimePd;
-  const discountFactor = eir>0 ? 1/Math.pow(1+eir, horizonMonths/12) : 1;
-  const ecl            = ead * pdUsed * lgd * discountFactor;
+  // ── LGD ─────────────────────────────────────────────────
+  const collVal = row.collateralValue || 0;
+  const haircut = eclHaircut(row.collateralType);
+  const lgd     = collVal > 0 && ead > 0
+    ? eclClamp(1 - Math.min(collVal*haircut, ead)/ead, .02, 1)
+    : prof.lgd;
 
-  return { ...row, stage, ead, pd12, lifetimePd, pdUsed, lgd, eir, horizonMonths, discountFactor, macroMult, ecl };
+  // ── EAD, horizon, discount ───────────────────────────────
+  const eir           = (row.eir || settings.defaultDiscount) / 100;
+  const dueDate2      = new Date(row.dueDate);
+  const lifeMonths2   = isNaN(dueDate2.getTime()) ? 12 : Math.max((dueDate2.getFullYear()-new Date().getFullYear())*12+dueDate2.getMonth()-new Date().getMonth(), 1);
+  const horizonMonths = stage === 1 ? Math.min(12, lifeMonths2) : lifeMonths2;
+  const pdUsed        = stage === 1 ? pd12 : lifetimePd;
+  const discountFactor = eir > 0 ? 1/Math.pow(1+eir, horizonMonths/12) : 1;
+  const ecl           = ead * pdUsed * lgd * discountFactor;
+
+  return { ...row, stage, ead, pd12, lifetimePd, pdUsed, lgd, eir, horizonMonths, discountFactor, macroMult, ecl, pdBasis, ageBucket:bk };
 }
 
 function eclReadSettings() {
   return {
-    inflationRate:   parseFloat($('ecl-inflation').value) || 10,
-    gdpGrowthRate:   parseFloat($('ecl-gdp').value)       || 3,
-    stage2Dpd:       parseInt($('ecl-s2dpd').value)        || 30,
-    stage3Dpd:       parseInt($('ecl-s3dpd').value)        || 90,
-    defaultDiscount: parseFloat($('ecl-eir-default').value) || 12,
+    inflationRate:   parseFloat($('ecl-inflation').value)    || 10,
+    gdpGrowthRate:   parseFloat($('ecl-gdp').value)          || 3,
+    stage2Dpd:       parseInt($('ecl-s2dpd').value)           || 30,
+    stage3Dpd:       parseInt($('ecl-s3dpd').value)           || 90,
+    defaultDiscount: parseFloat($('ecl-eir-default').value)  || 12,
     simplifiedApproach: $('ecl-simplified').checked,
-    includeUndrawn:     $('ecl-undrawn').checked,
-    autoStage:          $('ecl-autostage').checked,
+    useMatrix:          $('ecl-usematrix').checked,
+    includeUndrawn:     $('ecl-undrawn') ? $('ecl-undrawn').checked : false,
   };
 }
 
+function eclReadScenarios() {
+  return {
+    baseWeight:    parseFloat($('sc-base-wt').value)  || 50,
+    upsideWeight:  parseFloat($('sc-up-wt').value)    || 20,
+    downWeight:    parseFloat($('sc-dn-wt').value)    || 30,
+    upsideInflAdj: parseFloat($('sc-up-infl').value)  || -3,
+    upsideGdpAdj:  parseFloat($('sc-up-gdp').value)   || 2,
+    downInflAdj:   parseFloat($('sc-dn-infl').value)  || 5,
+    downGdpAdj:    parseFloat($('sc-dn-gdp').value)   || -3,
+  };
+}
+
+// ── Tab switching ──────────────────────────────────────────────
+function switchEclTab(tab, el) {
+  ['portfolio','provision','scenarios','writeoffs'].forEach(t => {
+    const panel = $('ecl-tab-' + t);
+    if(panel) panel.style.display = t === tab ? 'block' : 'none';
+  });
+  document.querySelectorAll('.ecl-tab').forEach(t => t.classList.remove('active'));
+  if(el) el.classList.add('active');
+  if(tab === 'writeoffs') loadWriteoffs();
+  if(tab === 'provision' || tab === 'scenarios') loadEclModelSettings();
+}
+
+// ── Load ECL model settings (provision matrix + scenarios) ─────
+async function loadEclModelSettings() {
+  try {
+    const d = await api('/ecl/model-settings');
+    eclModelSettings = d;
+    // Populate provision matrix inputs
+    const pm = d.provisionMatrix || {};
+    if($('pm-current'))  $('pm-current').value  = pm.current   ?? 0.5;
+    if($('pm-1_30'))     $('pm-1_30').value      = pm.days1_30  ?? 2.0;
+    if($('pm-31_60'))    $('pm-31_60').value      = pm.days31_60 ?? 5.0;
+    if($('pm-61_90'))    $('pm-61_90').value      = pm.days61_90 ?? 15.0;
+    if($('pm-91_180'))   $('pm-91_180').value     = pm.days91_180?? 35.0;
+    if($('pm-180plus'))  $('pm-180plus').value    = pm.days180plus??75.0;
+    // Populate scenario inputs
+    const sc = d.eclScenarios || {};
+    if($('sc-base-wt'))  $('sc-base-wt').value   = sc.baseWeight     ?? 50;
+    if($('sc-up-wt'))    $('sc-up-wt').value      = sc.upsideWeight   ?? 20;
+    if($('sc-dn-wt'))    $('sc-dn-wt').value      = sc.downsideWeight ?? 30;
+    if($('sc-up-infl'))  $('sc-up-infl').value    = sc.upsideInflAdj  ?? -3;
+    if($('sc-up-gdp'))   $('sc-up-gdp').value     = sc.upsideGdpAdj   ?? 2;
+    if($('sc-dn-infl'))  $('sc-dn-infl').value    = sc.downInflAdj    ?? 5;
+    if($('sc-dn-gdp'))   $('sc-dn-gdp').value     = sc.downGdpAdj     ?? -3;
+  } catch(e) { console.warn('Could not load ECL model settings:', e.message); }
+}
+
+async function saveProvisionMatrix() {
+  $('pm-save-txt').textContent = 'Saving…';
+  try {
+    await api('/ecl/model-settings', { method:'PUT', body:JSON.stringify({ provisionMatrix:{
+      current:    parseFloat($('pm-current').value)  || 0.5,
+      days1_30:   parseFloat($('pm-1_30').value)     || 2.0,
+      days31_60:  parseFloat($('pm-31_60').value)    || 5.0,
+      days61_90:  parseFloat($('pm-61_90').value)    || 15.0,
+      days91_180: parseFloat($('pm-91_180').value)   || 35.0,
+      days180plus:parseFloat($('pm-180plus').value)  || 75.0,
+    }})});
+    await loadEclModelSettings();
+    $('pm-status').textContent = '✓ Saved ' + new Date().toLocaleTimeString('en-GB');
+    toast('Provision matrix saved.');
+  } catch(e) { toast('Save failed: ' + e.message, 'err'); }
+  finally { $('pm-save-txt').textContent = 'Save Matrix'; }
+}
+
+async function saveScenarios() {
+  $('sc-save-txt').textContent = 'Saving…';
+  const sc = eclReadScenarios();
+  const total = sc.baseWeight + sc.upsideWeight + sc.downWeight;
+  if(Math.abs(total - 100) > 0.01) { toast(`Weights must sum to 100% (currently ${total}%)`, 'err'); $('sc-save-txt').textContent='Save Scenarios'; return; }
+  try {
+    await api('/ecl/model-settings', { method:'PUT', body:JSON.stringify({ eclScenarios:{
+      baseWeight:sc.baseWeight, upsideWeight:sc.upsideWeight, downsideWeight:sc.downWeight,
+      upsideInflAdj:sc.upsideInflAdj, upsideGdpAdj:sc.upsideGdpAdj,
+      downInflAdj:sc.downInflAdj, downGdpAdj:sc.downGdpAdj,
+    }})});
+    await loadEclModelSettings();
+    $('sc-status').textContent = '✓ Saved ' + new Date().toLocaleTimeString('en-GB');
+    toast('Scenarios saved.');
+  } catch(e) { toast('Save failed: ' + e.message, 'err'); }
+  finally { $('sc-save-txt').textContent = 'Save Scenarios'; }
+}
+
+// ── Load ECL portfolio ─────────────────────────────────────────
 async function loadEclPortfolio() {
   $('ecl-portfolio-table').innerHTML = '<div class="loading-row">Loading portfolio from database…</div>';
   $('ecl-kpis').innerHTML = '';
   $('ecl-stages').style.display = 'none';
   $('ecl-results-section').style.display = 'none';
+  if($('ecl-weighted-banner')) $('ecl-weighted-banner').style.display = 'none';
   eclResults = [];
   $('ecl-export-btn').disabled = true;
   try {
-    const d = await api('/ecl/portfolio');
+    const [d] = await Promise.all([api('/ecl/portfolio'), loadEclModelSettings()]);
     eclPortfolioRows = d.rows;
     $('ecl-ts').textContent = `${d.count} invoice rows loaded · ${new Date().toLocaleString('en-GB')}`;
     renderEclPortfolioTable();
     loadEclSnapshots();
-    if (!d.count) {
-      $('ecl-portfolio-table').innerHTML = empty('No outstanding invoices found. Add debtors and invoices in the Debtors view first.');
-    }
-  } catch(e) {
-    $('ecl-portfolio-table').innerHTML = `<div class="nt">⚠ ${e.message}</div>`;
-  }
+    if(!d.count) $('ecl-portfolio-table').innerHTML = empty('No outstanding invoices found. Add debtors and invoices in the Debtors view first.');
+  } catch(e) { $('ecl-portfolio-table').innerHTML = `<div class="nt">⚠ ${e.message}</div>`; }
 }
 
 function renderEclPortfolioTable() {
-  if (!eclPortfolioRows.length) return;
-  const makeSourceBadge = (src) => `<span class="ecl-source-badge ${src}">${src}</span>`;
-  const classOptions = ECL_LOAN_CLASSIFICATIONS.map(c=>`<option value="${c}">${c}</option>`).join('');
-  const collOptions  = ECL_COLLATERAL_TYPES.map(c=>`<option value="${c}">${c}</option>`).join('');
+  if(!eclPortfolioRows.length) return;
+  const makeSourceBadge = src => `<span class="ecl-source-badge ${src}">${src}</span>`;
 
   const rows = eclPortfolioRows.map((r, idx) => {
-    const bk = r.daysPastDue <= 0 ? 'current' : r.daysPastDue<=30?'1_30':r.daysPastDue<=60?'31_60':r.daysPastDue<=90?'61_90':r.daysPastDue<=180?'91_180':'180_plus';
+    const bk  = r.daysPastDue<=0?'current':r.daysPastDue<=30?'1_30':r.daysPastDue<=60?'31_60':r.daysPastDue<=90?'61_90':r.daysPastDue<=180?'91_180':'180_plus';
     const src = r._eclSource || {};
+    const sicrAny = r.sicrIndicators && (r.sicrIndicators.restructured||r.sicrIndicators.financialDifficulty||r.sicrIndicators.breachedCovenants||r.sicrIndicators.sectorStress);
+    const sicrBadge = sicrAny ? `<span class="sicr-badge">SICR</span>` : '';
+    const impBadge  = r.creditImpaired ? `<span class="sicr-badge impaired-badge">Impaired</span>` : '';
     return `<tr id="ecl-row-${idx}">
       <td>
-        <div style="font-weight:500;font-size:12px;cursor:pointer;color:var(--t);text-decoration:underline;text-decoration-style:dotted;text-underline-offset:2px" onclick="openDebtorEclModal('${r._debtorId}','${r.customerName.replace(/'/g,"\\'")}')" title="Edit ECL defaults for all ${r.customerName} invoices">${r.customerName}</div>
+        <div style="font-weight:500;font-size:12px;cursor:pointer;color:var(--t);text-decoration:underline;text-decoration-style:dotted;text-underline-offset:2px" onclick="openDebtorEclModal('${r._debtorId}','${r.customerName.replace(/'/g,"\\'")}')" title="Edit ECL defaults + SICR for ${r.customerName}">${r.customerName} ${sicrBadge}${impBadge}</div>
         <div style="font-size:10px;font-family:var(--mo);color:var(--tx3)">${r.invoiceNumber}</div>
       </td>
       <td>${fD(r.dueDate)}</td>
@@ -1068,28 +1286,24 @@ function renderEclPortfolioTable() {
         <div class="ecl-inline-edit">
           <select class="ecl-inline-select" id="cls-${idx}" onchange="eclFieldChanged(${idx},'loanClassification',this.value)">
             ${ECL_LOAN_CLASSIFICATIONS.map(c=>`<option value="${c}" ${c===r.loanClassification?'selected':''}>${c}</option>`).join('')}
-          </select>
-          ${makeSourceBadge(src.loanClassification||'default')}
+          </select>${makeSourceBadge(src.loanClassification||'default')}
         </div>
       </td>
       <td>
         <div class="ecl-inline-edit" style="gap:4px">
           <select class="ecl-inline-select" id="colt-${idx}" onchange="eclFieldChanged(${idx},'collateralType',this.value)">
             ${ECL_COLLATERAL_TYPES.map(c=>`<option value="${c}" ${c===r.collateralType?'selected':''}>${c}</option>`).join('')}
-          </select>
-          ${makeSourceBadge(src.collateralType||'default')}
+          </select>${makeSourceBadge(src.collateralType||'default')}
         </div>
       </td>
       <td>
         <div class="ecl-inline-edit">
-          <input class="ecl-inline-num" type="number" id="colv-${idx}" value="${r.collateralValue||0}" min="0" step="1000" onblur="eclFieldChanged(${idx},'collateralValue',this.value)">
-          ${makeSourceBadge(src.collateralValue||'default')}
+          <input class="ecl-inline-num" type="number" id="colv-${idx}" value="${r.collateralValue||0}" min="0" step="1000" onblur="eclFieldChanged(${idx},'collateralValue',this.value)">${makeSourceBadge(src.collateralValue||'default')}
         </div>
       </td>
       <td>
         <div class="ecl-inline-edit">
-          <input class="ecl-inline-num" type="number" id="eir-${idx}" value="${r.eir||''}" min="0" step="0.5" placeholder="—" onblur="eclFieldChanged(${idx},'eir',this.value)" style="width:60px">
-          ${makeSourceBadge(src.eir||'default')}
+          <input class="ecl-inline-num" type="number" id="eir-${idx}" value="${r.eir||''}" min="0" step="0.5" placeholder="—" onblur="eclFieldChanged(${idx},'eir',this.value)" style="width:60px">${makeSourceBadge(src.eir||'default')}
         </div>
       </td>
       <td>
@@ -1099,122 +1313,121 @@ function renderEclPortfolioTable() {
             <option value="1" ${r.stage===1?'selected':''}>Stage 1</option>
             <option value="2" ${r.stage===2?'selected':''}>Stage 2</option>
             <option value="3" ${r.stage===3?'selected':''}>Stage 3</option>
-          </select>
-          ${makeSourceBadge(src.stage||'auto')}
+          </select>${makeSourceBadge(src.stage||'auto')}
         </div>
       </td>
       <td>
-        <button class="bsm save-ecl-btn" id="save-ecl-${idx}" onclick="saveEclRow(${idx})" style="opacity:.5;font-size:10px;padding:3px 9px;border-radius:6px" title="Save ECL fields for this invoice">
-          Save
-        </button>
+        <div style="display:flex;gap:4px">
+          <button class="bsm save-ecl-btn" id="save-ecl-${idx}" onclick="saveEclRow(${idx})" style="opacity:.5;font-size:10px;padding:3px 9px;border-radius:6px">Save</button>
+          <button class="bsm bd" onclick="writeOffInvoice('${r._invoiceId}','${r.invoiceNumber}')" title="Write off" style="padding:3px 7px;font-size:10px">W/O</button>
+        </div>
       </td>
     </tr>`;
   }).join('');
 
   $('ecl-portfolio-table').innerHTML = `<div class="tw"><table>
     <thead><tr>
-      <th>Debtor / Invoice</th>
-      <th>Due Date</th>
-      <th style="text-align:right">Balance</th>
-      <th>Ageing</th>
-      <th>Loan Classification</th>
-      <th>Collateral Type</th>
-      <th>Collateral Value</th>
-      <th>EIR (%)</th>
-      <th>Stage Override</th>
-      <th></th>
+      <th>Debtor / Invoice</th><th>Due Date</th>
+      <th style="text-align:right">Balance</th><th>Ageing</th>
+      <th>Loan Classification</th><th>Collateral Type</th>
+      <th>Collateral Value</th><th>EIR (%)</th><th>Stage Override</th><th></th>
     </tr></thead>
     <tbody>${rows}</tbody>
   </table></div>`;
 }
 
-// Track dirty state per row
+// ── Dirty tracking & save ──────────────────────────────────────
 const eclDirty = {};
 function eclFieldChanged(idx, field, value) {
-  if (!eclDirty[idx]) eclDirty[idx] = {};
+  if(!eclDirty[idx]) eclDirty[idx] = {};
   eclDirty[idx][field] = value;
-  // Update local cache
-  eclPortfolioRows[idx][field] = field === 'collateralValue' || field === 'eir' ? parseFloat(value)||0 : (field === 'stage' ? (value?parseInt(value):null) : value);
-  // Brighten save button
+  eclPortfolioRows[idx][field] = field==='collateralValue'||field==='eir' ? parseFloat(value)||0 : (field==='stage'?(value?parseInt(value):null):value);
   const btn = $('save-ecl-' + idx);
-  if (btn) btn.style.opacity = '1';
+  if(btn) btn.style.opacity = '1';
 }
 
 async function saveEclRow(idx) {
-  const row = eclPortfolioRows[idx];
-  if (!row) return;
+  const row = eclPortfolioRows[idx]; if(!row) return;
   const btn = $('save-ecl-' + idx);
-  if (btn) btn.textContent = '…';
+  if(btn) btn.textContent = '…';
   try {
-    // Build invoice-level ECL payload
-    const payload = {
+    await api('/ecl/invoice/' + row._invoiceId, { method:'PUT', body:JSON.stringify({
       ecl_loanClassification: row.loanClassification,
       ecl_collateralType:     row.collateralType,
       ecl_collateralValue:    row.collateralValue || 0,
       ecl_eir:                row.eir || null,
       ecl_stage:              row.stage || null,
-    };
-    await api('/ecl/invoice/' + row._invoiceId, { method:'PUT', body:JSON.stringify(payload) });
-    // Update source badges to reflect 'invoice'
-    if (row._eclSource) {
-      ['loanClassification','collateralType','collateralValue','eir'].forEach(f => { row._eclSource[f] = 'invoice'; });
-      if (row.stage) row._eclSource.stage = 'invoice';
-    }
-    if (btn) { btn.textContent = '✓'; btn.style.opacity = '.5'; }
-    const tr = $('ecl-row-' + idx);
-    if (tr) tr.classList.add('ecl-row-saved');
+    })});
+    if(row._eclSource) { ['loanClassification','collateralType','collateralValue','eir'].forEach(f=>{row._eclSource[f]='invoice';}); if(row.stage) row._eclSource.stage='invoice'; }
+    if(btn){btn.textContent='✓';btn.style.opacity='.5';}
+    const tr=$('ecl-row-'+idx); if(tr) tr.classList.add('ecl-row-saved');
     toast('ECL fields saved for ' + row.invoiceNumber);
     delete eclDirty[idx];
-  } catch(e) {
-    toast('Save failed: ' + e.message, 'err');
-    if (btn) { btn.textContent = 'Save'; btn.style.opacity = '1'; }
-  }
+  } catch(e) { toast('Save failed: '+e.message,'err'); if(btn){btn.textContent='Save';btn.style.opacity='1';} }
 }
 
-// Edit ALL invoices for a debtor at once via modal
+// ── Debtor ECL modal — now includes SICR indicators ───────────
 async function openDebtorEclModal(debtorId, debtorName) {
-  openModal(`ECL Defaults — ${debtorName}`,
-    `<div class="merr" id="decl-err"></div>
-    <div class="nt-info" style="margin-bottom:1rem">These defaults apply to <strong>all invoices</strong> for this debtor unless a specific invoice has its own override saved.</div>
+  openModal(`ECL Defaults & SICR — ${debtorName}`, `
+    <div class="merr" id="decl-err"></div>
+    <div class="nt-info" style="margin-bottom:1rem">ECL defaults apply to all invoices for this debtor unless a specific invoice has its own override. SICR indicators and Credit-Impaired status apply immediately in staging.</div>
+
+    <div class="section-ttl" style="font-size:13px;margin-bottom:.75rem">ECL Parameter Defaults</div>
     <div class="fg">
       <div class="fld">
         <label>Loan Classification</label>
-        <select class="finput" id="decl-cls">
-          ${ECL_LOAN_CLASSIFICATIONS.map(c=>`<option value="${c}">${c}</option>`).join('')}
-        </select>
+        <select class="finput" id="decl-cls">${ECL_LOAN_CLASSIFICATIONS.map(c=>`<option value="${c}">${c}</option>`).join('')}</select>
       </div>
       <div class="fld">
         <label>Collateral Type</label>
-        <select class="finput" id="decl-colt">
-          ${ECL_COLLATERAL_TYPES.map(c=>`<option value="${c}">${c}</option>`).join('')}
-        </select>
+        <select class="finput" id="decl-colt">${ECL_COLLATERAL_TYPES.map(c=>`<option value="${c}">${c}</option>`).join('')}</select>
       </div>
     </div>
     <div class="fg">
-      <div class="fld"><label>Collateral Value (₦)</label><input class="finput" type="number" id="decl-colv" min="0" step="1000" value="0" placeholder="0"></div>
+      <div class="fld"><label>Collateral Value (₦)</label><input class="finput" type="number" id="decl-colv" min="0" step="1000" value="0"></div>
       <div class="fld"><label>EIR / Discount Rate (%)</label><input class="finput" type="number" id="decl-eir" min="0" step="0.5" placeholder="Leave blank for fallback"></div>
     </div>
     <div class="fld">
-      <label>Stage Override (optional)</label>
+      <label>Stage Override</label>
       <select class="finput" id="decl-stg">
         <option value="">Auto-determine</option>
         <option value="1">Stage 1</option><option value="2">Stage 2</option><option value="3">Stage 3</option>
       </select>
-    </div>`,
+    </div>
+
+    <div class="sep"></div>
+    <div class="section-ttl" style="font-size:13px;margin-bottom:.75rem">SICR Qualitative Indicators (IFRS 9 §B5.5.17)</div>
+    <div style="display:grid;gap:8px;margin-bottom:1rem">
+      <label class="cb"><input type="checkbox" id="sicr-restructured"><span>Loan/invoice has been restructured or payment terms extended</span></label>
+      <label class="cb"><input type="checkbox" id="sicr-difficulty"><span>Debtor is in financial difficulty or has going-concern issues</span></label>
+      <label class="cb"><input type="checkbox" id="sicr-covenants"><span>Debtor has breached agreed credit covenants or payment terms</span></label>
+      <label class="cb"><input type="checkbox" id="sicr-sector"><span>Debtor operates in a sector under significant economic stress</span></label>
+    </div>
+    <label class="cb" style="background:rgba(224,82,82,.07);border:1px solid rgba(224,82,82,.2);border-radius:var(--r);padding:10px 12px">
+      <input type="checkbox" id="sicr-impaired">
+      <span><strong style="color:var(--rd)">Credit-Impaired (Stage 3)</strong> — Force all this debtor's invoices to Stage 3 (IFRS 9 §5.5.3). Use when there is objective evidence of impairment.</span>
+    </label>`,
     `<button onclick="closeModal()">Cancel</button>
-     <button class="bp" onclick="saveDebtorEcl('${debtorId}','${debtorName.replace(/'/g,'\\\'')}')" ><span id="decl-save-txt">Save Defaults</span></button>`
+     <button class="bp" onclick="saveDebtorEcl('${debtorId}','${debtorName.replace(/'/g,'\\\'')}')" ><span id="decl-save-txt">Save</span></button>`,
+    false, false
   );
 
-  // Pre-fill with current debtor values
+  // Pre-fill
   try {
     const rows = eclPortfolioRows.filter(r => r._debtorId === debtorId);
-    if (rows.length) {
+    if(rows.length) {
       const r = rows[0];
-      if ($('decl-cls'))  $('decl-cls').value  = r.loanClassification || 'Trade Receivable';
-      if ($('decl-colt')) $('decl-colt').value = r.collateralType || 'Unsecured';
-      if ($('decl-colv')) $('decl-colv').value = r.collateralValue || 0;
-      if ($('decl-eir'))  $('decl-eir').value  = r.eir || '';
-      if ($('decl-stg'))  $('decl-stg').value  = r.stage || '';
+      if($('decl-cls'))  $('decl-cls').value  = r.loanClassification || 'Trade Receivable';
+      if($('decl-colt')) $('decl-colt').value = r.collateralType || 'Unsecured';
+      if($('decl-colv')) $('decl-colv').value = r.collateralValue || 0;
+      if($('decl-eir'))  $('decl-eir').value  = r.eir || '';
+      if($('decl-stg'))  $('decl-stg').value  = r.stage || '';
+      const si = r.sicrIndicators || {};
+      if($('sicr-restructured')) $('sicr-restructured').checked = si.restructured || false;
+      if($('sicr-difficulty'))   $('sicr-difficulty').checked   = si.financialDifficulty || false;
+      if($('sicr-covenants'))    $('sicr-covenants').checked    = si.breachedCovenants || false;
+      if($('sicr-sector'))       $('sicr-sector').checked       = si.sectorStress || false;
+      if($('sicr-impaired'))     $('sicr-impaired').checked     = r.creditImpaired || false;
     }
   } catch(e) {}
 }
@@ -1222,155 +1435,247 @@ async function openDebtorEclModal(debtorId, debtorName) {
 async function saveDebtorEcl(debtorId, debtorName) {
   const err = $('decl-err'); err.classList.remove('on');
   $('decl-save-txt').textContent = 'Saving…';
-  const payload = {
-    ecl_loanClassification: $('decl-cls').value,
-    ecl_collateralType:     $('decl-colt').value,
-    ecl_collateralValue:    parseFloat($('decl-colv').value) || 0,
-    ecl_eir:                parseFloat($('decl-eir').value) || null,
-    ecl_stage:              parseInt($('decl-stg').value) || null,
-  };
   try {
-    await api('/ecl/debtor/' + debtorId, { method:'PUT', body:JSON.stringify(payload) });
+    // Save ECL parameter defaults
+    await api('/ecl/debtor/' + debtorId, { method:'PUT', body:JSON.stringify({
+      ecl_loanClassification: $('decl-cls').value,
+      ecl_collateralType:     $('decl-colt').value,
+      ecl_collateralValue:    parseFloat($('decl-colv').value) || 0,
+      ecl_eir:                parseFloat($('decl-eir').value) || null,
+      ecl_stage:              parseInt($('decl-stg').value) || null,
+    })});
+    // Save SICR indicators and credit-impaired flag
+    await api('/ecl/debtor/' + debtorId + '/sicr', { method:'PUT', body:JSON.stringify({
+      creditImpaired: $('sicr-impaired').checked,
+      sicrIndicators: {
+        restructured:       $('sicr-restructured').checked,
+        financialDifficulty:$('sicr-difficulty').checked,
+        breachedCovenants:  $('sicr-covenants').checked,
+        sectorStress:       $('sicr-sector').checked,
+      }
+    })});
     closeModal();
-    toast('ECL defaults saved for ' + debtorName);
-    loadEclPortfolio(); // reload so badge sources refresh
-  } catch(e) {
-    err.textContent = e.message; err.classList.add('on');
-    $('decl-save-txt').textContent = 'Save Defaults';
-  }
+    toast('ECL defaults and SICR indicators saved for ' + debtorName);
+    loadEclPortfolio();
+  } catch(e) { err.textContent = e.message; err.classList.add('on'); $('decl-save-txt').textContent = 'Save'; }
 }
 
+// ── Write-off ──────────────────────────────────────────────────
+async function writeOffInvoice(invoiceId, invoiceNumber) {
+  const reason = prompt(`Write off invoice ${invoiceNumber}?\n\nEnter reason (e.g. "No reasonable expectation of recovery after 180+ days"):`);
+  if(reason === null) return; // cancelled
+  try {
+    await api('/ecl/invoice/' + invoiceId + '/writeoff', { method:'PUT', body:JSON.stringify({ reason: reason || 'No reasonable expectation of recovery' }) });
+    toast(`Invoice ${invoiceNumber} written off.`);
+    loadEclPortfolio();
+  } catch(e) { toast(e.message, 'err'); }
+}
+
+async function loadWriteoffs() {
+  const el = $('ecl-writeoffs-table');
+  if(!el) return;
+  el.innerHTML = '<div class="loading-row">Loading write-offs…</div>';
+  try {
+    const d = await api('/ecl/writeoffs');
+    if(!d.invoices.length) { el.innerHTML = empty('No written-off invoices yet. Write-offs are recorded here for audit trail and provision matrix calibration.'); return; }
+    const rows = d.invoices.map(i => `<tr>
+      <td>${fD(i.writtenOffDate)}</td>
+      <td style="font-family:var(--mo);font-size:11px">${i.invoiceNumber}</td>
+      <td>${i.debtorName}</td>
+      <td class="nm" style="color:var(--rd)">₦${fN(i.writtenOffAmount)}</td>
+      <td class="nm">₦${fN(i.amount)}</td>
+      <td class="nr">${i.writtenOffReason||'—'}</td>
+      <td>
+        <button class="bsm" onclick="restoreInvoice('${i._id}','${i.invoiceNumber}')" style="font-size:10px;padding:3px 9px">Restore</button>
+      </td>
+    </tr>`).join('');
+    el.innerHTML = `<div class="tw"><table>
+      <thead><tr><th>Written Off</th><th>Invoice #</th><th>Debtor</th><th style="text-align:right">W/O Amount</th><th style="text-align:right">Original</th><th>Reason</th><th></th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table></div>`;
+  } catch(e) { el.innerHTML = `<div class="nt">⚠ ${e.message}</div>`; }
+}
+
+async function restoreInvoice(id, no) {
+  if(!confirm(`Restore invoice ${no} back to outstanding?`)) return;
+  try { await api('/ecl/invoice/' + id + '/restore', { method:'PUT' }); toast('Invoice restored.'); loadWriteoffs(); }
+  catch(e) { toast(e.message, 'err'); }
+}
+
+// ── Fetch macro ────────────────────────────────────────────────
 async function fetchEclMacro() {
   const btn = $('ecl-macro-btn');
   btn.disabled = true; btn.textContent = 'Fetching…';
   try {
     const country = $('ecl-country').value;
-    const r = await fetch(`https://api.worldbank.org/v2/country/${country}/indicator/FP.CPI.TOTL.ZG?format=json&mrv=1`);
+    const r    = await fetch(`https://api.worldbank.org/v2/country/${country}/indicator/FP.CPI.TOTL.ZG?format=json&mrv=1`);
     const data = await r.json();
-    const val = data?.[1]?.[0]?.value;
-    if (val !== undefined && val !== null) {
+    const val  = data?.[1]?.[0]?.value;
+    if(val !== undefined && val !== null) {
       $('ecl-inflation').value = Number(val).toFixed(2);
       $('ecl-macro-status').textContent = `World Bank inflation for ${country}: ${Number(val).toFixed(2)}%. GDP growth is editable manually.`;
       toast('Macro data updated from World Bank.');
     } else {
       $('ecl-macro-status').textContent = 'Could not fetch macro data. Using manual values.';
     }
-  } catch(e) {
-    $('ecl-macro-status').textContent = 'Macro fetch failed. Enter values manually.';
-  } finally {
-    btn.disabled = false; btn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> Fetch Macro';
+  } catch(e) { $('ecl-macro-status').textContent = 'Macro fetch failed. Enter values manually.'; }
+  finally {
+    btn.disabled = false;
+    btn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> Fetch Macro';
   }
 }
 
+// ── Compute ECL — three scenarios, probability-weighted ────────
 function computeECL() {
-  if (!eclPortfolioRows.length) { toast('Load portfolio first.','err'); return; }
-  const settings = eclReadSettings();
-  eclResults = eclPortfolioRows.map(r => eclComputeRow(r, settings));
+  if(!eclPortfolioRows.length) { toast('Load portfolio first.','err'); return; }
+  const settings  = eclReadSettings();
+  const scenarios = eclReadScenarios();
+  const totalWt   = scenarios.baseWeight + scenarios.upsideWeight + scenarios.downWeight;
 
-  // KPIs
-  const totalEAD = eclResults.reduce((s,r)=>s+r.ead,0);
-  const totalECL = eclResults.reduce((s,r)=>s+r.ecl,0);
-  const coverage = totalEAD > 0 ? totalECL/totalEAD : 0;
+  if(Math.abs(totalWt - 100) > 0.5) {
+    toast(`Scenario weights sum to ${totalWt}% — must be 100%. Go to the Scenarios tab to fix.`, 'err');
+    return;
+  }
+
+  // Compute ECL for each scenario
+  const baseRows   = eclPortfolioRows.map(r => eclComputeRow(r, settings, settings.inflationRate, settings.gdpGrowthRate));
+  const upsideRows = eclPortfolioRows.map(r => eclComputeRow(r, settings, settings.inflationRate + scenarios.upsideInflAdj, settings.gdpGrowthRate + scenarios.upsideGdpAdj));
+  const downRows   = eclPortfolioRows.map(r => eclComputeRow(r, settings, settings.inflationRate + scenarios.downInflAdj, settings.gdpGrowthRate + scenarios.downGdpAdj));
+
+  // Probability-weighted ECL per row
+  eclResults = baseRows.map((br, i) => {
+    const ur = upsideRows[i], dr = downRows[i];
+    const wBase = scenarios.baseWeight / 100, wUp = scenarios.upsideWeight / 100, wDn = scenarios.downWeight / 100;
+    const weightedEcl = br.ecl*wBase + ur.ecl*wUp + dr.ecl*wDn;
+    return { ...br, eclBase:br.ecl, eclUpside:ur.ecl, eclDownside:dr.ecl, ecl:weightedEcl, weightedEcl };
+  });
+
+  // ── KPIs ────────────────────────────────────────────────
+  const totalEAD  = eclResults.reduce((s,r)=>s+r.ead,0);
+  const totalECL  = eclResults.reduce((s,r)=>s+r.ecl,0);
+  const baseECL   = eclResults.reduce((s,r)=>s+r.eclBase,0);
+  const upECL     = eclResults.reduce((s,r)=>s+r.eclUpside,0);
+  const dnECL     = eclResults.reduce((s,r)=>s+r.eclDownside,0);
+  const coverage  = totalEAD > 0 ? totalECL/totalEAD : 0;
   const s1 = eclResults.filter(r=>r.stage===1), s2 = eclResults.filter(r=>r.stage===2), s3 = eclResults.filter(r=>r.stage===3);
 
   $('ecl-kpis').innerHTML = [
     { l:'Total Exposure (EAD)', v:'₦'+fN(totalEAD), c:'tl', ac:true },
-    { l:'Total ECL',            v:'₦'+fN(totalECL), c:'rd', cl:'rd' },
+    { l:'Weighted ECL',         v:'₦'+fN(totalECL), c:'rd', cl:'rd' },
     { l:'Coverage Ratio',       v:(coverage*100).toFixed(2)+'%', c:'am', cl:'am' },
-    { l:'Rows Processed',       v:eclResults.length, c:'' },
+    { l:'Invoices Processed',   v:eclResults.length, c:'' },
     { l:'Stage 1 Exposure',     v:'₦'+fN(s1.reduce((s,r)=>s+r.ead,0)), c:'gr' },
     { l:'Stage 2 Exposure',     v:'₦'+fN(s2.reduce((s,r)=>s+r.ead,0)), c:'am', cl:'am' },
     { l:'Stage 3 Exposure',     v:'₦'+fN(s3.reduce((s,r)=>s+r.ead,0)), c:'rd', cl:'rd' },
-  ].map(k => `<div class="kpi${k.ac?' ac':k.cl?' '+k.cl:''}"><div class="kl">${k.l}</div><div class="kv ${k.c}">${k.v}</div></div>`).join('');
+  ].map(k=>`<div class="kpi${k.ac?' ac':k.cl?' '+k.cl:''}"><div class="kl">${k.l}</div><div class="kv ${k.c}">${k.v}</div></div>`).join('');
 
-  // Stage breakdown cards
+  // ── Weighted ECL banner ──────────────────────────────────
+  const banner = $('ecl-weighted-banner');
+  banner.style.display = 'flex';
+  banner.className = 'ecl-weighted-result';
+  banner.innerHTML = `
+    <div><div class="wlbl">Probability-Weighted ECL</div><div class="wval">₦${fN(totalECL)}</div><div class="wsub">IFRS 9 §5.5.17 compliant</div></div>
+    <div><div class="wlbl">Base Case ECL (${scenarios.baseWeight}%)</div><div class="wval" style="color:var(--bl)">₦${fN(baseECL)}</div></div>
+    <div><div class="wlbl">Upside ECL (${scenarios.upsideWeight}%)</div><div class="wval" style="color:var(--gr)">₦${fN(upECL)}</div></div>
+    <div><div class="wlbl">Downside ECL (${scenarios.downWeight}%)</div><div class="wval" style="color:var(--rd)">₦${fN(dnECL)}</div></div>
+    <div><div class="wlbl">Coverage Ratio</div><div class="wval" style="color:var(--am)">${(coverage*100).toFixed(2)}%</div></div>`;
+
+  // ── Stage breakdown ──────────────────────────────────────
   const stageBar = $('ecl-stages');
   stageBar.style.display = 'grid';
   stageBar.innerHTML = [
-    { cls:'s1', lbl:'Stage 1 — Performing', rows:s1, color:'gr' },
-    { cls:'s2', lbl:'Stage 2 — SICR / Watchlist', rows:s2, color:'am' },
-    { cls:'s3', lbl:'Stage 3 — Default', rows:s3, color:'rd' },
+    { cls:'s1', lbl:'Stage 1 — Performing (12M ECL)', rows:s1 },
+    { cls:'s2', lbl:'Stage 2 — SICR / Watchlist (Lifetime ECL)', rows:s2 },
+    { cls:'s3', lbl:'Stage 3 — Default / Impaired (Lifetime ECL)', rows:s3 },
   ].map(s => {
     const ead = s.rows.reduce((t,r)=>t+r.ead,0);
     const ecl = s.rows.reduce((t,r)=>t+r.ecl,0);
     return `<div class="ecl-stage-card ${s.cls}">
       <div class="ecl-stage-lbl">${s.lbl}</div>
       <div class="ecl-stage-amt">₦${fN(ead)}</div>
-      <div class="ecl-stage-sub">${s.rows.length} invoices · ECL ₦${fN(ecl)}</div>
+      <div class="ecl-stage-sub">${s.rows.length} invoices · Weighted ECL ₦${fN(ecl)}</div>
     </div>`;
   }).join('');
 
-  // Results table
+  // ── Results table ────────────────────────────────────────
   $('ecl-results-section').style.display = 'block';
   const fPct = v => (v*100).toFixed(2)+'%';
   const stageClass = s => s===1?'pg':s===2?'pa':'pr';
+
   const rows = eclResults.map(r => `<tr>
     <td>
       <div style="font-weight:500;font-size:12px">${r.customerName}</div>
       <div style="font-size:10px;font-family:var(--mo);color:var(--tx3)">${r.invoiceNumber}</div>
     </td>
     <td>${r.loanClassification}</td>
-    <td><span class="pl ${stageClass(r.stage)}">Stage ${r.stage}</span></td>
+    <td><span class="pl ${stageClass(r.stage)}">Stage ${r.stage}</span>${r.creditImpaired?'<span class="sicr-badge impaired-badge" style="margin-left:4px">Imp</span>':''}</td>
     <td class="nm">₦${fN(r.ead)}</td>
-    <td class="nm">${fPct(r.pd12)}</td>
-    <td class="nm">${fPct(r.lifetimePd)}</td>
+    <td class="nm">${fPct(r.pdUsed)}</td>
     <td class="nm">${fPct(r.lgd)}</td>
-    <td class="nm" style="color:var(--rd);font-weight:700">₦${fN(r.ecl)}</td>
-    <td style="font-size:10px;color:var(--tx3);font-family:var(--mo)">${r.collateralType}</td>
+    <td class="nm" style="color:var(--bl)">₦${fN(r.eclBase)}</td>
+    <td class="nm" style="color:var(--gr)">₦${fN(r.eclUpside)}</td>
+    <td class="nm" style="color:var(--rd)">₦${fN(r.eclDownside)}</td>
+    <td class="nm" style="color:var(--t);font-weight:700">₦${fN(r.ecl)}</td>
   </tr>`).join('');
 
-  const totECL2 = eclResults.reduce((s,r)=>s+r.ecl,0);
+  const totBase = eclResults.reduce((s,r)=>s+r.eclBase,0);
+  const totUp   = eclResults.reduce((s,r)=>s+r.eclUpside,0);
+  const totDn   = eclResults.reduce((s,r)=>s+r.eclDownside,0);
   $('ecl-results-table').innerHTML = `<div class="tw"><table>
     <thead><tr>
       <th>Debtor / Invoice</th><th>Classification</th><th>Stage</th>
       <th style="text-align:right">EAD</th>
-      <th style="text-align:right">12M PD</th>
-      <th style="text-align:right">Lifetime PD</th>
+      <th style="text-align:right">PD Used</th>
       <th style="text-align:right">LGD</th>
-      <th style="text-align:right">ECL</th>
-      <th>Collateral</th>
+      <th style="text-align:right;color:var(--bl)">Base ECL</th>
+      <th style="text-align:right;color:var(--gr)">Upside ECL</th>
+      <th style="text-align:right;color:var(--rd)">Downside ECL</th>
+      <th style="text-align:right;color:var(--t)">Weighted ECL</th>
     </tr></thead>
     <tbody>${rows}
       <tr class="trt">
-        <td colspan="7" style="text-align:right">TOTAL ECL</td>
-        <td class="nm" style="color:var(--t)">₦${fN(totECL2)}</td>
-        <td></td>
+        <td colspan="6" style="text-align:right">TOTAL</td>
+        <td class="nm" style="color:var(--bl)">₦${fN(totBase)}</td>
+        <td class="nm" style="color:var(--gr)">₦${fN(totUp)}</td>
+        <td class="nm" style="color:var(--rd)">₦${fN(totDn)}</td>
+        <td class="nm" style="color:var(--t)">₦${fN(totalECL)}</td>
       </tr>
     </tbody>
   </table></div>`;
 
   $('ecl-export-btn').disabled = false;
-  toast(`ECL computed for ${eclResults.length} invoices. Total ECL: ₦${fN(totalECL)}`);
+  toast(`ECL computed — Weighted ECL: ₦${fN(totalECL)} across ${eclResults.length} invoices.`);
 }
 
+// ── Save snapshot ──────────────────────────────────────────────
 async function saveEclSnapshot() {
-  if (!eclResults.length) { toast('Compute ECL first.','err'); return; }
-  const settings = eclReadSettings();
-  const totalEAD = eclResults.reduce((s,r)=>s+r.ead,0);
-  const totalECL = eclResults.reduce((s,r)=>s+r.ecl,0);
+  if(!eclResults.length) { toast('Compute ECL first.','err'); return; }
+  const settings  = eclReadSettings();
+  const scenarios = eclReadScenarios();
+  const totalEAD  = eclResults.reduce((s,r)=>s+r.ead,0);
+  const totalECL  = eclResults.reduce((s,r)=>s+r.ecl,0);
   const s1=eclResults.filter(r=>r.stage===1).length, s2=eclResults.filter(r=>r.stage===2).length, s3=eclResults.filter(r=>r.stage===3).length;
   try {
     const label = 'ECL Run — ' + new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
     await api('/ecl/snapshots', { method:'POST', body:JSON.stringify({
-      label, settings,
+      label, settings: { ...settings, scenarios },
       summary:{ totalExposure:totalEAD, totalEcl:totalECL, coverageRatio:totalEAD>0?totalECL/totalEAD:0, rowCount:eclResults.length, stage1Count:s1, stage2Count:s2, stage3Count:s3 },
-      rows: eclResults.map(r=>({ invoiceNumber:r.invoiceNumber, customerName:r.customerName, stage:r.stage, ead:r.ead, pd12:r.pd12, lifetimePd:r.lifetimePd, lgd:r.lgd, ecl:r.ecl, loanClassification:r.loanClassification }))
+      rows: eclResults.map(r=>({ invoiceNumber:r.invoiceNumber, customerName:r.customerName, stage:r.stage, ead:r.ead, pdUsed:r.pdUsed, lgd:r.lgd, eclBase:r.eclBase, eclUpside:r.eclUpside, eclDownside:r.eclDownside, ecl:r.ecl, loanClassification:r.loanClassification }))
     })});
     toast('Snapshot saved.'); loadEclSnapshots();
   } catch(e) { toast('Save failed: '+e.message,'err'); }
 }
 
 async function loadEclSnapshots() {
-  const el = $('ecl-snapshots');
-  if (!el) return;
+  const el = $('ecl-snapshots'); if(!el) return;
   try {
     const d = await api('/ecl/snapshots');
-    if (!d.snapshots.length) { el.innerHTML = `<div class="ep" style="padding:1.5rem"><div style="font-size:1.2rem;margin-bottom:8px">📸</div>No snapshots saved yet. Run Compute ECL and save a snapshot.</div>`; return; }
-    const fPct = v => v!=null ? (v*100).toFixed(2)+'%' : '—';
-    el.innerHTML = d.snapshots.map(s => `<div class="ecl-snap-row">
+    if(!d.snapshots.length) { el.innerHTML = `<div class="ep" style="padding:1.5rem"><div style="font-size:1.2rem;margin-bottom:8px">📸</div>No snapshots saved yet. Run Compute ECL and save a snapshot.</div>`; return; }
+    const fPct = v => v!=null?(v*100).toFixed(2)+'%':'—';
+    el.innerHTML = d.snapshots.map(s=>`<div class="ecl-snap-row">
       <div>
         <div style="font-size:13px;font-weight:500">${s.label||'Unlabelled snapshot'}</div>
-        <div class="ecl-snap-meta">${new Date(s.computedAt).toLocaleString('en-GB')} · ${s.summary?.rowCount||0} rows · ECL ₦${fN(s.summary?.totalEcl)} · Coverage ${fPct(s.summary?.coverageRatio)}</div>
+        <div class="ecl-snap-meta">${new Date(s.computedAt).toLocaleString('en-GB')} · ${s.summary?.rowCount||0} rows · Weighted ECL ₦${fN(s.summary?.totalEcl)} · Coverage ${fPct(s.summary?.coverageRatio)}</div>
         <div style="display:flex;gap:8px;margin-top:4px">
           <span class="pl pg">S1: ${s.summary?.stage1Count||0}</span>
           <span class="pl pa">S2: ${s.summary?.stage2Count||0}</span>
@@ -1385,54 +1690,76 @@ async function loadEclSnapshots() {
 }
 
 async function deleteEclSnapshot(id) {
-  if (!confirm('Delete this ECL snapshot?')) return;
-  try { await api('/ecl/snapshots/'+id, { method:'DELETE' }); toast('Snapshot deleted.'); loadEclSnapshots(); }
+  if(!confirm('Delete this ECL snapshot?')) return;
+  try { await api('/ecl/snapshots/'+id,{method:'DELETE'}); toast('Snapshot deleted.'); loadEclSnapshots(); }
   catch(e) { toast(e.message,'err'); }
 }
 
+// ── Export ─────────────────────────────────────────────────────
 function exportEclXLSX() {
-  if (!eclResults.length) { toast('Compute ECL before exporting.','err'); return; }
+  if(!eclResults.length) { toast('Compute ECL before exporting.','err'); return; }
   const wb = XLSX.utils.book_new();
   const fPct = v => +(v*100).toFixed(4);
-  const summaryRows = eclResults.map(r => ({
+  const settings  = eclReadSettings();
+  const scenarios = eclReadScenarios();
+
+  const summaryRows = eclResults.map(r=>({
     'Debtor':             r.customerName,
     'Invoice #':          r.invoiceNumber,
     'Loan Classification':r.loanClassification,
     'Stage':              'Stage ' + r.stage,
+    'Credit Impaired':    r.creditImpaired ? 'Yes' : 'No',
+    'SICR Flags':         [r.sicrIndicators?.restructured?'Restructured':'', r.sicrIndicators?.financialDifficulty?'Fin.Difficulty':'', r.sicrIndicators?.breachedCovenants?'Covenants':'', r.sicrIndicators?.sectorStress?'Sector Stress':''].filter(Boolean).join(', ')||'None',
     'EAD':                +r.ead.toFixed(2),
-    '12M PD (%)':         fPct(r.pd12),
-    'Lifetime PD (%)':    fPct(r.lifetimePd),
+    'PD Used (%)':        fPct(r.pdUsed),
     'LGD (%)':            fPct(r.lgd),
-    'Discount Rate (%)':  r.eir||0,
-    'ECL':                +r.ecl.toFixed(2),
+    'Base ECL':           +r.eclBase.toFixed(2),
+    'Upside ECL':         +r.eclUpside.toFixed(2),
+    'Downside ECL':       +r.eclDownside.toFixed(2),
+    'Weighted ECL':       +r.ecl.toFixed(2),
     'Days Past Due':      r.daysPastDue,
+    'Ageing Bucket':      BUCKET_LABELS[r.ageBucket]||r.ageBucket,
     'Collateral Type':    r.collateralType,
     'Collateral Value':   r.collateralValue||0,
+    'EIR (%)':            r.eir||0,
     'Due Date':           fD(r.dueDate),
   }));
   const ws = XLSX.utils.json_to_sheet(summaryRows);
-  ws['!cols'] = [28,14,18,8,14,10,12,8,12,14,12,14,14,12].map(w=>({wch:w}));
+  ws['!cols'] = [24,14,18,8,8,20,14,10,8,14,14,14,14,10,12,14,14,8,12].map(w=>({wch:w}));
   XLSX.utils.book_append_sheet(wb, ws, 'ECL Results');
 
-  // Stage summary sheet
-  const stageSummary = [1,2,3].map(s => {
+  // Stage summary
+  const stageSummary = [1,2,3].map(s=>{
     const rows = eclResults.filter(r=>r.stage===s);
-    return { Stage:'Stage '+s, Count:rows.length, 'Total EAD':+rows.reduce((t,r)=>t+r.ead,0).toFixed(2), 'Total ECL':+rows.reduce((t,r)=>t+r.ecl,0).toFixed(2), 'Avg Coverage %':(rows.reduce((t,r)=>t+r.ead,0)>0?(rows.reduce((t,r)=>t+r.ecl,0)/rows.reduce((t,r)=>t+r.ead,0)*100).toFixed(2):0) };
+    return { Stage:'Stage '+s, Count:rows.length,
+      'EAD':+rows.reduce((t,r)=>t+r.ead,0).toFixed(2),
+      'Base ECL':+rows.reduce((t,r)=>t+r.eclBase,0).toFixed(2),
+      'Upside ECL':+rows.reduce((t,r)=>t+r.eclUpside,0).toFixed(2),
+      'Downside ECL':+rows.reduce((t,r)=>t+r.eclDownside,0).toFixed(2),
+      'Weighted ECL':+rows.reduce((t,r)=>t+r.ecl,0).toFixed(2) };
   });
-  const ws2 = XLSX.utils.json_to_sheet(stageSummary);
-  XLSX.utils.book_append_sheet(wb, ws2, 'Stage Summary');
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(stageSummary), 'Stage Summary');
 
-  const settings = eclReadSettings();
+  // Model parameters
   const metaRows = [
     { Parameter:'Computed At', Value:new Date().toLocaleString('en-GB') },
-    { Parameter:'Inflation Rate (%)', Value:settings.inflationRate },
-    { Parameter:'GDP Growth (%)', Value:settings.gdpGrowthRate },
+    { Parameter:'Base Inflation Rate (%)', Value:settings.inflationRate },
+    { Parameter:'Base GDP Growth (%)', Value:settings.gdpGrowthRate },
     { Parameter:'Stage 2 DPD Trigger', Value:settings.stage2Dpd },
     { Parameter:'Stage 3 DPD Trigger', Value:settings.stage3Dpd },
     { Parameter:'Fallback EIR (%)', Value:settings.defaultDiscount },
-    { Parameter:'Total Rows', Value:eclResults.length },
+    { Parameter:'Provision Matrix Used', Value:settings.useMatrix?'Yes':'No' },
+    { Parameter:'Simplified Approach', Value:settings.simplifiedApproach?'Yes':'No' },
+    { Parameter:'Base Case Weight (%)', Value:scenarios.baseWeight },
+    { Parameter:'Upside Weight (%)', Value:scenarios.upsideWeight },
+    { Parameter:'Downside Weight (%)', Value:scenarios.downWeight },
+    { Parameter:'Upside Inflation Adj (%)', Value:scenarios.upsideInflAdj },
+    { Parameter:'Upside GDP Adj (%)', Value:scenarios.upsideGdpAdj },
+    { Parameter:'Downside Inflation Adj (%)', Value:scenarios.downInflAdj },
+    { Parameter:'Downside GDP Adj (%)', Value:scenarios.downGdpAdj },
+    { Parameter:'Total Invoices', Value:eclResults.length },
     { Parameter:'Total EAD', Value:+eclResults.reduce((s,r)=>s+r.ead,0).toFixed(2) },
-    { Parameter:'Total ECL', Value:+eclResults.reduce((s,r)=>s+r.ecl,0).toFixed(2) },
+    { Parameter:'Total Weighted ECL', Value:+eclResults.reduce((s,r)=>s+r.ecl,0).toFixed(2) },
   ];
   XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(metaRows), 'Model Parameters');
   XLSX.writeFile(wb, `FM-IFRS9-ECL-${ts()}.xlsx`);
@@ -1440,17 +1767,12 @@ function exportEclXLSX() {
 }
 
 // ── SETTINGS ───────────────────────────────────────────────────
-// ── SETTINGS ───────────────────────────────────────────────────
 async function loadSettings() {
   $('settings-form').innerHTML = '<div class="loading-row">Loading settings…</div>';
   try {
-    const [settingsRes, meRes] = await Promise.all([
-      api('/email/settings'),
-      api('/auth/me')
-    ]);
+    const [settingsRes, meRes] = await Promise.all([api('/email/settings'), api('/auth/me')]);
     const s = settingsRes.settings;
     const isAdmin = meRes.user?.role === 'admin';
-
     $('settings-form').innerHTML = `
     <div class="card" style="margin-bottom:1rem">
       <div class="section-ttl">Company Details</div>
@@ -1482,21 +1804,18 @@ async function loadSettings() {
         <input class="finput" id="s-test-email" placeholder="Test recipient email" style="max-width:260px">
         <button onclick="sendTestEmail()">Send Test Email</button>
       </div>
-    </div>
-    ` : ''}
+    </div>` : ''}
 
     <div class="card" style="margin-bottom:1rem">
       <div class="section-ttl">Payment Instructions</div>
       <div class="fld"><label>Payment Instructions (appears in all reminder emails)</label>
         <textarea class="finput" id="s-payinstr" rows="4">${s.paymentInstructions||''}</textarea></div>
     </div>
-
     <div class="card" style="margin-bottom:1rem">
       <div class="section-ttl">Auto-Reminder Schedule</div>
       <div class="nt" style="margin-bottom:.75rem">When enabled, the system automatically emails all debtors with overdue invoices every Monday at 8am.</div>
       <label class="cb"><input type="checkbox" id="s-auto" ${s.autoReminderEnabled?'checked':''}><span>Enable automatic weekly reminders</span></label>
     </div>
-
     <div class="card" style="margin-bottom:1rem">
       <div class="section-ttl">Email Templates</div>
       <p style="font-size:12px;color:var(--tx2);margin-bottom:1rem">Customise the subject line and opening message for each reminder type.</p>
@@ -1510,7 +1829,6 @@ async function loadSettings() {
         </div>`;
       }).join('')}
     </div>
-
     <div style="display:flex;justify-content:flex-end">
       <button class="bp" onclick="saveSettings()"><span id="set-save-txt">Save All Settings</span></button>
     </div>`;
@@ -1521,7 +1839,6 @@ async function saveSettings() {
   const err=$('set-err'), ok=$('set-ok');
   err.classList.remove('on'); ok.classList.remove('on');
   $('set-save-txt').textContent = 'Saving…';
-
   // Core fields — always present for all users
   const payload = {
     companyName:         $('s-cname').value.trim(),
@@ -1536,13 +1853,11 @@ async function saveSettings() {
     'templates.finalNotice.subject':    $('s-tpl-finalNotice-subj').value.trim(),
     'templates.finalNotice.intro':      $('s-tpl-finalNotice-intro').value.trim(),
   };
-
-  // Admin-only fields — only included when the inputs exist in the DOM
+  // Admin-only fields — only included when inputs exist in DOM
   if ($('s-buser')) payload.brevoSmtpUser = $('s-buser').value.trim();
   if ($('s-bkey'))  payload.brevoSmtpKey  = $('s-bkey').value.trim();
   if ($('s-from'))  payload.fromEmail     = $('s-from').value.trim();
   if ($('s-reply')) payload.replyTo       = $('s-reply').value.trim();
-
   try {
     await api('/email/settings', { method:'PUT', body:JSON.stringify(payload) });
     ok.textContent = '✓ Settings saved successfully.'; ok.classList.add('on');
@@ -1552,7 +1867,7 @@ async function saveSettings() {
 }
 
 async function sendTestEmail() {
-  const to = $('s-test-email').value.trim();
+  const to = $('s-test-email')?.value.trim();
   if (!to) { toast('Enter a test recipient email.','err'); return; }
   try { const d = await api('/email/test', { method:'POST', body:JSON.stringify({to}) }); toast(d.message); }
   catch(e) { toast(e.message,'err'); }
