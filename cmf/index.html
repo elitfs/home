@@ -927,6 +927,13 @@ td a:hover{color:var(--tx)}
 <script>
 "use strict";
 
+/* ══════════════════════════════════════════════════════════════
+   BACKEND URL — update this after deploying server.js to Render
+   Example: "https://capital-market-fx-console.onrender.com"
+   Leave trailing slash OFF.
+   ══════════════════════════════════════════════════════════════ */
+const API_BASE = "https://capital-market-fx-console.onrender.com";
+
 const state = { sources: [], currencies: [] };
 
 const els = {
@@ -998,7 +1005,7 @@ function toast(msg, isError = false) {
 }
 
 async function api(path, params = {}) {
-  const url = new URL(path, window.location.origin);
+  const url = new URL(API_BASE + path);
   for (const [k, v] of Object.entries(params)) {
     if (v !== undefined && v !== null && v !== "") url.searchParams.set(k, v);
   }
