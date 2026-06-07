@@ -689,7 +689,7 @@ td a:hover{color:var(--tx)}
   <div class="nav-right">
     <div class="user-chip" id="userChip">
       <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-      <span id="FM-user-name">Loading...</span>
+      <span id="userName">Finance User</span>
     </div>
     <a href="../portal/" class="nav-btn">
       <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
@@ -705,65 +705,14 @@ td a:hover{color:var(--tx)}
     </button>
   </div>
 </nav>
-<script>
-'use strict';
 
-var _API = 'https://eis-recbackend.onrender.com/api';
-
-(function(){
-  var tok = sessionStorage.getItem('FM_token');
-
-  if (!tok) {
-    window.location.href = '../portal/';
-    return;
-  }
-
-  fetch(_API + '/auth/me', {
-    headers: {
-      'Authorization': 'Bearer ' + tok,
-      'Content-Type': 'application/json'
-    }
-  })
-  .then(function(r){ return r.json(); })
-  .then(function(d){
-    if (d.success && d.user) {
-
-      // ✅ FIXED: correct element ID
-      var el = document.getElementById('FM-user-name');
-      if (el) el.textContent = d.user.name;
-
-    } else {
-      sessionStorage.removeItem('FM_token');
-      window.location.href = '../portal/';
-    }
-  })
-  .catch(function(err){
-    console.error('Auth check failed:', err);
-
-    // ✅ SOFT FAIL instead of hard logout
-    var el = document.getElementById('FM-user-name');
-    if (el) el.textContent = 'User';
-  });
-
-})();
-
-// ✅ FIXED: correct logout button ID
-var signOutBtn = document.getElementById('signOutBtn');
-if (signOutBtn) {
-  signOutBtn.addEventListener('click', function(){
-    if (!confirm('Sign out?')) return;
-    sessionStorage.removeItem('FM_token');
-    window.location.href = '../portal/';
-  });
-}
-</script>
 <!-- ════ PAGE HEADER ════ -->
 <div class="page-header">
   <div class="page-title-group">
-   <span class="eyebrow" style="display:flex;align-items:center;gap:8px">
-   <span class="live-dot" title="Live data feed active"></span>
-     Live capital market crawler — ECB · CBN · U.S. Treasury · SEC EDGAR
-   </span>
+    <span class="eyebrow" style="display:flex;align-items:center;gap:8px">
+  <span class="live-dot" title="Live data feed active"></span>
+  Live capital market Feed — ECB · CBN · U.S. Treasury · SEC EDGAR
+</span>
     <h1 class="page-title">Capital Market &amp; FX Console</h1>
   </div>
   <div class="header-actions">
@@ -985,7 +934,7 @@ if (signOutBtn) {
    Example: "https://capital-market-fx-console.onrender.com"
    Leave trailing slash OFF.
    ══════════════════════════════════════════════════════════════ */
-const API_BASE = "https://eis-recbackend.onrender.com";
+const API_BASE = "https://capital-market-fx-console.onrender.com";
 
 const state = { sources: [], currencies: [] };
 
@@ -1077,7 +1026,7 @@ function escHtml(v) {
 /* ── Sources ── */
 async function loadSources() {
   try {
-    const { sources } = await api("/api/sources");
+    const { sources } = await api("/api/fx/sources");
     state.sources = sources;
     renderSources();
   } catch (e) { log(`Sources error: ${e.message}`); }
@@ -1107,7 +1056,7 @@ function renderSources() {
 /* ── Currencies ── */
 async function loadCurrencies() {
   try {
-    const { currencies } = await api("/api/currencies");
+    const { currencies } = await api("/api/fx/currencies");
     state.currencies = currencies;
     const opts = currencies.map(c => `<option value="${c.code}">${c.code} — ${c.name}</option>`).join("");
     els.fxBase.innerHTML = opts;
@@ -1141,7 +1090,7 @@ async function doFxLookup(date, base, quote, amount) {
   setStatus(els.fxStatus, "Loading…", "loading");
   log(`FX lookup: ${amount} ${base}/${quote} @ ${date || "today"}`);
   try {
-    const d = await api("/api/fx", { date, base, quote, amount });
+    const d = await api("/api/fx/rate", { date, base, quote, amount });
     renderFxResult(d);
     setStatus(els.fxStatus, "OK", "ok");
     if (d.provider === "ECB") els.mEcbDate.textContent = d.effectiveDate;
@@ -1191,7 +1140,7 @@ async function doTreasury(date) {
   setStatus(els.treasuryStatus, "Loading…", "loading");
   log(`Treasury yield curve @ ${date || "today"}`);
   try {
-    const d = await api("/api/treasury", { date });
+    const d = await api("/api/fx/treasury", { date });
     renderYieldCurve(d.curve);
     renderTreasuryMetrics(d.curve);
     setStatus(els.treasuryStatus, "OK", "ok");
@@ -1277,7 +1226,7 @@ async function doSecSearch(ticker, formFilter) {
   setStatus(els.secStatus, "Loading…", "loading");
   log(`SEC EDGAR: ${ticker}${formFilter ? ` (${formFilter})` : ""}`);
   try {
-    const d = await api("/api/filings", { ticker, form: formFilter });
+    const d = await api("/api/fx/filings", { ticker, form: formFilter });
     if (!d.filings.length) {
       els.filingsBody.innerHTML = `<tr><td colspan="4" class="empty-state">No filings found for ${escHtml(d.ticker)}.</td></tr>`;
     } else {
