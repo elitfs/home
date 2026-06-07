@@ -751,15 +751,43 @@ async function deleteInvoice(id, no) {
   try { await api('/invoices/'+id, { method:'DELETE' }); toast('Invoice deleted.'); }
   catch(e) { toast(e.message,'err'); }
 }
+function downloadImportTemplate() {
+  const headers = ['Debtor Name','Email','Phone','Invoice Number','Invoice Date','Due Date','Amount','Amount Paid','Description','Credit Limit'];
+  const samples = [
+    ['ABC Company Ltd','abc@company.com','+2348012345678','INV-2025-001','2025-01-15','2025-02-15','500000','0','Supply of goods','1000000'],
+    ['XYZ Enterprises','xyz@enterprise.com','+2348098765432','INV-2025-002','2025-02-01','2025-03-01','250000','100000','Consulting services','500000'],
+    ['Demo Client','demo@client.com','','INV-2025-003','2025-03-10','2025-04-10','750000','0','Equipment supply',''],
+  ];
+  const rows = [headers, ...samples];
+  const csv  = rows.map(r => r.map(v => v.includes(',') ? `"${v}"` : v).join(',')).join('\r\n');
+  const blob = new Blob([csv], { type:'text/csv' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url; a.download = 'FM-Import-Template.csv'; a.click();
+  URL.revokeObjectURL(url);
+  toast('Template downloaded.');
+}
+
 function openImportModal() {
   openModal('Import from Excel / CSV', `
     <div class="merr" id="imp-err"></div>
     <div class="mok"  id="imp-ok"></div>
-    <div class="nt">File must have columns: <strong>Debtor Name, Email, Invoice Number, Invoice Date, Due Date, Amount, Amount Paid</strong><br>Optional: Phone, Credit Limit, Description/Narration</div>
+    <div class="nt-info" style="margin-bottom:1rem">
+      <strong style="color:var(--t)">Required columns:</strong> Debtor Name, Email, Invoice Number, Invoice Date, Due Date, Amount, Amount Paid<br>
+      <strong style="color:var(--tx2)">Optional:</strong> Phone, Credit Limit, Description<br>
+      <strong style="color:var(--tx2)">Date format:</strong> YYYY-MM-DD &nbsp;(e.g. 2025-11-27)<br>
+      <strong style="color:var(--tx2)">Amount format:</strong> Numbers only, no commas or currency symbols &nbsp;(e.g. 500000)
+    </div>
+    <div style="margin-bottom:1rem">
+      <button onclick="downloadImportTemplate()" style="width:100%;justify-content:center;gap:8px;background:var(--tg);border-color:rgba(0,201,167,.3);color:var(--t);padding:10px">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download CSV Template (with sample rows)
+      </button>
+    </div>
     <div style="border:1.5px dashed var(--b2);border-radius:var(--r);padding:2rem;text-align:center;cursor:pointer;background:var(--tg);position:relative" id="imp-drop">
       <input type="file" accept=".csv,.xlsx,.xls" id="imp-file" style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%">
       <div style="font-size:1.5rem;margin-bottom:8px">📂</div>
-      <div style="font-size:13px;font-weight:500">Click or drop your Excel/CSV file</div>
+      <div style="font-size:13px;font-weight:500">Click or drop your completed file here</div>
       <div style="font-size:11px;color:var(--tx3);margin-top:4px" id="imp-fname">Accepts .xlsx, .xls, .csv</div>
     </div>`,
     `<button onclick="closeModal()">Cancel</button>
@@ -768,6 +796,7 @@ function openImportModal() {
     if (e.target.files[0]) { $('imp-fname').textContent = e.target.files[0].name; $('imp-btn').disabled = false; }
   });
 }
+
 async function doImport() {
   const file = $('imp-file').files[0]; if (!file) return;
   const errEl = $('imp-err'), okEl = $('imp-ok');
