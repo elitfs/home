@@ -12,12 +12,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
 <style>
-
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --n:#0a1628;--n2:#0f1f3d;--n3:#162747;--n4:#1c3057;
   --t:#00c9a7;--t2:#00a98e;--td:rgba(0,201,167,.13);--tg:rgba(0,201,167,.06);
-  --am:#f5a623;--rd:#e05252;--gr:#22c55e;--bl:#63b3ed;
+  --am:#f5a623;--rd:#e05252;--gr:#22c55e;--bl:#63b3ed;--pu:#a78bfa;
   --tx:#e8edf5;--tx2:#8fa3bf;--tx3:#4a6080;
   --b:rgba(255,255,255,.07);--b2:rgba(255,255,255,.13);
   --sf:rgba(255,255,255,.04);--sf2:rgba(255,255,255,.08);
@@ -28,44 +27,16 @@
 html{font-size:15px}
 body{font-family:var(--sa);background:var(--n);color:var(--tx);min-height:100vh;line-height:1.6}
 
-/* ── LOGIN ── */
-
-
-
-
-
-
-.lname span{color:var(--t)}
-
-
-
-.lerr.on{display:block}
-
-.lfield label{display:block;font-size:11px;font-family:var(--mo);color:var(--tx2);margin-bottom:7px;letter-spacing:.06em;text-transform:uppercase}
-
-
-.linput:focus{border-color:var(--t);box-shadow:0 0 0 3px rgba(0,201,167,.12)}
-.linput::placeholder{color:var(--tx3)}
-
-.eyebtn:hover{color:var(--tx2)}
-
-.lbtn:hover:not(:disabled){background:var(--t2);transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,201,167,.25)}
-.lbtn:disabled{opacity:.6;cursor:not-allowed;transform:none}
-.lbtn 
-.lbtn 
-}
-
 /* ── APP SHELL ── */
-#app{display:none;min-height:100vh;flex-direction:column}
-
-#topbar{background:var(--n2);border-bottom:1px solid var(--b);height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;flex-shrink:0;position:sticky;top:0;z-index:100}
-.logo{font-family:var(--di);font-weight:700;font-size:17px;letter-spacing:-.03em;display:flex;align-items:center;gap:10px}
-.lm{width:30px;height:30px;background:var(--t);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--n);font-weight:700;letter-spacing:-.5px;flex-shrink:0}
+#app{display:flex;min-height:100vh;flex-direction:column}
+#topbar{background:var(--n2);border-bottom:1px solid var(--b);padding:0 1.75rem;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;flex-shrink:0}
+.logo{font-family:var(--di);font-weight:700;font-size:17px;letter-spacing:-.03em;color:var(--tx);display:flex;align-items:center;gap:9px}
+.lm{width:30px;height:30px;background:var(--t);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--n);font-weight:700}
 .la{color:var(--t)}
-.tbr{display:flex;align-items:center;gap:10px}
-
-
-.lgout:hover{background:rgba(224,82,82,.1);border-color:rgba(224,82,82,.3);color:var(--rd)}
+.tbr{display:flex;align-items:center;gap:8px}
+.nav-btn-link{display:flex;align-items:center;gap:6px;background:transparent;border:1px solid var(--b2);border-radius:10px;padding:6px 12px;font-size:11.5px;font-family:var(--mo);color:var(--tx3);cursor:pointer;transition:all .2s;text-decoration:none}
+.nav-btn-link:hover{background:var(--sf2);color:var(--tx)}
+.user-chip-top{display:flex;align-items:center;gap:6px;background:var(--sf);border:1px solid var(--b2);border-radius:20px;padding:4px 11px;font-size:11.5px;color:var(--tx2);font-family:var(--mo)}
 
 /* ── LAYOUT ── */
 #layout{display:flex;flex:1;overflow:hidden}
@@ -94,10 +65,11 @@ body{font-family:var(--sa);background:var(--n);color:var(--tx);min-height:100vh;
 .kpi.ac{border-color:rgba(0,201,167,.3);background:var(--td)}
 .kpi.rd{border-color:rgba(224,82,82,.3);background:rgba(224,82,82,.06)}
 .kpi.am{border-color:rgba(245,166,35,.3);background:rgba(245,166,35,.06)}
+.kpi.pu{border-color:rgba(167,139,250,.3);background:rgba(167,139,250,.06)}
 .kl{font-size:10px;font-family:var(--mo);color:var(--tx3);letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px}
 .kv{font-family:var(--di);font-size:24px;font-weight:700;letter-spacing:-.03em;line-height:1}
 .ks{font-size:10px;font-family:var(--mo);color:var(--tx2);margin-top:4px}
-.kv.tl{color:var(--t)}.kv.rd{color:var(--rd)}.kv.am{color:var(--am)}.kv.gr{color:var(--gr)}.kv.bl{color:var(--bl)}
+.kv.tl{color:var(--t)}.kv.rd{color:var(--rd)}.kv.am{color:var(--am)}.kv.gr{color:var(--gr)}.kv.bl{color:var(--bl)}.kv.pu{color:var(--pu)}
 
 /* ── AGEING BAR ── */
 .ag-bar-wrap{background:var(--n3);border:1px solid var(--b);border-radius:var(--r);padding:16px 18px;margin-bottom:1.5rem}
@@ -107,7 +79,6 @@ body{font-family:var(--sa);background:var(--n);color:var(--tx);min-height:100vh;
 .ag-bar-track{background:var(--sf);border-radius:4px;height:10px;overflow:hidden}
 .ag-bar-fill{height:100%;border-radius:4px;transition:width .6s ease}
 .ag-bar-amt{font-size:11px;font-family:var(--mo);color:var(--tx);text-align:right}
-.ag-colors{current:'#22c55e','1_30':'#84cc16','31_60':'#f59e0b','61_90':'#ef4444','91_180':'#dc2626','180_plus':'#991b1b'}
 
 /* ── BUTTONS ── */
 button{font-family:var(--sa);font-size:13px;font-weight:500;border-radius:var(--r);padding:8px 18px;cursor:pointer;border:1px solid var(--b2);background:transparent;color:var(--tx2);transition:all .2s;display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
@@ -117,6 +88,8 @@ button:disabled{opacity:.35;cursor:not-allowed}
 .bp:hover:not(:disabled){background:var(--t2);color:var(--n)}
 .bd{background:rgba(224,82,82,.1);border-color:rgba(224,82,82,.3);color:var(--rd)}
 .bd:hover:not(:disabled){background:rgba(224,82,82,.2)}
+.bpu{background:rgba(167,139,250,.1);border-color:rgba(167,139,250,.3);color:var(--pu)}
+.bpu:hover:not(:disabled){background:rgba(167,139,250,.2)}
 .bsm{padding:5px 12px;font-size:12px}
 
 /* ── TABLES ── */
@@ -135,6 +108,7 @@ tbody tr:hover{background:var(--sf)}
 .pa{background:rgba(245,166,35,.1);color:var(--am);border:1px solid rgba(245,166,35,.2)}
 .pr{background:rgba(224,82,82,.1);color:var(--rd);border:1px solid rgba(224,82,82,.2)}
 .pb{background:rgba(99,179,237,.1);color:var(--bl);border:1px solid rgba(99,179,237,.2)}
+.pp{background:rgba(167,139,250,.1);color:var(--pu);border:1px solid rgba(167,139,250,.2)}
 .pdark{background:rgba(153,27,27,.2);color:#fca5a5;border:1px solid rgba(153,27,27,.4)}
 
 /* ── FORMS & INPUTS ── */
@@ -152,7 +126,8 @@ select.finput{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xm
 #modal-bg{display:none;position:fixed;inset:0;background:rgba(5,12,24,.75);z-index:200;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(3px)}
 #modal-bg.on{display:flex}
 .modal{background:var(--n2);border:1px solid var(--b2);border-radius:var(--rl);width:100%;max-width:560px;max-height:90vh;display:flex;flex-direction:column;box-shadow:0 8px 40px rgba(0,0,0,.5)}
-.modal.wide{max-width:780px}
+.modal.wide{max-width:820px}
+.modal.xl{max-width:1000px}
 .mhdr{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 1.5rem;border-bottom:1px solid var(--b);flex-shrink:0}
 .mttl{font-family:var(--di);font-size:16px;font-weight:600}
 .mclose{width:30px;height:30px;border:1px solid var(--b2);border-radius:7px;background:transparent;color:var(--tx2);display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;flex-shrink:0}
@@ -164,40 +139,59 @@ select.finput{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xm
 .mok{display:none;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);border-radius:var(--r);padding:8px 12px;font-size:12px;color:var(--gr);margin-bottom:1rem;font-family:var(--mo)}
 .mok.on{display:block}
 
+/* ── ECL specific styles ── */
+.ecl-stage-bar{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:1.5rem}
+.ecl-stage-card{border-radius:var(--r);padding:14px 16px;border:1px solid var(--b)}
+.ecl-stage-card.s1{border-color:rgba(34,197,94,.3);background:rgba(34,197,94,.05)}
+.ecl-stage-card.s2{border-color:rgba(245,166,35,.3);background:rgba(245,166,35,.05)}
+.ecl-stage-card.s3{border-color:rgba(224,82,82,.3);background:rgba(224,82,82,.05)}
+.ecl-stage-lbl{font-size:10px;font-family:var(--mo);color:var(--tx3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.ecl-stage-amt{font-family:var(--di);font-size:20px;font-weight:700;letter-spacing:-.03em}
+.ecl-stage-card.s1 .ecl-stage-amt{color:var(--gr)}
+.ecl-stage-card.s2 .ecl-stage-amt{color:var(--am)}
+.ecl-stage-card.s3 .ecl-stage-amt{color:var(--rd)}
+.ecl-stage-sub{font-size:10px;font-family:var(--mo);color:var(--tx3);margin-top:4px}
+.ecl-macro-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:1.25rem}
+.ecl-macro-fld label{display:block;font-size:10px;font-family:var(--mo);color:var(--tx2);margin-bottom:5px;letter-spacing:.04em;text-transform:uppercase}
+.ecl-source-badge{font-size:9px;font-family:var(--mo);padding:1px 6px;border-radius:8px;margin-left:5px;vertical-align:middle}
+.ecl-source-badge.invoice{background:rgba(99,179,237,.15);color:var(--bl);border:1px solid rgba(99,179,237,.2)}
+.ecl-source-badge.debtor{background:rgba(167,139,250,.15);color:var(--pu);border:1px solid rgba(167,139,250,.2)}
+.ecl-source-badge.default{background:rgba(255,255,255,.05);color:var(--tx3);border:1px solid var(--b)}
+.ecl-source-badge.auto{background:rgba(0,201,167,.1);color:var(--t);border:1px solid rgba(0,201,167,.2)}
+.ecl-panel{background:var(--n3);border:1px solid var(--b);border-radius:var(--r);padding:16px 18px;margin-bottom:1rem}
+.ecl-panel-title{font-size:12px;font-family:var(--mo);color:var(--tx2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.ecl-snap-row{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-radius:var(--r);background:var(--sf);border:1px solid var(--b);margin-bottom:6px}
+.ecl-snap-row:hover{border-color:var(--b2)}
+.ecl-snap-meta{font-size:11px;font-family:var(--mo);color:var(--tx3)}
+.ecl-inline-edit{display:inline-flex;align-items:center;gap:4px}
+.ecl-inline-select{background:var(--n4);border:1px solid var(--b2);border-radius:6px;color:var(--tx);font-family:var(--mo);font-size:10px;padding:3px 22px 3px 7px;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='9' viewBox='0 0 24 24' fill='none' stroke='%238fa3bf' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 6px center;cursor:pointer;outline:none}
+.ecl-inline-select:focus{border-color:var(--t)}
+.ecl-inline-num{background:var(--n4);border:1px solid var(--b2);border-radius:6px;color:var(--tx);font-family:var(--mo);font-size:10px;padding:3px 7px;width:80px;outline:none}
+.ecl-inline-num:focus{border-color:var(--t)}
+.save-ecl-btn{font-size:10px;padding:3px 8px;border-radius:6px;font-family:var(--mo);font-weight:600}
+.ecl-row-saved{animation:eclsave .6s ease}
+@keyframes eclsave{0%{background:rgba(0,201,167,.2)}100%{background:transparent}}
+
 /* ── MISC ── */
 .ep{text-align:center;padding:3rem 1rem;color:var(--tx3);font-family:var(--mo);font-size:12px}
 .ei{font-size:2rem;margin-bottom:10px}
 .nt{background:rgba(245,166,35,.07);border:1px solid rgba(245,166,35,.2);border-radius:var(--r);padding:10px 14px;font-size:12px;color:var(--tx2);margin-bottom:1rem;line-height:1.5}
+.nt-info{background:rgba(0,201,167,.07);border:1px solid rgba(0,201,167,.2);border-radius:var(--r);padding:10px 14px;font-size:12px;color:var(--tx2);margin-bottom:1rem;line-height:1.5}
 .loading-row{text-align:center;padding:2rem;color:var(--tx3);font-family:var(--mo);font-size:12px}
 #toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--n3);border:1px solid var(--b2);border-radius:var(--r);padding:10px 18px;font-size:12px;font-family:var(--mo);color:var(--tx);z-index:500;box-shadow:var(--sh);display:none;align-items:center;gap:8px;white-space:nowrap;max-width:90vw}
 #toast.on{display:flex}
 #toast.ok{border-color:rgba(34,197,94,.4);color:var(--gr)}
 #toast.err{border-color:rgba(224,82,82,.4);color:var(--rd)}
-.badge-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1rem}
 .row{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
 .sep{height:1px;background:var(--b);margin:1rem 0}
 .section-ttl{font-family:var(--di);font-size:15px;font-weight:600;margin-bottom:1rem}
 .cb{display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;color:var(--tx2)}
 .cb input[type=checkbox]{width:16px;height:16px;cursor:pointer;accent-color:var(--t)}
 .cb:hover{color:var(--tx)}
-
-
-
-
-/* FM NAV OVERRIDES */
-#topbar{background:var(--n2);border-bottom:1px solid var(--b);padding:0 1.75rem;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;flex-shrink:0}
-.logo{font-family:var(--di);font-weight:700;font-size:17px;letter-spacing:-.03em;color:var(--tx);display:flex;align-items:center;gap:9px}
-.lm{width:30px;height:30px;background:var(--t);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--n);font-weight:700}
-.la{color:var(--t)}
-.tbr{display:flex;align-items:center;gap:8px}
-.nav-btn-link{display:flex;align-items:center;gap:6px;background:transparent;border:1px solid var(--b2);border-radius:10px;padding:6px 12px;font-size:11.5px;font-family:var(--mo);color:var(--tx3);cursor:pointer;transition:all .2s;text-decoration:none}
-.nav-btn-link:hover{background:var(--sf2);color:var(--tx)}
-.user-chip-top{display:flex;align-items:center;gap:6px;background:var(--sf);border:1px solid var(--b2);border-radius:20px;padding:4px 11px;font-size:11.5px;color:var(--tx2);font-family:var(--mo)}
-
 </style>
 </head>
 <body>
-<div id="app" style="display:flex;flex-direction:column;min-height:100vh">
+<div id="app">
   <div id="topbar">
     <div class="logo"><div class="lm">FM</div>FM <span class="la">&nbsp;Receivables</span></div>
     <div class="tbr">
@@ -206,47 +200,42 @@ select.finput{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xm
         <span id="user-name">Loading...</span>
       </div>
       <a href="../portal/" class="nav-btn-link">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
-        Portal
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>Portal
       </a>
       <a href="../" class="nav-btn-link">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-        Home
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Home
       </a>
-      <button class="nav-btn-link" id="logout-btn" style="cursor:pointer;border-color:rgba(224,82,82,.3)">Sign out</button>
+      <button class="nav-btn-link" id="logout-btn">Sign out</button>
     </div>
   </div>
+
   <div id="layout">
-    <!-- Sidebar -->
     <nav id="sidebar">
       <div class="nav-item active" data-view="dashboard">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-        Dashboard
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Dashboard
       </div>
       <div class="nav-item" data-view="debtors">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        Debtors
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>Debtors
       </div>
       <div class="nav-item" data-view="ageing">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-        Ageing Report
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Ageing Report
       </div>
       <div class="nav-item" data-view="reminders">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 15a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 4.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 11.7a16 16 0 0 0 6 6l.91-1.01a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-        Send Reminders
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 15a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 4.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 11.7a16 16 0 0 0 6 6l.91-1.01a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>Send Reminders
       </div>
       <div class="nav-item" data-view="logs">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-        Email Logs
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Email Logs
+      </div>
+      <div class="nav-section">Analysis</div>
+      <div class="nav-item" data-view="ecl">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>IFRS 9 ECL Model
       </div>
       <div class="nav-section">Config</div>
       <div class="nav-item" data-view="settings">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-        Settings
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings
       </div>
     </nav>
 
-    <!-- Content -->
     <main id="content">
 
       <!-- Dashboard -->
@@ -254,8 +243,7 @@ select.finput{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xm
         <div class="vhdr">
           <div><div class="vttl">Portfolio Overview</div><div class="vsub" id="dash-ts">—</div></div>
           <button class="bp" onclick="loadDashboard()">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.18-5.5"/></svg>
-            Refresh
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.18-5.5"/></svg>Refresh
           </button>
         </div>
         <div class="kpi-grid" id="dash-kpis"></div>
@@ -270,12 +258,10 @@ select.finput{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xm
           <div><div class="vttl">Debtors</div><div class="vsub">Manage debtor accounts and invoices</div></div>
           <div class="vacts">
             <button onclick="openImportModal()">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-              Import Excel
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Import Excel
             </button>
             <button class="bp" onclick="openDebtorModal()">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-              Add Debtor
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add Debtor
             </button>
           </div>
         </div>
@@ -288,12 +274,10 @@ select.finput{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xm
           <div><div class="vttl">Ageing Report</div><div class="vsub" id="ageing-ts">—</div></div>
           <div class="vacts">
             <button onclick="exportAgeingXLSX()">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-              Export Excel
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>Export Excel
             </button>
             <button onclick="exportAgeingPDF()">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-              Export PDF
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Export PDF
             </button>
           </div>
         </div>
@@ -305,11 +289,11 @@ select.finput{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xm
         <div class="vhdr">
           <div><div class="vttl">Send Reminders</div><div class="vsub">Select debtors and dispatch collection emails</div></div>
         </div>
-        <div class="nt">Emails are sent using your configured templates. The system picks the appropriate template (First/Second/Final) based on how overdue each debtor is. You can override the template below.</div>
+        <div class="nt">Emails are sent using your configured templates. The system picks the appropriate template (First/Second/Final) based on how overdue each debtor is.</div>
         <div class="card" style="margin-bottom:1rem">
           <div class="fg" style="align-items:flex-end">
             <div class="fld" style="margin:0">
-              <label>Template Override (optional)</label>
+              <label class="fld">Template Override (optional)</label>
               <select class="finput" id="tpl-override">
                 <option value="">Auto-select based on ageing</option>
                 <option value="firstReminder">First Reminder (≤30 days)</option>
@@ -321,8 +305,7 @@ select.finput{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xm
               <button onclick="selectAllDebtors(true)">Select All</button>
               <button onclick="selectAllDebtors(false)">Clear</button>
               <button class="bp" id="send-btn" onclick="sendReminders()" disabled>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-                Send Selected
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>Send Selected
               </button>
             </div>
           </div>
@@ -335,11 +318,119 @@ select.finput{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xm
         <div class="vhdr">
           <div><div class="vttl">Email Logs</div><div class="vsub">History of all sent reminders</div></div>
           <button onclick="loadLogs()">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.18-5.5"/></svg>
-            Refresh
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.18-5.5"/></svg>Refresh
           </button>
         </div>
         <div id="logs-table"></div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════════════
+           ECL MODEL VIEW
+      ════════════════════════════════════════════════════════ -->
+      <div class="view" id="view-ecl">
+        <div class="vhdr">
+          <div>
+            <div class="vttl">IFRS 9 ECL Model</div>
+            <div class="vsub" id="ecl-ts">Portfolio data loaded from receivables database</div>
+          </div>
+          <div class="vacts">
+            <button onclick="loadEclPortfolio()">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.18-5.5"/></svg>Reload Portfolio
+            </button>
+            <button onclick="fetchEclMacro()" id="ecl-macro-btn">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Fetch Macro
+            </button>
+            <button class="bpu" onclick="computeECL()" id="ecl-compute-btn">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Compute ECL
+            </button>
+            <button onclick="exportEclXLSX()" id="ecl-export-btn" disabled>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>Export Excel
+            </button>
+          </div>
+        </div>
+
+        <!-- Macro settings panel -->
+        <div class="ecl-panel" id="ecl-macro-panel">
+          <div class="ecl-panel-title">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+            Macro-Economic Parameters
+          </div>
+          <div class="ecl-macro-grid">
+            <div class="ecl-macro-fld fld" style="margin:0">
+              <label>Country</label>
+              <select class="finput" id="ecl-country" style="font-size:12px;padding:7px 32px 7px 10px">
+                <option value="NG">Nigeria</option><option value="GH">Ghana</option><option value="KE">Kenya</option>
+                <option value="ZA">South Africa</option><option value="US">United States</option>
+                <option value="GB">United Kingdom</option><option value="IN">India</option><option value="CA">Canada</option>
+              </select>
+            </div>
+            <div class="ecl-macro-fld fld" style="margin:0">
+              <label>Inflation Rate (%)</label>
+              <input type="number" class="finput" id="ecl-inflation" value="10.00" step="0.01" style="font-size:12px;padding:7px 10px">
+            </div>
+            <div class="ecl-macro-fld fld" style="margin:0">
+              <label>GDP Growth (%)</label>
+              <input type="number" class="finput" id="ecl-gdp" value="3.00" step="0.01" style="font-size:12px;padding:7px 10px">
+            </div>
+            <div class="ecl-macro-fld fld" style="margin:0">
+              <label>Stage 2 DPD Trigger</label>
+              <input type="number" class="finput" id="ecl-s2dpd" value="30" min="1" step="1" style="font-size:12px;padding:7px 10px">
+            </div>
+            <div class="ecl-macro-fld fld" style="margin:0">
+              <label>Stage 3 DPD Trigger</label>
+              <input type="number" class="finput" id="ecl-s3dpd" value="90" min="1" step="1" style="font-size:12px;padding:7px 10px">
+            </div>
+            <div class="ecl-macro-fld fld" style="margin:0">
+              <label>Fallback EIR (%)</label>
+              <input type="number" class="finput" id="ecl-eir-default" value="12.00" step="0.01" style="font-size:12px;padding:7px 10px">
+            </div>
+          </div>
+          <div style="display:flex;gap:1rem;flex-wrap:wrap">
+            <label class="cb" style="font-size:12px"><input type="checkbox" id="ecl-simplified" checked><span>Use lifetime ECL for trade/lease receivables (Simplified Approach)</span></label>
+            <label class="cb" style="font-size:12px"><input type="checkbox" id="ecl-undrawn" checked><span>Include undrawn limits using CCF</span></label>
+            <label class="cb" style="font-size:12px"><input type="checkbox" id="ecl-autostage" checked><span>Auto-stage when stage is missing</span></label>
+          </div>
+          <div style="font-size:11px;color:var(--tx3);font-family:var(--mo);margin-top:8px" id="ecl-macro-status">Macro defaults are editable. Click "Fetch Macro" for live World Bank data.</div>
+        </div>
+
+        <!-- KPI metrics row -->
+        <div class="kpi-grid" id="ecl-kpis" style="margin-bottom:1rem"></div>
+
+        <!-- Stage breakdown -->
+        <div class="ecl-stage-bar" id="ecl-stages" style="display:none"></div>
+
+        <!-- Portfolio table with inline ECL field editing -->
+        <div class="nt-info" style="margin-bottom:1rem">
+          <strong style="color:var(--t)">Editing ECL parameters inline:</strong> Each row shows live receivables data. You can edit Loan Classification, Collateral Type/Value, and EIR directly in the table — changes are saved to the database immediately. The source badge shows where the value came from:
+          <span class="ecl-source-badge invoice">invoice</span> = saved on this invoice,
+          <span class="ecl-source-badge debtor">debtor</span> = inherited from debtor defaults,
+          <span class="ecl-source-badge default">default</span> = system default.
+          To set defaults for all of a debtor's invoices at once, click the debtor name.
+        </div>
+
+        <div id="ecl-portfolio-table"></div>
+
+        <!-- Results section (shown after compute) -->
+        <div id="ecl-results-section" style="display:none;margin-top:1.5rem">
+          <div class="vhdr" style="margin-bottom:1rem">
+            <div class="section-ttl" style="margin:0">Computed ECL Results</div>
+            <div style="display:flex;gap:.5rem">
+              <button onclick="saveEclSnapshot()">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Save Snapshot
+              </button>
+            </div>
+          </div>
+          <div id="ecl-results-table"></div>
+        </div>
+
+        <!-- Snapshots -->
+        <div style="margin-top:1.5rem">
+          <div class="vhdr" style="margin-bottom:.75rem">
+            <div class="section-ttl" style="margin:0">Saved ECL Snapshots</div>
+            <button onclick="loadEclSnapshots()" style="font-size:11px;padding:5px 12px">Refresh</button>
+          </div>
+          <div id="ecl-snapshots"></div>
+        </div>
       </div>
 
       <!-- Settings -->
@@ -367,86 +458,62 @@ select.finput{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xm
     <div class="mfoot" id="modal-foot"></div>
   </div>
 </div>
-
 <div id="toast"></div>
 
-
-
+<!-- ═══════════════════ AUTH GUARD ═══════════════════ -->
 <script>
 'use strict';
 (function(){
   var tok = sessionStorage.getItem('FM_token');
-  // No token at all — redirect
   if (!tok) { window.location.href = '../portal/'; return; }
-
-  // Token exists — show page immediately, verify in background
-  // Only redirect if server explicitly says token is invalid
   var _API = 'https://eis-recbackend.onrender.com/api';
   var _attempts = 0;
-
   function verifyToken() {
     _attempts++;
-    fetch(_API + '/auth/me', {
-      headers: { 'Authorization': 'Bearer ' + tok, 'Content-Type': 'application/json' }
-    })
+    fetch(_API + '/auth/me', { headers: { 'Authorization': 'Bearer ' + tok, 'Content-Type': 'application/json' } })
     .then(function(r) { return r.json().then(function(d) { return { status: r.status, data: d }; }); })
     .then(function(obj) {
       if (obj.status === 200 && obj.data.success && obj.data.user) {
-        // Valid — update display name
         var el = document.getElementById('user-name');
         if (el) el.textContent = obj.data.user.name;
       } else if (obj.status === 401) {
-        // Genuinely invalid/expired token
         sessionStorage.removeItem('FM_token');
         window.location.href = '../portal/';
       }
-      // Any other status (500, 503, rate-limit) — stay on page
     })
-    .catch(function() {
-      // Network error / backend waking up — retry once after 4s, then give up and stay
-      if (_attempts < 2) setTimeout(verifyToken, 4000);
-    });
+    .catch(function() { if (_attempts < 2) setTimeout(verifyToken, 4000); });
   }
-
   verifyToken();
 })();
 </script>
+
+<!-- ═══════════════════ MAIN APP ═══════════════════ -->
 <script>
+'use strict';
 const API_BASE = 'https://eis-recbackend.onrender.com/api';
 
-// ════════════════════════════════════════════════════
-// API HELPER
-// ════════════════════════════════════════════════════
-let currentUser = null;
-
+// ── API helper ─────────────────────────────────────────────────
 async function api(endpoint, opts = {}) {
   const tok = sessionStorage.getItem('FM_token');
   const isFormData = opts.body instanceof FormData;
   const headers = { 'Authorization': tok ? 'Bearer ' + tok : '' };
-  // Do NOT set Content-Type for FormData — browser sets it with boundary automatically
   if (!isFormData) headers['Content-Type'] = 'application/json';
   const res = await fetch(API_BASE + endpoint, { ...opts, headers });
   const data = await res.json().catch(() => ({ success:false, message:'No response from server.' }));
   if (!res.ok) throw new Error(data.message || data.error || 'Server error ' + res.status);
   return data;
 }
-
 async function apiForm(endpoint, formData) {
   const tok = sessionStorage.getItem('FM_token');
-  // Do NOT set Content-Type — let browser set multipart/form-data with boundary
-  const headers = { 'Authorization': tok ? 'Bearer ' + tok : '' };
-  const res = await fetch(API_BASE + endpoint, { method:'POST', body: formData, headers });
+  const res = await fetch(API_BASE + endpoint, { method:'POST', body: formData, headers: { 'Authorization': tok ? 'Bearer ' + tok : '' } });
   const data = await res.json().catch(() => ({ success:false, message:'No response.' }));
   if (!res.ok) throw new Error(data.message || data.error || 'Upload failed');
   return data;
 }
 
-// ════════════════════════════════════════════════════
-// UI HELPERS
-// ════════════════════════════════════════════════════
+// ── UI helpers ─────────────────────────────────────────────────
 const $  = id => document.getElementById(id);
-const fN = n  => n == null || isNaN(n) ? '0.00'
-  : Number(n).toLocaleString('en-NG',{minimumFractionDigits:2,maximumFractionDigits:2});
+const fN = n  => n == null || isNaN(n) ? '0.00' : Number(n).toLocaleString('en-NG',{minimumFractionDigits:2,maximumFractionDigits:2});
 const fD = d  => !d ? '—' : new Date(d).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
 const ts = () => new Date().toISOString().slice(0,10);
 
@@ -455,19 +522,14 @@ function toast(msg, type='ok') {
   el.className = 'on ' + type;
   setTimeout(() => el.className = '', 4000);
 }
-
-function showApi(msg) { /* portal handles auth */ }
-function hideApi()    { }
-
-function openModal(title, bodyHTML, footHTML, wide=false) {
+function openModal(title, bodyHTML, footHTML, wide=false, xl=false) {
   $('modal-title').textContent = title;
   $('modal-body').innerHTML    = bodyHTML;
   $('modal-foot').innerHTML    = footHTML || '<button onclick="closeModal()">Close</button>';
-  $('modal-box').className     = 'modal' + (wide?' wide':'');
+  $('modal-box').className     = 'modal' + (xl?' xl':wide?' wide':'');
   $('modal-bg').classList.add('on');
 }
 function closeModal() { $('modal-bg').classList.remove('on'); }
-// modal-bg listener added in initNav()
 
 const BUCKET_LABELS = { current:'Current', '1_30':'1–30 days', '31_60':'31–60 days', '61_90':'61–90 days', '91_180':'91–180 days', '180_plus':'180+ days' };
 const BUCKET_COLORS = { current:'#22c55e', '1_30':'#84cc16', '31_60':'#f59e0b', '61_90':'#ef4444', '91_180':'#dc2626', '180_plus':'#991b1b' };
@@ -478,20 +540,15 @@ function bucketPill(key, days) {
   const lbl  = key === 'current' ? 'Current' : (days||0) + ' days';
   return `<span class="pl ${cls}">${lbl}</span>`;
 }
-
 function empty(msg) { return `<div class="ep"><div class="ei">📭</div>${msg}</div>`; }
 
-
-// ════════════════════════════════════════════════════
-// DASHBOARD
-// ════════════════════════════════════════════════════
+// ── DASHBOARD ──────────────────────────────────────────────────
 async function loadDashboard() {
   $('dash-kpis').innerHTML = '<div class="loading-row">Loading…</div>';
   try {
     const d = await api('/dashboard');
     const s = d.stats;
     $('dash-ts').textContent = 'As at ' + new Date().toLocaleString('en-GB');
-
     $('dash-kpis').innerHTML = [
       { l:'Total Outstanding', v:'₦'+fN(s.totalOutstanding), c:'tl', ac:true },
       { l:'Total Overdue',     v:'₦'+fN(s.totalOverdue),     c:'rd', cl:'rd' },
@@ -501,22 +558,19 @@ async function loadDashboard() {
       { l:'Portfolio DSO',     v:s.dso + ' days',            c:'am', cl:'am' },
     ].map(k => `<div class="kpi${k.ac?' ac':k.cl?' '+k.cl:''}"><div class="kl">${k.l}</div><div class="kv ${k.c}">${k.v}</div></div>`).join('');
 
-    // Ageing bar chart
     const ag = d.ageing;
     const maxVal = Math.max(...Object.values(ag), 1);
     const barRows = Object.entries(BUCKET_LABELS).map(([key, lbl]) => {
       const val = ag[key] || 0;
       const pct = Math.round((val / maxVal) * 100);
-      const col = BUCKET_COLORS[key];
       return `<div class="ag-bar-row">
         <div class="ag-bar-lbl">${lbl}</div>
-        <div class="ag-bar-track"><div class="ag-bar-fill" style="width:${pct}%;background:${col}"></div></div>
+        <div class="ag-bar-track"><div class="ag-bar-fill" style="width:${pct}%;background:${BUCKET_COLORS[key]}"></div></div>
         <div class="ag-bar-amt">₦${fN(val)}</div>
       </div>`;
     }).join('');
     $('dash-ageing').innerHTML = `<div class="ag-bar-wrap"><div class="ag-bar-title">Outstanding by Ageing Bucket</div>${barRows}</div>`;
 
-    // Recent emails
     if (!d.recentEmails?.length) {
       $('dash-emails').innerHTML = empty('No emails sent yet');
     } else {
@@ -531,16 +585,11 @@ async function loadDashboard() {
           <td style="font-family:var(--mo);font-size:11px;color:var(--tx3)">${fD(e.createdAt)}</td>
         </tr>`).join('')}</tbody></table></div>`;
     }
-  } catch(e) {
-    $('dash-kpis').innerHTML = `<div class="nt">⚠ ${e.message}</div>`;
-  }
+  } catch(e) { $('dash-kpis').innerHTML = `<div class="nt">⚠ ${e.message}</div>`; }
 }
 
-// ════════════════════════════════════════════════════
-// DEBTORS
-// ════════════════════════════════════════════════════
+// ── DEBTORS ────────────────────────────────────────────────────
 let debtorsCache = [];
-
 async function loadDebtors() {
   $('debtors-list').innerHTML = '<div class="loading-row">Loading debtors…</div>';
   try {
@@ -549,7 +598,6 @@ async function loadDebtors() {
     renderDebtors(d.debtors);
   } catch(e) { $('debtors-list').innerHTML = `<div class="nt">⚠ ${e.message}</div>`; }
 }
-
 function renderDebtors(debtors) {
   if (!debtors.length) { $('debtors-list').innerHTML = empty('No debtors yet. Add one or import from Excel.'); return; }
   const rows = debtors.map(d => {
@@ -563,28 +611,24 @@ function renderDebtors(debtors) {
       <td><span class="pl ${BUCKET_CLASSES[highBucket]}">${BUCKET_LABELS[highBucket]}</span></td>
       <td class="nm">${d.invoiceCount}</td>
       <td><span class="pl ${scoreCls}">${score > 5000?'High':score > 1000?'Medium':'Low'}</span></td>
-      <td>
-        <div style="display:flex;gap:5px">
-          <button class="bsm" title="View invoices" onclick="viewInvoices('${d._id}','${d.name.replace(/'/g,'\\\'')}')" style="padding:4px 10px">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-          </button>
-          <button class="bsm" title="Edit debtor" onclick="openDebtorModal('${d._id}')" style="padding:4px 10px">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-          </button>
-          <button class="bsm bd" title="Delete debtor" onclick="deleteDebtor('${d._id}','${d.name.replace(/'/g,'\\\'')}')" style="padding:4px 10px">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg>
-          </button>
-        </div>
-      </td>
+      <td><div style="display:flex;gap:5px">
+        <button class="bsm" title="View invoices" onclick="viewInvoices('${d._id}','${d.name.replace(/'/g,'\\\'')}')" style="padding:4px 10px">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+        <button class="bsm" title="Edit debtor" onclick="openDebtorModal('${d._id}')" style="padding:4px 10px">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </button>
+        <button class="bsm bd" title="Delete debtor" onclick="deleteDebtor('${d._id}','${d.name.replace(/'/g,'\\\'')}')" style="padding:4px 10px">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg>
+        </button>
+      </div></td>
     </tr>`;
   }).join('');
-
   $('debtors-list').innerHTML = `<div class="tw"><table>
     <thead><tr><th>Debtor</th><th>Email</th><th>Outstanding</th><th>Oldest Bucket</th><th>Invoices</th><th>Risk</th><th>Actions</th></tr></thead>
     <tbody>${rows}</tbody>
   </table></div>`;
 }
-
 function openDebtorModal(id) {
   const deb = id ? debtorsCache.find(d => d._id === id) : null;
   const title = deb ? 'Edit Debtor' : 'Add New Debtor';
@@ -607,31 +651,25 @@ function openDebtorModal(id) {
     <button class="bp" onclick="saveDebtor('${id||''}')"><span id="deb-save-txt">${deb?'Save Changes':'Add Debtor'}</span></button>`;
   openModal(title, body, foot);
 }
-
 async function saveDebtor(id) {
-  const errEl = $('deb-err');
-  errEl.classList.remove('on');
+  const errEl = $('deb-err'); errEl.classList.remove('on');
   const name = $('deb-name').value.trim();
   if (!name) { errEl.textContent='Name is required.'; errEl.classList.add('on'); return; }
   const payload = { name, contactPerson:$('deb-contact').value.trim(), email:$('deb-email').value.trim(),
     phone:$('deb-phone').value.trim(), creditLimit:parseFloat($('deb-limit').value)||0,
     address:$('deb-addr').value.trim(), notes:$('deb-notes').value.trim() };
-  const saveTxt = $('deb-save-txt');
-  saveTxt.textContent = 'Saving…';
+  const saveTxt = $('deb-save-txt'); saveTxt.textContent = 'Saving…';
   try {
     if (id) await api('/debtors/'+id, { method:'PUT', body:JSON.stringify(payload) });
     else    await api('/debtors', { method:'POST', body:JSON.stringify(payload) });
     closeModal(); toast(id ? 'Debtor updated.' : 'Debtor added.'); loadDebtors();
   } catch(e) { errEl.textContent = e.message; errEl.classList.add('on'); saveTxt.textContent = id?'Save Changes':'Add Debtor'; }
 }
-
 async function deleteDebtor(id, name) {
   if (!confirm(`Delete "${name}" and ALL their invoices?\n\nThis cannot be undone.`)) return;
   try { await api('/debtors/'+id, { method:'DELETE' }); toast('Debtor deleted.'); loadDebtors(); }
   catch(e) { toast(e.message,'err'); }
 }
-
-// Invoices modal
 async function viewInvoices(debtorId, debtorName) {
   openModal(`Invoices — ${debtorName}`,
     '<div class="loading-row">Loading invoices…</div>',
@@ -661,7 +699,6 @@ async function viewInvoices(debtorId, debtorName) {
     </table></div>`;
   } catch(e) { $('modal-body').innerHTML = `<div class="nt">⚠ ${e.message}</div>`; }
 }
-
 function openInvoiceModal(debtorId, debtorName) {
   openModal(`Add Invoice — ${debtorName}`, `
     <div class="merr" id="inv-err"></div>
@@ -680,23 +717,16 @@ function openInvoiceModal(debtorId, debtorName) {
     `<button onclick="viewInvoices('${debtorId}','${debtorName}')">← Back</button>
      <button class="bp" onclick="saveInvoice('${debtorId}','${debtorName}')"><span id="inv-save-txt">Add Invoice</span></button>`);
 }
-
 async function saveInvoice(debtorId, debtorName) {
   const err = $('inv-err'); err.classList.remove('on');
-  const no   = $('inv-no').value.trim();
-  const date = $('inv-date').value;
-  const due  = $('inv-due').value;
-  const amt  = parseFloat($('inv-amt').value);
+  const no=($('inv-no').value.trim()), date=$('inv-date').value, due=$('inv-due').value, amt=parseFloat($('inv-amt').value);
   if (!no||!date||!due||!amt) { err.textContent='Invoice number, dates and amount are required.'; err.classList.add('on'); return; }
   $('inv-save-txt').textContent = 'Saving…';
   try {
-    await api('/invoices', { method:'POST', body:JSON.stringify({ debtorId, invoiceNumber:no,
-      invoiceDate:date, dueDate:due, amount:amt, amountPaid:parseFloat($('inv-paid').value)||0,
-      description:$('inv-desc').value.trim() }) });
+    await api('/invoices', { method:'POST', body:JSON.stringify({ debtorId, invoiceNumber:no, invoiceDate:date, dueDate:due, amount:amt, amountPaid:parseFloat($('inv-paid').value)||0, description:$('inv-desc').value.trim() }) });
     toast('Invoice added.'); viewInvoices(debtorId, debtorName);
   } catch(e) { err.textContent=e.message; err.classList.add('on'); $('inv-save-txt').textContent='Add Invoice'; }
 }
-
 function openPaymentModal(invId, invNo, balance) {
   openModal('Record Payment — ' + invNo, `
     <div class="merr" id="pay-err"></div>
@@ -705,7 +735,6 @@ function openPaymentModal(invId, invNo, balance) {
     `<button onclick="closeModal()">Cancel</button>
      <button class="bp" onclick="recordPayment('${invId}',${balance})"><span id="pay-save-txt">Record Payment</span></button>`);
 }
-
 async function recordPayment(invId, currentBalance) {
   const err = $('pay-err'); err.classList.remove('on');
   const amt = parseFloat($('pay-amt').value);
@@ -717,21 +746,16 @@ async function recordPayment(invId, currentBalance) {
     toast('Payment recorded.'); closeModal(); loadDebtors();
   } catch(e) { err.textContent=e.message; err.classList.add('on'); $('pay-save-txt').textContent='Record Payment'; }
 }
-
 async function deleteInvoice(id, no) {
   if (!confirm(`Delete invoice ${no}? This cannot be undone.`)) return;
   try { await api('/invoices/'+id, { method:'DELETE' }); toast('Invoice deleted.'); }
   catch(e) { toast(e.message,'err'); }
 }
-
-// Import modal
 function openImportModal() {
   openModal('Import from Excel / CSV', `
     <div class="merr" id="imp-err"></div>
     <div class="mok"  id="imp-ok"></div>
-    <div class="nt">File must have columns: <strong>Debtor Name, Email, Invoice Number, Invoice Date, Due Date, Amount, Amount Paid</strong><br>
-    Optional: Phone, Credit Limit, Description/Narration<br>
-    Existing invoices with the same number are updated, not duplicated.</div>
+    <div class="nt">File must have columns: <strong>Debtor Name, Email, Invoice Number, Invoice Date, Due Date, Amount, Amount Paid</strong><br>Optional: Phone, Credit Limit, Description/Narration</div>
     <div style="border:1.5px dashed var(--b2);border-radius:var(--r);padding:2rem;text-align:center;cursor:pointer;background:var(--tg);position:relative" id="imp-drop">
       <input type="file" accept=".csv,.xlsx,.xls" id="imp-file" style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%">
       <div style="font-size:1.5rem;margin-bottom:8px">📂</div>
@@ -740,15 +764,12 @@ function openImportModal() {
     </div>`,
     `<button onclick="closeModal()">Cancel</button>
      <button class="bp" id="imp-btn" onclick="doImport()" disabled><span id="imp-txt">Import</span></button>`);
-
   $('imp-file').addEventListener('change', e => {
     if (e.target.files[0]) { $('imp-fname').textContent = e.target.files[0].name; $('imp-btn').disabled = false; }
   });
 }
-
 async function doImport() {
-  const file = $('imp-file').files[0];
-  if (!file) return;
+  const file = $('imp-file').files[0]; if (!file) return;
   const errEl = $('imp-err'), okEl = $('imp-ok');
   errEl.classList.remove('on'); okEl.classList.remove('on');
   $('imp-txt').textContent = 'Importing…'; $('imp-btn').disabled = true;
@@ -762,11 +783,8 @@ async function doImport() {
   finally { $('imp-txt').textContent = 'Import'; $('imp-btn').disabled = false; }
 }
 
-// ════════════════════════════════════════════════════
-// AGEING REPORT
-// ════════════════════════════════════════════════════
+// ── AGEING REPORT ──────────────────────────────────────────────
 let ageingCache = null;
-
 async function loadAgeing() {
   $('ageing-table').innerHTML = '<div class="loading-row">Generating ageing report…</div>';
   try {
@@ -776,10 +794,8 @@ async function loadAgeing() {
     renderAgeingTable(d.report);
   } catch(e) { $('ageing-table').innerHTML = `<div class="nt">⚠ ${e.message}</div>`; }
 }
-
 function renderAgeingTable(report) {
   if (!report.length) { $('ageing-table').innerHTML = empty('No outstanding invoices to report.'); return; }
-
   const totals = { current:0,'1_30':0,'31_60':0,'61_90':0,'91_180':0,'180_plus':0,total:0 };
   const rows = report.map(r => {
     const ag = r.ageing;
@@ -793,30 +809,20 @@ function renderAgeingTable(report) {
       <td class="nm" style="font-weight:700">₦${fN(r.totalOutstanding)}</td>
     </tr>`;
   }).join('');
-
-  const totalRow = `<tr class="trt">
-    <td>TOTAL</td>
-    ${['current','1_30','31_60','61_90','91_180','180_plus'].map(k =>
-      `<td class="nm">₦${fN(totals[k])}</td>`
-    ).join('')}
+  const totalRow = `<tr class="trt"><td>TOTAL</td>
+    ${['current','1_30','31_60','61_90','91_180','180_plus'].map(k=>`<td class="nm">₦${fN(totals[k])}</td>`).join('')}
     <td class="nm">₦${fN(totals.total)}</td>
   </tr>`;
-
   $('ageing-table').innerHTML = `<div class="tw"><table>
-    <thead><tr>
-      <th>Debtor</th>
-      ${Object.entries(BUCKET_LABELS).map(([,l]) => `<th style="text-align:right">${l}</th>`).join('')}
-      <th style="text-align:right">Total</th>
-    </tr></thead>
+    <thead><tr><th>Debtor</th>
+    ${Object.entries(BUCKET_LABELS).map(([,l])=>`<th style="text-align:right">${l}</th>`).join('')}
+    <th style="text-align:right">Total</th></tr></thead>
     <tbody>${rows}${totalRow}</tbody>
   </table></div>`;
 }
 
-// ════════════════════════════════════════════════════
-// SEND REMINDERS
-// ════════════════════════════════════════════════════
+// ── SEND REMINDERS ─────────────────────────────────────────────
 let remindersCache = [];
-
 async function loadReminders() {
   $('reminders-list').innerHTML = '<div class="loading-row">Loading overdue debtors…</div>';
   try {
@@ -824,7 +830,6 @@ async function loadReminders() {
     const overdue = d.debtors.filter(deb => deb.totalOutstanding > 0);
     remindersCache = overdue;
     if (!overdue.length) { $('reminders-list').innerHTML = empty('No debtors with outstanding invoices.'); return; }
-
     const rows = overdue.map(deb => {
       const highBucket = ['180_plus','91_180','61_90','31_60','1_30','current'].find(k => (deb.ageing[k]||0) > 0) || 'current';
       const tpl = deb.ageing['180_plus']>0 ? 'Final Notice' : deb.ageing['91_180']>0||deb.ageing['61_90']>0 ? 'Second Reminder' : deb.ageing['31_60']>0 ? 'Second Reminder' : 'First Reminder';
@@ -836,44 +841,35 @@ async function loadReminders() {
         <td><span class="pl pb">${tpl}</span></td>
       </tr>`;
     }).join('');
-
     $('reminders-list').innerHTML = `<div class="tw"><table>
       <thead><tr><th>Debtor</th><th>Email</th><th>Outstanding</th><th>Oldest Bucket</th><th>Default Template</th></tr></thead>
       <tbody>${rows}</tbody>
     </table></div>`;
   } catch(e) { $('reminders-list').innerHTML = `<div class="nt">⚠ ${e.message}</div>`; }
 }
-
 function updateSendBtn() {
   const any = remindersCache.some(d => d.email && $('chk-'+d._id)?.checked);
   $('send-btn').disabled = !any;
 }
-
 function selectAllDebtors(select) {
   remindersCache.forEach(d => { const el = $('chk-'+d._id); if(el && !el.disabled) el.checked = select; });
   updateSendBtn();
 }
-
 async function sendReminders() {
   const ids = remindersCache.filter(d => d.email && $('chk-'+d._id)?.checked).map(d => d._id);
   if (!ids.length) { toast('Select at least one debtor.','err'); return; }
   const tpl = $('tpl-override').value || '';
-  const btn = $('send-btn');
-  btn.disabled = true; btn.textContent = 'Sending…';
-  showApi('Sending emails via Brevo…');
+  const btn = $('send-btn'); btn.disabled = true; btn.textContent = 'Sending…';
   try {
     const d = await api('/email/send', { method:'POST', body:JSON.stringify({debtorIds:ids, templateOverride:tpl||undefined}) });
-    hideApi();
     const { sent, failed, skipped } = d.summary;
     toast(`Done: ${sent} sent, ${failed} failed, ${skipped} skipped.`, failed>0?'err':'ok');
     selectAllDebtors(false); loadReminders();
-  } catch(e) { hideApi(); toast(e.message,'err'); }
+  } catch(e) { toast(e.message,'err'); }
   finally { btn.disabled=false; btn.innerHTML='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> Send Selected'; }
 }
 
-// ════════════════════════════════════════════════════
-// EMAIL LOGS
-// ════════════════════════════════════════════════════
+// ── EMAIL LOGS ─────────────────────────────────────────────────
 async function loadLogs() {
   $('logs-table').innerHTML = '<div class="loading-row">Loading email logs…</div>';
   try {
@@ -897,9 +893,524 @@ async function loadLogs() {
   } catch(e) { $('logs-table').innerHTML = `<div class="nt">⚠ ${e.message}</div>`; }
 }
 
-// ════════════════════════════════════════════════════
-// SETTINGS
-// ════════════════════════════════════════════════════
+// ─────────────────────────────────────────────────────────────────
+// ECL MODEL
+// Full IFRS 9 ECL engine — data comes from /api/ecl/portfolio
+// ECL fields persisted per invoice and per debtor via PUT endpoints
+// ─────────────────────────────────────────────────────────────────
+let eclPortfolioRows = [];   // raw rows from API (inc ECL fields)
+let eclResults       = [];   // computed rows after Compute ECL
+
+// ECL engine constants (mirrors original standalone app)
+const ECL_PROFILES = [
+  {key:'overdraft',basePd:.07,lgd:.55,ccf:.75,stage:1},
+  {key:'watch',basePd:.08,lgd:.5,ccf:.1,stage:2},
+  {key:'special mention',basePd:.1,lgd:.52,ccf:.1,stage:2},
+  {key:'substandard',basePd:.25,lgd:.6,ccf:.2,stage:2},
+  {key:'doubtful',basePd:.5,lgd:.75,ccf:.5,stage:3},
+  {key:'non performing',basePd:1,lgd:.8,ccf:.5,stage:3},
+  {key:'npl',basePd:1,lgd:.8,ccf:.5,stage:3},
+  {key:'lost',basePd:1,lgd:.95,ccf:.5,stage:3},
+  {key:'default',basePd:1,lgd:.85,ccf:.5,stage:3},
+  {key:'staff',basePd:.012,lgd:.3,ccf:0,stage:1},
+  {key:'lpo',basePd:.05,lgd:.45,ccf:.2,stage:1},
+  {key:'trade receivable',basePd:.06,lgd:.5,ccf:0,stage:2},
+  {key:'trade',basePd:.06,lgd:.5,ccf:0,stage:2},
+  {key:'performing',basePd:.02,lgd:.45,ccf:0,stage:1},
+  {key:'standard',basePd:.02,lgd:.45,ccf:0,stage:1},
+  {key:'normal',basePd:.02,lgd:.45,ccf:0,stage:1},
+];
+const ECL_COLLATERAL_HAIRCUTS = [
+  ['cash',.95],['deposit',.95],['treasury',.9],['government',.9],
+  ['real estate',.7],['property',.7],['vehicle',.55],['equipment',.5],
+  ['inventory',.45],['receivable',.45],['guarantee',.35],['unsecured',0]
+];
+const ECL_LOAN_CLASSIFICATIONS = [
+  'Trade Receivable','Performing','Standard','Watchlist','Special Mention',
+  'Substandard','Doubtful','Non Performing','Lost','Overdraft','LPO','Staff','Default'
+];
+const ECL_COLLATERAL_TYPES = [
+  'Unsecured','Real Estate','Cash','Deposit','Treasury','Government Bond',
+  'Vehicle','Equipment','Inventory','Receivable','Guarantee'
+];
+
+function eclNorm(v){ return String(v||'').trim().toLowerCase().replace(/[%()]/g,'').replace(/[_-]+/g,' ').replace(/\s+/g,' '); }
+function eclClamp(v,min,max){ return Math.min(Math.max(v,min),max); }
+function eclProfile(cls){
+  const n = eclNorm(cls);
+  return ECL_PROFILES.find(p => n === p.key || n.includes(p.key)) || {basePd:.035,lgd:.5,ccf:0,stage:1};
+}
+function eclHaircut(type){
+  const n = eclNorm(type);
+  return ECL_COLLATERAL_HAIRCUTS.find(([k]) => n.includes(k))?.[1] ?? 0;
+}
+function eclMacroMult(infl, gdp){
+  return eclClamp(1 + ((infl*100-10)*.025) - ((gdp*100-3)*.04), .7, 1.8);
+}
+
+function eclComputeRow(row, settings) {
+  const prof = eclProfile(row.loanClassification);
+  const dpd  = row.daysPastDue || 0;
+  const ead  = Math.max(row.balance + (settings.includeUndrawn ? Math.max((row.creditLimit||0)-row.balance,0)*prof.ccf : 0), 0);
+
+  // Stage determination
+  let stage = row.stage; // explicit from DB
+  if (!stage) {
+    if (dpd > settings.stage3Dpd || prof.stage === 3) stage = 3;
+    else if (dpd > settings.stage2Dpd || prof.stage === 2) stage = 2;
+    else if (settings.simplifiedApproach && /trade|receivable/i.test(row.loanClassification)) stage = 2;
+    else stage = 1;
+  }
+
+  const macroMult  = eclMacroMult(settings.inflationRate/100, settings.gdpGrowthRate/100);
+  const dpdMult    = dpd<=0?.8:dpd<=30?1:dpd<=60?2:dpd<=90?4:12;
+  const scoreRatio = Math.max(0, Math.min(1, 1 - dpd/120));
+  const pd12 = stage===3 ? 1 : eclClamp(prof.basePd*(1+(1-scoreRatio)*2)*dpdMult*macroMult, .001, .95);
+
+  const dueDate     = new Date(row.dueDate);
+  const lifeMonths  = isNaN(dueDate.getTime()) ? 12 : Math.max((dueDate.getFullYear()-new Date().getFullYear())*12+dueDate.getMonth()-new Date().getMonth(), 1);
+  const lifetimePd  = stage===3 ? 1 : eclClamp(1-Math.pow(1-pd12, Math.max(lifeMonths/12, 1/12)), 0, 1);
+
+  const collVal   = row.collateralValue || 0;
+  const haircut   = eclHaircut(row.collateralType);
+  const lgd       = collVal>0 && ead>0 ? eclClamp(1-Math.min(collVal*haircut,ead)/ead, .02, 1) : prof.lgd;
+
+  const eir            = (row.eir || settings.defaultDiscount) / 100;
+  const horizonMonths  = stage===1 ? Math.min(12,lifeMonths) : lifeMonths;
+  const pdUsed         = stage===1 ? pd12 : lifetimePd;
+  const discountFactor = eir>0 ? 1/Math.pow(1+eir, horizonMonths/12) : 1;
+  const ecl            = ead * pdUsed * lgd * discountFactor;
+
+  return { ...row, stage, ead, pd12, lifetimePd, pdUsed, lgd, eir, horizonMonths, discountFactor, macroMult, ecl };
+}
+
+function eclReadSettings() {
+  return {
+    inflationRate:   parseFloat($('ecl-inflation').value) || 10,
+    gdpGrowthRate:   parseFloat($('ecl-gdp').value)       || 3,
+    stage2Dpd:       parseInt($('ecl-s2dpd').value)        || 30,
+    stage3Dpd:       parseInt($('ecl-s3dpd').value)        || 90,
+    defaultDiscount: parseFloat($('ecl-eir-default').value) || 12,
+    simplifiedApproach: $('ecl-simplified').checked,
+    includeUndrawn:     $('ecl-undrawn').checked,
+    autoStage:          $('ecl-autostage').checked,
+  };
+}
+
+async function loadEclPortfolio() {
+  $('ecl-portfolio-table').innerHTML = '<div class="loading-row">Loading portfolio from database…</div>';
+  $('ecl-kpis').innerHTML = '';
+  $('ecl-stages').style.display = 'none';
+  $('ecl-results-section').style.display = 'none';
+  eclResults = [];
+  $('ecl-export-btn').disabled = true;
+  try {
+    const d = await api('/ecl/portfolio');
+    eclPortfolioRows = d.rows;
+    $('ecl-ts').textContent = `${d.count} invoice rows loaded · ${new Date().toLocaleString('en-GB')}`;
+    renderEclPortfolioTable();
+    loadEclSnapshots();
+    if (!d.count) {
+      $('ecl-portfolio-table').innerHTML = empty('No outstanding invoices found. Add debtors and invoices in the Debtors view first.');
+    }
+  } catch(e) {
+    $('ecl-portfolio-table').innerHTML = `<div class="nt">⚠ ${e.message}</div>`;
+  }
+}
+
+function renderEclPortfolioTable() {
+  if (!eclPortfolioRows.length) return;
+  const makeSourceBadge = (src) => `<span class="ecl-source-badge ${src}">${src}</span>`;
+  const classOptions = ECL_LOAN_CLASSIFICATIONS.map(c=>`<option value="${c}">${c}</option>`).join('');
+  const collOptions  = ECL_COLLATERAL_TYPES.map(c=>`<option value="${c}">${c}</option>`).join('');
+
+  const rows = eclPortfolioRows.map((r, idx) => {
+    const bk = r.daysPastDue <= 0 ? 'current' : r.daysPastDue<=30?'1_30':r.daysPastDue<=60?'31_60':r.daysPastDue<=90?'61_90':r.daysPastDue<=180?'91_180':'180_plus';
+    const src = r._eclSource || {};
+    return `<tr id="ecl-row-${idx}">
+      <td>
+        <div style="font-weight:500;font-size:12px;cursor:pointer;color:var(--t);text-decoration:underline;text-decoration-style:dotted;text-underline-offset:2px" onclick="openDebtorEclModal('${r._debtorId}','${r.customerName.replace(/'/g,"\\'")}')" title="Edit ECL defaults for all ${r.customerName} invoices">${r.customerName}</div>
+        <div style="font-size:10px;font-family:var(--mo);color:var(--tx3)">${r.invoiceNumber}</div>
+      </td>
+      <td>${fD(r.dueDate)}</td>
+      <td class="nm" style="color:var(--rd);font-weight:600">₦${fN(r.balance)}</td>
+      <td><span class="pl ${BUCKET_CLASSES[bk]||'pa'}">${r.daysPastDue<=0?'Current':r.daysPastDue+' days'}</span></td>
+      <td>
+        <div class="ecl-inline-edit">
+          <select class="ecl-inline-select" id="cls-${idx}" onchange="eclFieldChanged(${idx},'loanClassification',this.value)">
+            ${ECL_LOAN_CLASSIFICATIONS.map(c=>`<option value="${c}" ${c===r.loanClassification?'selected':''}>${c}</option>`).join('')}
+          </select>
+          ${makeSourceBadge(src.loanClassification||'default')}
+        </div>
+      </td>
+      <td>
+        <div class="ecl-inline-edit" style="gap:4px">
+          <select class="ecl-inline-select" id="colt-${idx}" onchange="eclFieldChanged(${idx},'collateralType',this.value)">
+            ${ECL_COLLATERAL_TYPES.map(c=>`<option value="${c}" ${c===r.collateralType?'selected':''}>${c}</option>`).join('')}
+          </select>
+          ${makeSourceBadge(src.collateralType||'default')}
+        </div>
+      </td>
+      <td>
+        <div class="ecl-inline-edit">
+          <input class="ecl-inline-num" type="number" id="colv-${idx}" value="${r.collateralValue||0}" min="0" step="1000" onblur="eclFieldChanged(${idx},'collateralValue',this.value)">
+          ${makeSourceBadge(src.collateralValue||'default')}
+        </div>
+      </td>
+      <td>
+        <div class="ecl-inline-edit">
+          <input class="ecl-inline-num" type="number" id="eir-${idx}" value="${r.eir||''}" min="0" step="0.5" placeholder="—" onblur="eclFieldChanged(${idx},'eir',this.value)" style="width:60px">
+          ${makeSourceBadge(src.eir||'default')}
+        </div>
+      </td>
+      <td>
+        <div class="ecl-inline-edit">
+          <select class="ecl-inline-select" id="stg-${idx}" onchange="eclFieldChanged(${idx},'stage',this.value)">
+            <option value="">Auto</option>
+            <option value="1" ${r.stage===1?'selected':''}>Stage 1</option>
+            <option value="2" ${r.stage===2?'selected':''}>Stage 2</option>
+            <option value="3" ${r.stage===3?'selected':''}>Stage 3</option>
+          </select>
+          ${makeSourceBadge(src.stage||'auto')}
+        </div>
+      </td>
+      <td>
+        <button class="bsm save-ecl-btn" id="save-ecl-${idx}" onclick="saveEclRow(${idx})" style="opacity:.5;font-size:10px;padding:3px 9px;border-radius:6px" title="Save ECL fields for this invoice">
+          Save
+        </button>
+      </td>
+    </tr>`;
+  }).join('');
+
+  $('ecl-portfolio-table').innerHTML = `<div class="tw"><table>
+    <thead><tr>
+      <th>Debtor / Invoice</th>
+      <th>Due Date</th>
+      <th style="text-align:right">Balance</th>
+      <th>Ageing</th>
+      <th>Loan Classification</th>
+      <th>Collateral Type</th>
+      <th>Collateral Value</th>
+      <th>EIR (%)</th>
+      <th>Stage Override</th>
+      <th></th>
+    </tr></thead>
+    <tbody>${rows}</tbody>
+  </table></div>`;
+}
+
+// Track dirty state per row
+const eclDirty = {};
+function eclFieldChanged(idx, field, value) {
+  if (!eclDirty[idx]) eclDirty[idx] = {};
+  eclDirty[idx][field] = value;
+  // Update local cache
+  eclPortfolioRows[idx][field] = field === 'collateralValue' || field === 'eir' ? parseFloat(value)||0 : (field === 'stage' ? (value?parseInt(value):null) : value);
+  // Brighten save button
+  const btn = $('save-ecl-' + idx);
+  if (btn) btn.style.opacity = '1';
+}
+
+async function saveEclRow(idx) {
+  const row = eclPortfolioRows[idx];
+  if (!row) return;
+  const btn = $('save-ecl-' + idx);
+  if (btn) btn.textContent = '…';
+  try {
+    // Build invoice-level ECL payload
+    const payload = {
+      ecl_loanClassification: row.loanClassification,
+      ecl_collateralType:     row.collateralType,
+      ecl_collateralValue:    row.collateralValue || 0,
+      ecl_eir:                row.eir || null,
+      ecl_stage:              row.stage || null,
+    };
+    await api('/ecl/invoice/' + row._invoiceId, { method:'PUT', body:JSON.stringify(payload) });
+    // Update source badges to reflect 'invoice'
+    if (row._eclSource) {
+      ['loanClassification','collateralType','collateralValue','eir'].forEach(f => { row._eclSource[f] = 'invoice'; });
+      if (row.stage) row._eclSource.stage = 'invoice';
+    }
+    if (btn) { btn.textContent = '✓'; btn.style.opacity = '.5'; }
+    const tr = $('ecl-row-' + idx);
+    if (tr) tr.classList.add('ecl-row-saved');
+    toast('ECL fields saved for ' + row.invoiceNumber);
+    delete eclDirty[idx];
+  } catch(e) {
+    toast('Save failed: ' + e.message, 'err');
+    if (btn) { btn.textContent = 'Save'; btn.style.opacity = '1'; }
+  }
+}
+
+// Edit ALL invoices for a debtor at once via modal
+async function openDebtorEclModal(debtorId, debtorName) {
+  openModal(`ECL Defaults — ${debtorName}`,
+    `<div class="merr" id="decl-err"></div>
+    <div class="nt-info" style="margin-bottom:1rem">These defaults apply to <strong>all invoices</strong> for this debtor unless a specific invoice has its own override saved.</div>
+    <div class="fg">
+      <div class="fld">
+        <label>Loan Classification</label>
+        <select class="finput" id="decl-cls">
+          ${ECL_LOAN_CLASSIFICATIONS.map(c=>`<option value="${c}">${c}</option>`).join('')}
+        </select>
+      </div>
+      <div class="fld">
+        <label>Collateral Type</label>
+        <select class="finput" id="decl-colt">
+          ${ECL_COLLATERAL_TYPES.map(c=>`<option value="${c}">${c}</option>`).join('')}
+        </select>
+      </div>
+    </div>
+    <div class="fg">
+      <div class="fld"><label>Collateral Value (₦)</label><input class="finput" type="number" id="decl-colv" min="0" step="1000" value="0" placeholder="0"></div>
+      <div class="fld"><label>EIR / Discount Rate (%)</label><input class="finput" type="number" id="decl-eir" min="0" step="0.5" placeholder="Leave blank for fallback"></div>
+    </div>
+    <div class="fld">
+      <label>Stage Override (optional)</label>
+      <select class="finput" id="decl-stg">
+        <option value="">Auto-determine</option>
+        <option value="1">Stage 1</option><option value="2">Stage 2</option><option value="3">Stage 3</option>
+      </select>
+    </div>`,
+    `<button onclick="closeModal()">Cancel</button>
+     <button class="bp" onclick="saveDebtorEcl('${debtorId}','${debtorName.replace(/'/g,'\\\'')}')" ><span id="decl-save-txt">Save Defaults</span></button>`
+  );
+
+  // Pre-fill with current debtor values
+  try {
+    const rows = eclPortfolioRows.filter(r => r._debtorId === debtorId);
+    if (rows.length) {
+      const r = rows[0];
+      if ($('decl-cls'))  $('decl-cls').value  = r.loanClassification || 'Trade Receivable';
+      if ($('decl-colt')) $('decl-colt').value = r.collateralType || 'Unsecured';
+      if ($('decl-colv')) $('decl-colv').value = r.collateralValue || 0;
+      if ($('decl-eir'))  $('decl-eir').value  = r.eir || '';
+      if ($('decl-stg'))  $('decl-stg').value  = r.stage || '';
+    }
+  } catch(e) {}
+}
+
+async function saveDebtorEcl(debtorId, debtorName) {
+  const err = $('decl-err'); err.classList.remove('on');
+  $('decl-save-txt').textContent = 'Saving…';
+  const payload = {
+    ecl_loanClassification: $('decl-cls').value,
+    ecl_collateralType:     $('decl-colt').value,
+    ecl_collateralValue:    parseFloat($('decl-colv').value) || 0,
+    ecl_eir:                parseFloat($('decl-eir').value) || null,
+    ecl_stage:              parseInt($('decl-stg').value) || null,
+  };
+  try {
+    await api('/ecl/debtor/' + debtorId, { method:'PUT', body:JSON.stringify(payload) });
+    closeModal();
+    toast('ECL defaults saved for ' + debtorName);
+    loadEclPortfolio(); // reload so badge sources refresh
+  } catch(e) {
+    err.textContent = e.message; err.classList.add('on');
+    $('decl-save-txt').textContent = 'Save Defaults';
+  }
+}
+
+async function fetchEclMacro() {
+  const btn = $('ecl-macro-btn');
+  btn.disabled = true; btn.textContent = 'Fetching…';
+  try {
+    const country = $('ecl-country').value;
+    const r = await fetch(`https://api.worldbank.org/v2/country/${country}/indicator/FP.CPI.TOTL.ZG?format=json&mrv=1`);
+    const data = await r.json();
+    const val = data?.[1]?.[0]?.value;
+    if (val !== undefined && val !== null) {
+      $('ecl-inflation').value = Number(val).toFixed(2);
+      $('ecl-macro-status').textContent = `World Bank inflation for ${country}: ${Number(val).toFixed(2)}%. GDP growth is editable manually.`;
+      toast('Macro data updated from World Bank.');
+    } else {
+      $('ecl-macro-status').textContent = 'Could not fetch macro data. Using manual values.';
+    }
+  } catch(e) {
+    $('ecl-macro-status').textContent = 'Macro fetch failed. Enter values manually.';
+  } finally {
+    btn.disabled = false; btn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> Fetch Macro';
+  }
+}
+
+function computeECL() {
+  if (!eclPortfolioRows.length) { toast('Load portfolio first.','err'); return; }
+  const settings = eclReadSettings();
+  eclResults = eclPortfolioRows.map(r => eclComputeRow(r, settings));
+
+  // KPIs
+  const totalEAD = eclResults.reduce((s,r)=>s+r.ead,0);
+  const totalECL = eclResults.reduce((s,r)=>s+r.ecl,0);
+  const coverage = totalEAD > 0 ? totalECL/totalEAD : 0;
+  const s1 = eclResults.filter(r=>r.stage===1), s2 = eclResults.filter(r=>r.stage===2), s3 = eclResults.filter(r=>r.stage===3);
+
+  $('ecl-kpis').innerHTML = [
+    { l:'Total Exposure (EAD)', v:'₦'+fN(totalEAD), c:'tl', ac:true },
+    { l:'Total ECL',            v:'₦'+fN(totalECL), c:'rd', cl:'rd' },
+    { l:'Coverage Ratio',       v:(coverage*100).toFixed(2)+'%', c:'am', cl:'am' },
+    { l:'Rows Processed',       v:eclResults.length, c:'' },
+    { l:'Stage 1 Exposure',     v:'₦'+fN(s1.reduce((s,r)=>s+r.ead,0)), c:'gr' },
+    { l:'Stage 2 Exposure',     v:'₦'+fN(s2.reduce((s,r)=>s+r.ead,0)), c:'am', cl:'am' },
+    { l:'Stage 3 Exposure',     v:'₦'+fN(s3.reduce((s,r)=>s+r.ead,0)), c:'rd', cl:'rd' },
+  ].map(k => `<div class="kpi${k.ac?' ac':k.cl?' '+k.cl:''}"><div class="kl">${k.l}</div><div class="kv ${k.c}">${k.v}</div></div>`).join('');
+
+  // Stage breakdown cards
+  const stageBar = $('ecl-stages');
+  stageBar.style.display = 'grid';
+  stageBar.innerHTML = [
+    { cls:'s1', lbl:'Stage 1 — Performing', rows:s1, color:'gr' },
+    { cls:'s2', lbl:'Stage 2 — SICR / Watchlist', rows:s2, color:'am' },
+    { cls:'s3', lbl:'Stage 3 — Default', rows:s3, color:'rd' },
+  ].map(s => {
+    const ead = s.rows.reduce((t,r)=>t+r.ead,0);
+    const ecl = s.rows.reduce((t,r)=>t+r.ecl,0);
+    return `<div class="ecl-stage-card ${s.cls}">
+      <div class="ecl-stage-lbl">${s.lbl}</div>
+      <div class="ecl-stage-amt">₦${fN(ead)}</div>
+      <div class="ecl-stage-sub">${s.rows.length} invoices · ECL ₦${fN(ecl)}</div>
+    </div>`;
+  }).join('');
+
+  // Results table
+  $('ecl-results-section').style.display = 'block';
+  const fPct = v => (v*100).toFixed(2)+'%';
+  const stageClass = s => s===1?'pg':s===2?'pa':'pr';
+  const rows = eclResults.map(r => `<tr>
+    <td>
+      <div style="font-weight:500;font-size:12px">${r.customerName}</div>
+      <div style="font-size:10px;font-family:var(--mo);color:var(--tx3)">${r.invoiceNumber}</div>
+    </td>
+    <td>${r.loanClassification}</td>
+    <td><span class="pl ${stageClass(r.stage)}">Stage ${r.stage}</span></td>
+    <td class="nm">₦${fN(r.ead)}</td>
+    <td class="nm">${fPct(r.pd12)}</td>
+    <td class="nm">${fPct(r.lifetimePd)}</td>
+    <td class="nm">${fPct(r.lgd)}</td>
+    <td class="nm" style="color:var(--rd);font-weight:700">₦${fN(r.ecl)}</td>
+    <td style="font-size:10px;color:var(--tx3);font-family:var(--mo)">${r.collateralType}</td>
+  </tr>`).join('');
+
+  const totECL2 = eclResults.reduce((s,r)=>s+r.ecl,0);
+  $('ecl-results-table').innerHTML = `<div class="tw"><table>
+    <thead><tr>
+      <th>Debtor / Invoice</th><th>Classification</th><th>Stage</th>
+      <th style="text-align:right">EAD</th>
+      <th style="text-align:right">12M PD</th>
+      <th style="text-align:right">Lifetime PD</th>
+      <th style="text-align:right">LGD</th>
+      <th style="text-align:right">ECL</th>
+      <th>Collateral</th>
+    </tr></thead>
+    <tbody>${rows}
+      <tr class="trt">
+        <td colspan="7" style="text-align:right">TOTAL ECL</td>
+        <td class="nm" style="color:var(--t)">₦${fN(totECL2)}</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table></div>`;
+
+  $('ecl-export-btn').disabled = false;
+  toast(`ECL computed for ${eclResults.length} invoices. Total ECL: ₦${fN(totalECL)}`);
+}
+
+async function saveEclSnapshot() {
+  if (!eclResults.length) { toast('Compute ECL first.','err'); return; }
+  const settings = eclReadSettings();
+  const totalEAD = eclResults.reduce((s,r)=>s+r.ead,0);
+  const totalECL = eclResults.reduce((s,r)=>s+r.ecl,0);
+  const s1=eclResults.filter(r=>r.stage===1).length, s2=eclResults.filter(r=>r.stage===2).length, s3=eclResults.filter(r=>r.stage===3).length;
+  try {
+    const label = 'ECL Run — ' + new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
+    await api('/ecl/snapshots', { method:'POST', body:JSON.stringify({
+      label, settings,
+      summary:{ totalExposure:totalEAD, totalEcl:totalECL, coverageRatio:totalEAD>0?totalECL/totalEAD:0, rowCount:eclResults.length, stage1Count:s1, stage2Count:s2, stage3Count:s3 },
+      rows: eclResults.map(r=>({ invoiceNumber:r.invoiceNumber, customerName:r.customerName, stage:r.stage, ead:r.ead, pd12:r.pd12, lifetimePd:r.lifetimePd, lgd:r.lgd, ecl:r.ecl, loanClassification:r.loanClassification }))
+    })});
+    toast('Snapshot saved.'); loadEclSnapshots();
+  } catch(e) { toast('Save failed: '+e.message,'err'); }
+}
+
+async function loadEclSnapshots() {
+  const el = $('ecl-snapshots');
+  if (!el) return;
+  try {
+    const d = await api('/ecl/snapshots');
+    if (!d.snapshots.length) { el.innerHTML = `<div class="ep" style="padding:1.5rem"><div style="font-size:1.2rem;margin-bottom:8px">📸</div>No snapshots saved yet. Run Compute ECL and save a snapshot.</div>`; return; }
+    const fPct = v => v!=null ? (v*100).toFixed(2)+'%' : '—';
+    el.innerHTML = d.snapshots.map(s => `<div class="ecl-snap-row">
+      <div>
+        <div style="font-size:13px;font-weight:500">${s.label||'Unlabelled snapshot'}</div>
+        <div class="ecl-snap-meta">${new Date(s.computedAt).toLocaleString('en-GB')} · ${s.summary?.rowCount||0} rows · ECL ₦${fN(s.summary?.totalEcl)} · Coverage ${fPct(s.summary?.coverageRatio)}</div>
+        <div style="display:flex;gap:8px;margin-top:4px">
+          <span class="pl pg">S1: ${s.summary?.stage1Count||0}</span>
+          <span class="pl pa">S2: ${s.summary?.stage2Count||0}</span>
+          <span class="pl pr">S3: ${s.summary?.stage3Count||0}</span>
+        </div>
+      </div>
+      <button class="bsm bd" onclick="deleteEclSnapshot('${s._id}')" style="padding:4px 10px;flex-shrink:0" title="Delete snapshot">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg>
+      </button>
+    </div>`).join('');
+  } catch(e) { el.innerHTML = `<div class="nt">⚠ ${e.message}</div>`; }
+}
+
+async function deleteEclSnapshot(id) {
+  if (!confirm('Delete this ECL snapshot?')) return;
+  try { await api('/ecl/snapshots/'+id, { method:'DELETE' }); toast('Snapshot deleted.'); loadEclSnapshots(); }
+  catch(e) { toast(e.message,'err'); }
+}
+
+function exportEclXLSX() {
+  if (!eclResults.length) { toast('Compute ECL before exporting.','err'); return; }
+  const wb = XLSX.utils.book_new();
+  const fPct = v => +(v*100).toFixed(4);
+  const summaryRows = eclResults.map(r => ({
+    'Debtor':             r.customerName,
+    'Invoice #':          r.invoiceNumber,
+    'Loan Classification':r.loanClassification,
+    'Stage':              'Stage ' + r.stage,
+    'EAD':                +r.ead.toFixed(2),
+    '12M PD (%)':         fPct(r.pd12),
+    'Lifetime PD (%)':    fPct(r.lifetimePd),
+    'LGD (%)':            fPct(r.lgd),
+    'Discount Rate (%)':  r.eir||0,
+    'ECL':                +r.ecl.toFixed(2),
+    'Days Past Due':      r.daysPastDue,
+    'Collateral Type':    r.collateralType,
+    'Collateral Value':   r.collateralValue||0,
+    'Due Date':           fD(r.dueDate),
+  }));
+  const ws = XLSX.utils.json_to_sheet(summaryRows);
+  ws['!cols'] = [28,14,18,8,14,10,12,8,12,14,12,14,14,12].map(w=>({wch:w}));
+  XLSX.utils.book_append_sheet(wb, ws, 'ECL Results');
+
+  // Stage summary sheet
+  const stageSummary = [1,2,3].map(s => {
+    const rows = eclResults.filter(r=>r.stage===s);
+    return { Stage:'Stage '+s, Count:rows.length, 'Total EAD':+rows.reduce((t,r)=>t+r.ead,0).toFixed(2), 'Total ECL':+rows.reduce((t,r)=>t+r.ecl,0).toFixed(2), 'Avg Coverage %':(rows.reduce((t,r)=>t+r.ead,0)>0?(rows.reduce((t,r)=>t+r.ecl,0)/rows.reduce((t,r)=>t+r.ead,0)*100).toFixed(2):0) };
+  });
+  const ws2 = XLSX.utils.json_to_sheet(stageSummary);
+  XLSX.utils.book_append_sheet(wb, ws2, 'Stage Summary');
+
+  const settings = eclReadSettings();
+  const metaRows = [
+    { Parameter:'Computed At', Value:new Date().toLocaleString('en-GB') },
+    { Parameter:'Inflation Rate (%)', Value:settings.inflationRate },
+    { Parameter:'GDP Growth (%)', Value:settings.gdpGrowthRate },
+    { Parameter:'Stage 2 DPD Trigger', Value:settings.stage2Dpd },
+    { Parameter:'Stage 3 DPD Trigger', Value:settings.stage3Dpd },
+    { Parameter:'Fallback EIR (%)', Value:settings.defaultDiscount },
+    { Parameter:'Total Rows', Value:eclResults.length },
+    { Parameter:'Total EAD', Value:+eclResults.reduce((s,r)=>s+r.ead,0).toFixed(2) },
+    { Parameter:'Total ECL', Value:+eclResults.reduce((s,r)=>s+r.ecl,0).toFixed(2) },
+  ];
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(metaRows), 'Model Parameters');
+  XLSX.writeFile(wb, `FM-IFRS9-ECL-${ts()}.xlsx`);
+  toast('ECL Excel exported.');
+}
+
+// ── SETTINGS ───────────────────────────────────────────────────
 async function loadSettings() {
   $('settings-form').innerHTML = '<div class="loading-row">Loading settings…</div>';
   try {
@@ -916,39 +1427,33 @@ async function loadSettings() {
       </div>
       <div class="fld"><label>Company Address</label><input class="finput" id="s-caddr" value="${s.companyAddress||''}"></div>
     </div>
-
     <div class="card" style="margin-bottom:1rem">
       <div class="section-ttl">Brevo SMTP Configuration</div>
-      <div class="nt">Get these from your Brevo dashboard → SMTP & API → SMTP tab. The From Email must be verified in Brevo.</div>
+      <div class="nt">Get these from your Brevo dashboard → SMTP & API → SMTP tab.</div>
       <div class="fg">
-        <div class="fld"><label>Brevo SMTP Login (your Brevo email) *</label><input class="finput" id="s-buser" value="${s.brevoSmtpUser||''}" placeholder="you@yourcompany.com"></div>
-        <div class="fld"><label>Brevo SMTP Key *</label><input class="finput" type="password" id="s-bkey" value="${s.brevoSmtpKey||''}" placeholder="xsmtpsib-..."></div>
+        <div class="fld"><label>Brevo SMTP Login *</label><input class="finput" id="s-buser" value="${s.brevoSmtpUser||''}"></div>
+        <div class="fld"><label>Brevo SMTP Key *</label><input class="finput" type="password" id="s-bkey" value="${s.brevoSmtpKey||''}"></div>
       </div>
       <div class="fg">
-        <div class="fld"><label>From Email (verified in Brevo)</label><input class="finput" type="email" id="s-from" value="${s.fromEmail||''}" placeholder="noreply@yourcompany.com"></div>
-        <div class="fld"><label>Reply-To Email</label><input class="finput" type="email" id="s-reply" value="${s.replyTo||''}" placeholder="accounts@yourcompany.com"></div>
+        <div class="fld"><label>From Email (verified in Brevo)</label><input class="finput" type="email" id="s-from" value="${s.fromEmail||''}"></div>
+        <div class="fld"><label>Reply-To Email</label><input class="finput" type="email" id="s-reply" value="${s.replyTo||''}"></div>
       </div>
       <div style="display:flex;gap:.5rem;align-items:center;margin-top:.5rem">
         <input class="finput" id="s-test-email" placeholder="Test recipient email" style="max-width:260px">
         <button onclick="sendTestEmail()">Send Test Email</button>
       </div>
     </div>
-
     <div class="card" style="margin-bottom:1rem">
       <div class="section-ttl">Payment Instructions</div>
       <div class="fld"><label>Payment Instructions (appears in all reminder emails)</label>
         <textarea class="finput" id="s-payinstr" rows="3">${s.paymentInstructions||''}</textarea></div>
     </div>
-
     <div class="card" style="margin-bottom:1rem">
-      <div class="section-ttl">Auto-Reminder Schedule (GitHub Actions)</div>
-      <div class="nt">When enabled, GitHub Actions triggers the <code style="font-family:var(--mo);background:var(--sf);padding:1px 5px;border-radius:4px">/api/email/send-scheduled</code> endpoint every Monday at 8am WAT to automatically email all debtors with overdue invoices.</div>
+      <div class="section-ttl">Auto-Reminder Schedule</div>
       <label class="cb"><input type="checkbox" id="s-auto" ${s.autoReminderEnabled?'checked':''}><span>Enable automatic weekly reminders</span></label>
     </div>
-
     <div class="card" style="margin-bottom:1rem">
       <div class="section-ttl">Email Templates</div>
-      <p style="font-size:12px;color:var(--tx2);margin-bottom:1rem">Edit the subject line and opening paragraph for each template. Amounts and invoice tables are appended automatically.</p>
       ${['firstReminder','secondReminder','finalNotice'].map((k,i) => {
         const labels = ['First Reminder (≤30 days overdue)','Second Reminder (31–60 days)','Final Notice (60+ days)'];
         const tpl = s.templates?.[k] || {};
@@ -959,33 +1464,27 @@ async function loadSettings() {
         </div>`;
       }).join('')}
     </div>
-
     <div style="display:flex;justify-content:flex-end">
       <button class="bp" onclick="saveSettings()"><span id="set-save-txt">Save All Settings</span></button>
     </div>`;
   } catch(e) { $('settings-form').innerHTML = `<div class="nt">⚠ ${e.message}</div>`; }
 }
-
 async function saveSettings() {
   const err=$('set-err'), ok=$('set-ok');
   err.classList.remove('on'); ok.classList.remove('on');
   $('set-save-txt').textContent = 'Saving…';
   const payload = {
-    companyName:  $('s-cname').value.trim(),
-    companyEmail: $('s-cemail').value.trim(),
-    companyAddress:$('s-caddr').value.trim(),
-    brevoSmtpUser:$('s-buser').value.trim(),
-    brevoSmtpKey: $('s-bkey').value.trim(),
-    fromEmail:    $('s-from').value.trim(),
-    replyTo:      $('s-reply').value.trim(),
-    paymentInstructions:$('s-payinstr').value.trim(),
+    companyName:$('s-cname').value.trim(), companyEmail:$('s-cemail').value.trim(),
+    companyAddress:$('s-caddr').value.trim(), brevoSmtpUser:$('s-buser').value.trim(),
+    brevoSmtpKey:$('s-bkey').value.trim(), fromEmail:$('s-from').value.trim(),
+    replyTo:$('s-reply').value.trim(), paymentInstructions:$('s-payinstr').value.trim(),
     autoReminderEnabled:$('s-auto').checked,
-    'templates.firstReminder.subject':  $('s-tpl-firstReminder-subj').value.trim(),
-    'templates.firstReminder.intro':    $('s-tpl-firstReminder-intro').value.trim(),
-    'templates.secondReminder.subject': $('s-tpl-secondReminder-subj').value.trim(),
-    'templates.secondReminder.intro':   $('s-tpl-secondReminder-intro').value.trim(),
-    'templates.finalNotice.subject':    $('s-tpl-finalNotice-subj').value.trim(),
-    'templates.finalNotice.intro':      $('s-tpl-finalNotice-intro').value.trim(),
+    'templates.firstReminder.subject':$('s-tpl-firstReminder-subj').value.trim(),
+    'templates.firstReminder.intro':$('s-tpl-firstReminder-intro').value.trim(),
+    'templates.secondReminder.subject':$('s-tpl-secondReminder-subj').value.trim(),
+    'templates.secondReminder.intro':$('s-tpl-secondReminder-intro').value.trim(),
+    'templates.finalNotice.subject':$('s-tpl-finalNotice-subj').value.trim(),
+    'templates.finalNotice.intro':$('s-tpl-finalNotice-intro').value.trim(),
   };
   try {
     await api('/email/settings', { method:'PUT', body:JSON.stringify(payload) });
@@ -994,78 +1493,37 @@ async function saveSettings() {
   } catch(e) { err.textContent = e.message; err.classList.add('on'); }
   finally { $('set-save-txt').textContent = 'Save All Settings'; }
 }
-
 async function sendTestEmail() {
   const to = $('s-test-email').value.trim();
   if (!to) { toast('Enter a test recipient email.','err'); return; }
-  showApi('Sending test email…');
-  try {
-    const d = await api('/email/test', { method:'POST', body:JSON.stringify({to}) });
-    hideApi(); toast(d.message);
-  } catch(e) { hideApi(); toast(e.message,'err'); }
+  try { const d = await api('/email/test', { method:'POST', body:JSON.stringify({to}) }); toast(d.message); }
+  catch(e) { toast(e.message,'err'); }
 }
 
-// ════════════════════════════════════════════════════
-// EXCEL / PDF EXPORT
-// ════════════════════════════════════════════════════
+// ── EXCEL / PDF EXPORT ─────────────────────────────────────────
 async function exportAgeingXLSX() {
   if (!ageingCache) { await loadAgeing(); }
-  const wb  = XLSX.utils.book_new();
-  const N   = n => +n || 0;
+  const wb = XLSX.utils.book_new();
+  const N  = n => +n || 0;
   const fmtD = d => !d ? '' : new Date(d).toLocaleDateString('en-GB');
   const BUCKETS = ['current','1_30','31_60','61_90','91_180','180_plus'];
-  const headers = { 'Debtor':'', 'Current':0, '1-30 Days':0, '31-60 Days':0, '61-90 Days':0, '91-180 Days':0, '180+ Days':0, 'Total Outstanding':0 };
-
-  const rows = ageingCache.report.map(r => ({
-    'Debtor': r.debtor.name,
-    'Current':       N(r.ageing.current),
-    '1-30 Days':     N(r.ageing['1_30']),
-    '31-60 Days':    N(r.ageing['31_60']),
-    '61-90 Days':    N(r.ageing['61_90']),
-    '91-180 Days':   N(r.ageing['91_180']),
-    '180+ Days':     N(r.ageing['180_plus']),
-    'Total Outstanding': N(r.totalOutstanding)
-  }));
-
-  // Total row
-  const totals = BUCKETS.reduce((a,k) => { a[k] = ageingCache.report.reduce((s,r)=>s+N(r.ageing[k]),0); return a; }, {});
-  rows.push({
-    'Debtor':'TOTAL','Current':totals.current,'1-30 Days':totals['1_30'],
-    '31-60 Days':totals['31_60'],'61-90 Days':totals['61_90'],
-    '91-180 Days':totals['91_180'],'180+ Days':totals['180_plus'],
-    'Total Outstanding':Object.values(totals).reduce((s,v)=>s+v,0)
-  });
-
+  const rows = ageingCache.report.map(r => ({ 'Debtor':r.debtor.name, 'Current':N(r.ageing.current), '1-30 Days':N(r.ageing['1_30']), '31-60 Days':N(r.ageing['31_60']), '61-90 Days':N(r.ageing['61_90']), '91-180 Days':N(r.ageing['91_180']), '180+ Days':N(r.ageing['180_plus']), 'Total Outstanding':N(r.totalOutstanding) }));
+  const totals = BUCKETS.reduce((a,k)=>{ a[k]=ageingCache.report.reduce((s,r)=>s+N(r.ageing[k]),0); return a;},{});
+  rows.push({ 'Debtor':'TOTAL','Current':totals.current,'1-30 Days':totals['1_30'],'31-60 Days':totals['31_60'],'61-90 Days':totals['61_90'],'91-180 Days':totals['91_180'],'180+ Days':totals['180_plus'],'Total Outstanding':Object.values(totals).reduce((s,v)=>s+v,0) });
   const ws = XLSX.utils.json_to_sheet(rows);
   ws['!cols'] = [40,14,14,14,14,14,14,18].map(w=>({wch:w}));
   XLSX.utils.book_append_sheet(wb, ws, 'Ageing Report');
-
-  // Detail sheet
   const detail = [];
-  ageingCache.report.forEach(r => r.invoices.forEach(i => detail.push({
-    'Debtor': r.debtor.name, 'Invoice #': i.invoiceNumber,
-    'Invoice Date': fmtD(i.invoiceDate), 'Due Date': fmtD(i.dueDate),
-    'Amount': N(i.amount), 'Paid': N(i.amountPaid), 'Balance': N(i.balance),
-    'Days Overdue': i.daysOverdue, 'Ageing Bucket': BUCKET_LABELS[i.ageingBucket]||i.ageingBucket
-  })));
-  if (detail.length) {
-    const ws2 = XLSX.utils.json_to_sheet(detail);
-    ws2['!cols'] = [28,14,12,12,14,14,14,12,14].map(w=>({wch:w}));
-    XLSX.utils.book_append_sheet(wb, ws2, 'Invoice Detail');
-  }
-
-  XLSX.writeFile(wb, `FM-Ageing-${ts()}.xlsx`);
-  toast('Excel export downloaded.');
+  ageingCache.report.forEach(r => r.invoices.forEach(i => detail.push({ 'Debtor':r.debtor.name,'Invoice #':i.invoiceNumber,'Invoice Date':fmtD(i.invoiceDate),'Due Date':fmtD(i.dueDate),'Amount':N(i.amount),'Paid':N(i.amountPaid),'Balance':N(i.balance),'Days Overdue':i.daysOverdue,'Ageing Bucket':BUCKET_LABELS[i.ageingBucket]||i.ageingBucket })));
+  if (detail.length) { const ws2 = XLSX.utils.json_to_sheet(detail); ws2['!cols']=[28,14,12,12,14,14,14,12,14].map(w=>({wch:w})); XLSX.utils.book_append_sheet(wb, ws2, 'Invoice Detail'); }
+  XLSX.writeFile(wb, `FM-Ageing-${ts()}.xlsx`); toast('Excel export downloaded.');
 }
-
 async function exportAgeingPDF() {
   if (!ageingCache) { await loadAgeing(); }
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ orientation:'landscape', unit:'pt', format:'a4' });
-  const W   = doc.internal.pageSize.getWidth();
-  const fmtD2 = d => new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
+  const W = doc.internal.pageSize.getWidth();
   const N = n => Number(n||0).toLocaleString('en-NG',{minimumFractionDigits:2,maximumFractionDigits:2});
-
   doc.setFillColor(10,22,40); doc.rect(0,0,W,48,'F');
   doc.setFillColor(0,201,167); doc.rect(0,0,6,48,'F');
   doc.setFont('helvetica','bold'); doc.setFontSize(15); doc.setTextColor(232,237,245);
@@ -1073,71 +1531,43 @@ async function exportAgeingPDF() {
   doc.setFont('helvetica','normal'); doc.setFontSize(11); doc.setTextColor(143,163,191);
   doc.text('Receivables Ageing Report',22,43);
   doc.setFontSize(9); doc.text(`Generated: ${ts()}`,W-20,30,{align:'right'});
-
   const COLS=['current','1_30','31_60','61_90','91_180','180_plus'];
-  const totals = COLS.reduce((a,k)=>{ a[k]=ageingCache.report.reduce((s,r)=>s+(r.ageing[k]||0),0);return a;},{});
-  const grandTotal = Object.values(totals).reduce((s,v)=>s+v,0);
-
-  const body = [
-    ...ageingCache.report.map(r => [r.debtor.name,
-      ...COLS.map(k => (r.ageing[k]||0)>0?'₦'+N(r.ageing[k]):'—'),
-      '₦'+N(r.totalOutstanding)]),
-    ['TOTAL',...COLS.map(k=>'₦'+N(totals[k])),'₦'+N(grandTotal)]
-  ];
-
-  doc.autoTable({
-    startY:64, margin:{left:20,right:20},
-    head:[['Debtor',...Object.values(BUCKET_LABELS),'Total Outstanding']],
-    body,
-    headStyles:{fillColor:[10,22,40],textColor:[0,201,167],fontSize:8,fontStyle:'bold'},
-    bodyStyles:{fontSize:8,textColor:[200,210,230]},
-    alternateRowStyles:{fillColor:[15,31,61]},
-    styles:{fillColor:[10,22,40],lineColor:[255,255,255,15],lineWidth:0.3},
-    columnStyles:{0:{cellWidth:80},...COLS.reduce((a,_,i)=>({...a,[i+1]:{halign:'right',cellWidth:60}}),{}),7:{halign:'right',cellWidth:70,fontStyle:'bold'}},
-    didParseCell: c => { if(c.row.index===c.table.body.length-1){c.cell.styles.fontStyle='bold';c.cell.styles.textColor=[0,201,167];} }
-  });
-
+  const totals=COLS.reduce((a,k)=>{ a[k]=ageingCache.report.reduce((s,r)=>s+(r.ageing[k]||0),0); return a;},{});
+  const grandTotal=Object.values(totals).reduce((s,v)=>s+v,0);
+  const body=[...ageingCache.report.map(r=>[r.debtor.name,...COLS.map(k=>(r.ageing[k]||0)>0?'₦'+N(r.ageing[k]):'—'),'₦'+N(r.totalOutstanding)]),['TOTAL',...COLS.map(k=>'₦'+N(totals[k])),'₦'+N(grandTotal)]];
+  doc.autoTable({ startY:64, margin:{left:20,right:20}, head:[['Debtor',...Object.values(BUCKET_LABELS),'Total Outstanding']], body, headStyles:{fillColor:[10,22,40],textColor:[0,201,167],fontSize:8,fontStyle:'bold'}, bodyStyles:{fontSize:8,textColor:[200,210,230]}, alternateRowStyles:{fillColor:[15,31,61]}, styles:{fillColor:[10,22,40],lineColor:[255,255,255,15],lineWidth:0.3}, columnStyles:{0:{cellWidth:80},...COLS.reduce((a,_,i)=>({...a,[i+1]:{halign:'right',cellWidth:60}}),{}),7:{halign:'right',cellWidth:70,fontStyle:'bold'}}, didParseCell:c=>{ if(c.row.index===c.table.body.length-1){c.cell.styles.fontStyle='bold';c.cell.styles.textColor=[0,201,167];} } });
   doc.setFont('helvetica','italic'); doc.setFontSize(8); doc.setTextColor(74,96,128);
-  doc.text('Developed by Michael Felix Happy · EIS Finance Suite',W/2,doc.internal.pageSize.getHeight()-12,{align:'center'});
-  doc.save(`FM-Ageing-${ts()}.pdf`);
-  toast('PDF export downloaded.');
+  doc.text('Developed by Michael Felix Happy · EIS Finance Suite', W/2, doc.internal.pageSize.getHeight()-12, {align:'center'});
+  doc.save(`FM-Ageing-${ts()}.pdf`); toast('PDF export downloaded.');
 }
 
-// ════════════════════════════════════════════════════
-// INIT
-// ════════════════════════════════════════════════════
+// ── INIT ───────────────────────────────────────────────────────
 window.addEventListener('load', () => {
-  // Logout
-  var logoutBtn = document.getElementById('logout-btn');
-  if (logoutBtn) logoutBtn.addEventListener('click', function() {
+  document.getElementById('logout-btn').addEventListener('click', function() {
     if (!confirm('Sign out?')) return;
-    sessionStorage.removeItem('mfh_token');
+    sessionStorage.removeItem('FM_token');
     window.location.href = '../portal/';
   });
-  // Modal backdrop
-  var modalBg = document.getElementById('modal-bg');
-  if (modalBg) modalBg.addEventListener('click', function(e) {
-    if (e.target === modalBg) closeModal();
+  document.getElementById('modal-bg').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
   });
-  // Nav items
-  var navItems = document.querySelectorAll('.nav-item');
-  navItems.forEach(function(item) {
+  document.querySelectorAll('.nav-item').forEach(function(item) {
     item.addEventListener('click', function() {
-      var view = item.getAttribute('data-view');
-      document.querySelectorAll('.nav-item').forEach(function(i) { i.classList.remove('active'); });
-      document.querySelectorAll('.view').forEach(function(v) { v.classList.remove('on'); });
+      const view = item.getAttribute('data-view');
+      document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('on'));
       item.classList.add('active');
-      var viewEl = document.getElementById('view-' + view);
+      const viewEl = document.getElementById('view-' + view);
       if (viewEl) viewEl.classList.add('on');
-      if (view === 'dashboard') loadDashboard();
-      else if (view === 'debtors') loadDebtors();
-      else if (view === 'ageing') loadAgeing();
+      if      (view === 'dashboard') loadDashboard();
+      else if (view === 'debtors')   loadDebtors();
+      else if (view === 'ageing')    loadAgeing();
       else if (view === 'reminders') loadReminders();
-      else if (view === 'logs') loadLogs();
-      else if (view === 'settings') loadSettings();
+      else if (view === 'logs')      loadLogs();
+      else if (view === 'ecl')       loadEclPortfolio();
+      else if (view === 'settings')  loadSettings();
     });
   });
-  // Initial load
   loadDashboard();
 });
 </script>
