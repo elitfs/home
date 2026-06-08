@@ -203,6 +203,32 @@ select.finput{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xm
 .ecl-tab:hover{color:var(--tx);background:var(--sf)}
 .ecl-tab.active{color:var(--t);background:var(--n2);border-color:var(--b);border-bottom-color:var(--n2)}
 
+/* ── Calibration & sensitivity ── */
+.calib-table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:1rem}
+.calib-table th{background:var(--n3);color:var(--tx3);font-family:var(--mo);font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:9px 14px;text-align:left;border-bottom:1px solid var(--b)}
+.calib-table td{padding:10px 14px;border-bottom:1px solid var(--b);vertical-align:middle}
+.calib-table tr:last-child td{border-bottom:none}
+.calib-rate-chip{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-family:var(--mo);font-size:11px;font-weight:700}
+.calib-rate-chip.low{background:rgba(34,197,94,.1);color:var(--gr);border:1px solid rgba(34,197,94,.2)}
+.calib-rate-chip.mid{background:rgba(245,166,35,.1);color:var(--am);border:1px solid rgba(245,166,35,.2)}
+.calib-rate-chip.high{background:rgba(224,82,82,.1);color:var(--rd);border:1px solid rgba(224,82,82,.2)}
+.calib-rate-chip.none{background:var(--sf);color:var(--tx3);border:1px solid var(--b)}
+.sensitivity-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:1.5rem}
+.sensitivity-card{background:var(--n3);border:1px solid var(--b);border-radius:var(--r);padding:14px 16px}
+.sensitivity-card .sc-lbl{font-size:10px;font-family:var(--mo);color:var(--tx3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.sensitivity-card .sc-val{font-family:var(--di);font-size:18px;font-weight:700;letter-spacing:-.02em}
+.sensitivity-card .sc-delta{font-size:11px;font-family:var(--mo);margin-top:3px}
+.sensitivity-card.up{border-color:rgba(34,197,94,.3)} .sensitivity-card.up .sc-val{color:var(--gr)} .sensitivity-card.up .sc-delta{color:var(--gr)}
+.sensitivity-card.dn{border-color:rgba(224,82,82,.3)} .sensitivity-card.dn .sc-val{color:var(--rd)} .sensitivity-card.dn .sc-delta{color:var(--rd)}
+.sensitivity-card.base{border-color:rgba(99,179,237,.3)} .sensitivity-card.base .sc-val{color:var(--bl)}
+.assump-section{background:var(--n3);border:1px solid var(--b);border-radius:var(--r);padding:16px 20px;margin-bottom:1rem}
+.assump-section-title{font-size:12px;font-family:var(--mo);color:var(--t);text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.assump-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--b);font-size:12px}
+.assump-row:last-child{border-bottom:none}
+.assump-row .ar-lbl{color:var(--tx2);font-family:var(--mo);font-size:11px}
+.assump-row .ar-val{color:var(--tx);font-weight:500}
+.assump-row .ar-val.highlight{color:var(--t);font-family:var(--mo)}
+
 /* ── MISC ── */
 .ep{text-align:center;padding:3rem 1rem;color:var(--tx3);font-family:var(--mo);font-size:12px}
 .ei{font-size:2rem;margin-bottom:10px}
@@ -385,7 +411,9 @@ select.finput{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xm
           <div class="ecl-tab active" onclick="switchEclTab('portfolio',this)">Portfolio</div>
           <div class="ecl-tab" onclick="switchEclTab('provision',this)">Provision Matrix</div>
           <div class="ecl-tab" onclick="switchEclTab('scenarios',this)">Scenarios</div>
+          <div class="ecl-tab" onclick="switchEclTab('calibration',this)">Calibration</div>
           <div class="ecl-tab" onclick="switchEclTab('writeoffs',this)">Write-offs</div>
+          <div class="ecl-tab" onclick="switchEclTab('assumptions',this)">Assumption Log</div>
         </div>
 
         <!-- TAB: Portfolio -->
@@ -550,6 +578,66 @@ select.finput{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xm
             </button>
           </div>
           <div id="ecl-writeoffs-table"></div>
+        </div>
+
+        <!-- TAB: Calibration -->
+        <div id="ecl-tab-calibration" style="display:none">
+          <div class="vhdr" style="margin-bottom:1rem">
+            <div>
+              <div class="section-ttl" style="margin:0">Historical Loss Rate Calibration</div>
+              <div style="font-size:11px;color:var(--tx3);font-family:var(--mo);margin-top:3px">Derive provision matrix rates from your own write-off history (IFRS 9 §5.5.20)</div>
+            </div>
+            <button onclick="loadCalibrationData()" id="calib-refresh-btn">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.18-5.5"/></svg>Refresh
+            </button>
+          </div>
+
+          <div class="nt-info" style="margin-bottom:1rem">
+            This tab analyses your actual write-off history to compute implied historical loss rates per ageing bucket. These rates represent what percentage of invoices in each bucket have historically become uncollectable. You can then apply these rates directly to your Provision Matrix for a fully entity-specific, audit-defensible ECL model. The more write-off data you accumulate over time, the more reliable these rates become.
+          </div>
+
+          <div id="calib-content"><div class="ep"><div class="ei">📊</div>Click Refresh to analyse your write-off history.</div></div>
+
+          <div id="calib-apply-section" style="display:none;margin-top:1.5rem">
+            <div class="card">
+              <div class="section-ttl" style="font-size:13px;margin-bottom:.75rem">Apply Calibrated Rates to Provision Matrix</div>
+              <p style="font-size:12px;color:var(--tx2);margin-bottom:1rem">The table above shows historically implied rates from your write-off data. Click below to apply them directly to your Provision Matrix, replacing the current rates. Buckets with no write-off history will retain their existing rates.</p>
+              <div style="display:flex;gap:.75rem;align-items:center">
+                <button class="bp" onclick="applyCalibrationToMatrix()" id="calib-apply-btn">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                  Apply Calibrated Rates to Provision Matrix
+                </button>
+                <span style="font-size:11px;color:var(--tx3);font-family:var(--mo)" id="calib-apply-status"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB: Assumption Log -->
+        <div id="ecl-tab-assumptions" style="display:none">
+          <div class="vhdr" style="margin-bottom:1rem">
+            <div>
+              <div class="section-ttl" style="margin:0">Assumption Log & Model Documentation</div>
+              <div style="font-size:11px;color:var(--tx3);font-family:var(--mo);margin-top:3px">IFRS 7 §35G disclosure — sensitivity analysis and model documentation</div>
+            </div>
+            <div style="display:flex;gap:.5rem">
+              <button onclick="generateAssumptionLog()" id="assump-gen-btn">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Generate Log
+              </button>
+              <button class="bp" onclick="downloadAssumptionPDF()" id="assump-pdf-btn" disabled>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download PDF
+              </button>
+            </div>
+          </div>
+
+          <div class="nt-info" style="margin-bottom:1rem">
+            This generates a formal model documentation report capturing all methodology choices, parameter values, scenario weights, and a sensitivity analysis showing how ECL changes under ±1%, ±2%, and ±5% shifts in provision matrix rates. This document supports IFRS 7 paragraph 35G disclosure requirements and provides auditors with the evidence needed to review the ECL model.
+            <strong style="color:var(--am)"> You must run Compute ECL first before generating the log.</strong>
+          </div>
+
+          <div id="assump-content">
+            <div class="ep"><div class="ei">📋</div>Run Compute ECL on the Portfolio tab, then click Generate Log.</div>
+          </div>
         </div>
 
       </div>
@@ -821,7 +909,6 @@ async function viewInvoices(debtorId, debtorName) {
   } catch(e) { $('modal-body').innerHTML = `<div class="nt">⚠ ${e.message}</div>`; }
 }
 function openInvoiceModal(debtorId, debtorName) {
-  const today = new Date().toISOString().slice(0,10);
   openModal(`Add Invoice — ${debtorName}`, `
     <div class="merr" id="inv-err"></div>
     <div class="fg">
@@ -829,40 +916,8 @@ function openInvoiceModal(debtorId, debtorName) {
       <div class="fld"><label>Description</label><input class="finput" id="inv-desc" placeholder="Goods/services supplied"></div>
     </div>
     <div class="fg">
-      <div class="fld">
-        <label>Invoice Date *</label>
-        <input class="finput" type="date" id="inv-date" value="${today}" oninput="calcInvDueDate()">
-      </div>
-      <div class="fld">
-        <label>Payment Terms *</label>
-        <select class="finput" id="inv-terms" onchange="calcInvDueDate()">
-          <option value="0">Due on receipt (0 days)</option>
-          <option value="7">Net 7 days</option>
-          <option value="14">Net 14 days</option>
-          <option value="21">Net 21 days</option>
-          <option value="30" selected>Net 30 days</option>
-          <option value="45">Net 45 days</option>
-          <option value="60">Net 60 days</option>
-          <option value="90">Net 90 days</option>
-          <option value="120">Net 120 days</option>
-          <option value="custom">Custom days...</option>
-        </select>
-      </div>
-    </div>
-    <div class="fg" id="inv-custom-row" style="display:none">
-      <div class="fld">
-        <label>Custom Payment Days *</label>
-        <input class="finput" type="number" id="inv-custom-days" min="1" max="365" placeholder="e.g. 45" oninput="calcInvDueDate()">
-      </div>
-      <div></div>
-    </div>
-    <div style="background:var(--n3);border:1px solid var(--b2);border-radius:var(--r);padding:10px 14px;margin-bottom:1rem;display:flex;align-items:center;gap:12px">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--t)" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-      <div>
-        <div style="font-size:10px;font-family:var(--mo);color:var(--tx3);text-transform:uppercase;letter-spacing:.06em">Calculated Due Date</div>
-        <div style="font-size:14px;font-weight:600;color:var(--t);font-family:var(--mo)" id="inv-due-display">—</div>
-        <input type="hidden" id="inv-due">
-      </div>
+      <div class="fld"><label>Invoice Date *</label><input class="finput" type="date" id="inv-date"></div>
+      <div class="fld"><label>Due Date *</label><input class="finput" type="date" id="inv-due"></div>
     </div>
     <div class="fg">
       <div class="fld"><label>Invoice Amount (₦) *</label><input class="finput" type="number" id="inv-amt" min="0" step="0.01" placeholder="0.00"></div>
@@ -870,37 +925,6 @@ function openInvoiceModal(debtorId, debtorName) {
     </div>`,
     `<button onclick="viewInvoices('${debtorId}','${debtorName}')">← Back</button>
      <button class="bp" onclick="saveInvoice('${debtorId}','${debtorName}')"><span id="inv-save-txt">Add Invoice</span></button>`);
-
-  // Calculate initial due date on open
-  calcInvDueDate();
-
-  // Show/hide custom days input when "Custom" is selected
-  $('inv-terms').addEventListener('change', function() {
-    $('inv-custom-row').style.display = this.value === 'custom' ? 'grid' : 'none';
-  });
-}
-
-function calcInvDueDate() {
-  const dateVal  = $('inv-date')?.value;
-  const termsVal = $('inv-terms')?.value;
-  if (!dateVal || !termsVal) return;
-
-  let days;
-  if (termsVal === 'custom') {
-    days = parseInt($('inv-custom-days')?.value) || 0;
-  } else {
-    days = parseInt(termsVal);
-  }
-
-  const invoiceDate = new Date(dateVal);
-  if (isNaN(invoiceDate.getTime())) return;
-
-  const dueDate = new Date(invoiceDate);
-  dueDate.setDate(dueDate.getDate() + days);
-
-  const iso = dueDate.toISOString().slice(0,10);
-  $('inv-due').value = iso;
-  $('inv-due-display').textContent = dueDate.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
 }
 async function saveInvoice(debtorId, debtorName) {
   const err = $('inv-err'); err.classList.remove('on');
@@ -1238,13 +1262,14 @@ function eclReadScenarios() {
 
 // ── Tab switching ──────────────────────────────────────────────
 function switchEclTab(tab, el) {
-  ['portfolio','provision','scenarios','writeoffs'].forEach(t => {
+  ['portfolio','provision','scenarios','calibration','writeoffs','assumptions'].forEach(t => {
     const panel = $('ecl-tab-' + t);
     if(panel) panel.style.display = t === tab ? 'block' : 'none';
   });
   document.querySelectorAll('.ecl-tab').forEach(t => t.classList.remove('active'));
   if(el) el.classList.add('active');
-  if(tab === 'writeoffs') loadWriteoffs();
+  if(tab === 'writeoffs')    loadWriteoffs();
+  if(tab === 'calibration')  loadCalibrationData();
   if(tab === 'provision' || tab === 'scenarios') loadEclModelSettings();
 }
 
@@ -1828,6 +1853,465 @@ function exportEclXLSX() {
   XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(metaRows), 'Model Parameters');
   XLSX.writeFile(wb, `FM-IFRS9-ECL-${ts()}.xlsx`);
   toast('ECL Excel exported.');
+}
+
+// ─────────────────────────────────────────────────────────────────
+// HISTORICAL CALIBRATION
+// Derives implied loss rates from entity's own write-off history
+// ─────────────────────────────────────────────────────────────────
+let calibrationData = null;
+
+const BUCKET_LABELS_FULL = {
+  current:   'Current (0 days)',
+  '1_30':    '1–30 Days',
+  '31_60':   '31–60 Days',
+  '61_90':   '61–90 Days',
+  '91_180':  '91–180 Days',
+  '180_plus':'180+ Days'
+};
+
+async function loadCalibrationData() {
+  const el = $('calib-content');
+  if(!el) return;
+  el.innerHTML = '<div class="loading-row">Analysing write-off history…</div>';
+  $('calib-apply-section').style.display = 'none';
+  try {
+    const d = await api('/ecl/calibration-data');
+    calibrationData = d;
+
+    if(!d.hasData) {
+      el.innerHTML = `
+        <div class="ep">
+          <div class="ei">📊</div>
+          <div>No write-off history found yet.</div>
+          <div style="font-size:11px;color:var(--tx3);margin-top:8px;max-width:400px;margin-left:auto;margin-right:auto;line-height:1.6">
+            As you write off uncollectable invoices over time (using the W/O button in the Portfolio tab or the Write-offs tab), this calibration table will automatically compute your entity-specific historical loss rates. Even 6–12 months of write-off data produces defensible rates.
+          </div>
+        </div>`;
+      return;
+    }
+
+    const BUCKETS = ['current','1_30','31_60','61_90','91_180','180_plus'];
+    const settings = await api('/ecl/model-settings');
+    const pm = settings.provisionMatrix || {};
+    const pmMap = { current:'current', '1_30':'days1_30', '31_60':'days31_60', '61_90':'days61_90', '91_180':'days91_180', '180_plus':'days180plus' };
+
+    const rows = BUCKETS.map(bk => {
+      const s   = d.stats[bk];
+      const imp = s.impliedRate;
+      const cur = pm[pmMap[bk]] ?? '—';
+      const chip = imp === null
+        ? `<span class="calib-rate-chip none">No data</span>`
+        : imp <= 5   ? `<span class="calib-rate-chip low">${imp.toFixed(2)}%</span>`
+        : imp <= 25  ? `<span class="calib-rate-chip mid">${imp.toFixed(2)}%</span>`
+        :               `<span class="calib-rate-chip high">${imp.toFixed(2)}%</span>`;
+
+      const diff = imp !== null && typeof cur === 'number'
+        ? (imp - cur).toFixed(2)
+        : null;
+      const diffHtml = diff !== null
+        ? `<span style="font-size:10px;font-family:var(--mo);color:${parseFloat(diff)>0?'var(--rd)':parseFloat(diff)<0?'var(--gr)':'var(--tx3)'}">${parseFloat(diff)>0?'+':''}${diff}%</span>`
+        : '';
+
+      return `<tr>
+        <td style="font-weight:500">${BUCKET_LABELS_FULL[bk]}</td>
+        <td class="nm">${s.total}</td>
+        <td class="nm">₦${fN(s.totalAmount)}</td>
+        <td class="nm">${s.writtenOff}</td>
+        <td class="nm">₦${fN(s.writtenOffAmount)}</td>
+        <td>${chip}</td>
+        <td style="font-family:var(--mo);font-size:11px;color:var(--tx2)">${typeof cur === 'number' ? cur.toFixed(2)+'%' : '—'} ${diffHtml}</td>
+      </tr>`;
+    }).join('');
+
+    el.innerHTML = `
+      <div style="display:flex;gap:1rem;margin-bottom:1rem;flex-wrap:wrap">
+        <div class="kpi" style="flex:1;min-width:140px"><div class="kl">Total Invoices Analysed</div><div class="kv bl">${d.totalInvoices}</div></div>
+        <div class="kpi rd" style="flex:1;min-width:140px"><div class="kl">Total Written Off</div><div class="kv rd">${d.totalWrittenOff}</div></div>
+        <div class="kpi" style="flex:1;min-width:140px"><div class="kl">Overall Loss Rate</div><div class="kv am">${d.totalInvoices>0?(d.totalWrittenOff/d.totalInvoices*100).toFixed(2)+'%':'—'}</div></div>
+        <div class="kpi" style="flex:1;min-width:200px"><div class="kl">Data Generated</div><div class="kv" style="font-size:13px;color:var(--tx2)">${new Date(d.generatedAt).toLocaleString('en-GB')}</div></div>
+      </div>
+      <div class="nt" style="margin-bottom:1rem">
+        <strong>How to read this table:</strong> "Implied Rate" is your historically observed loss rate — the percentage of invoice value in each bucket that was eventually written off. "Current Matrix Rate" is what your Provision Matrix currently uses. A large difference between the two suggests your current rates may need updating.
+      </div>
+      <div class="tw" style="margin-bottom:1rem">
+        <table class="calib-table">
+          <thead><tr>
+            <th>Ageing Bucket</th>
+            <th style="text-align:right">Total Invoices</th>
+            <th style="text-align:right">Total Amount</th>
+            <th style="text-align:right">Written Off</th>
+            <th style="text-align:right">W/O Amount</th>
+            <th>Implied Rate</th>
+            <th>Current Matrix Rate</th>
+          </tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+      <div class="nt" style="font-size:11px">
+        <strong>Audit note:</strong> These rates are derived from ${d.totalWrittenOff} written-off invoice(s) across your portfolio. For rates to be statistically reliable, IFRS 9 guidance suggests a minimum observation period of 2–3 years with sufficient write-off events per bucket. Buckets showing "No data" will retain their existing provision matrix rates if you apply calibration.
+      </div>`;
+
+    $('calib-apply-section').style.display = 'block';
+
+  } catch(e) { el.innerHTML = `<div class="nt">⚠ ${e.message}</div>`; }
+}
+
+async function applyCalibrationToMatrix() {
+  if(!calibrationData || !calibrationData.hasData) return;
+  const btn = $('calib-apply-btn');
+  btn.disabled = true; btn.textContent = 'Applying…';
+  try {
+    // Fetch current matrix to only replace buckets that have data
+    const settings = await api('/ecl/model-settings');
+    const pm = settings.provisionMatrix || {};
+    const pmMap = { current:'current', '1_30':'days1_30', '31_60':'days31_60', '61_90':'days61_90', '91_180':'days91_180', '180_plus':'days180plus' };
+    const newMatrix = { ...pm };
+
+    const BUCKETS = ['current','1_30','31_60','61_90','91_180','180_plus'];
+    let updated = 0;
+    BUCKETS.forEach(bk => {
+      const imp = calibrationData.stats[bk]?.impliedRate;
+      if(imp !== null && imp !== undefined) {
+        newMatrix[pmMap[bk]] = imp;
+        updated++;
+      }
+    });
+
+    await api('/ecl/model-settings', { method:'PUT', body:JSON.stringify({ provisionMatrix: newMatrix }) });
+    await loadEclModelSettings();
+    $('calib-apply-status').textContent = `✓ ${updated} bucket rates updated from historical data`;
+    toast(`Provision matrix updated with ${updated} calibrated rates.`);
+  } catch(e) { toast('Apply failed: ' + e.message, 'err'); }
+  finally { btn.disabled = false; btn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Apply Calibrated Rates to Provision Matrix'; }
+}
+
+// ─────────────────────────────────────────────────────────────────
+// ASSUMPTION LOG & SENSITIVITY ANALYSIS
+// IFRS 7 §35G — model documentation + sensitivity disclosure
+// ─────────────────────────────────────────────────────────────────
+let lastAssumptionLog = null;
+
+async function generateAssumptionLog() {
+  const el = $('assump-content');
+  if(!eclResults.length) {
+    toast('Run Compute ECL on the Portfolio tab first.', 'err');
+    return;
+  }
+  el.innerHTML = '<div class="loading-row">Generating assumption log and sensitivity analysis…</div>';
+
+  const settings  = eclReadSettings();
+  const scenarios = eclReadScenarios();
+  const modelSettings = await api('/ecl/model-settings').catch(()=>({provisionMatrix:{},eclScenarios:{}}));
+  const pm = modelSettings.provisionMatrix || {};
+  const meRes = await api('/auth/me').catch(()=>({user:{name:'—'}}));
+  const userName = meRes.user?.name || '—';
+
+  const totalEAD = eclResults.reduce((s,r)=>s+r.ead,0);
+  const totalECL = eclResults.reduce((s,r)=>s+r.ecl,0);
+  const coverage = totalEAD>0 ? totalECL/totalEAD : 0;
+  const s1=eclResults.filter(r=>r.stage===1), s2=eclResults.filter(r=>r.stage===2), s3=eclResults.filter(r=>r.stage===3);
+
+  // ── Sensitivity Analysis ────────────────────────────────────
+  // Shift all provision matrix rates by ±1%, ±2%, ±5% and recompute ECL
+  const shiftECL = (shiftPct) => {
+    const shiftedSettings = { ...settings };
+    const shiftedMatrix = {};
+    ['current','days1_30','days31_60','days61_90','days91_180','days180plus'].forEach(k => {
+      shiftedMatrix[k] = Math.max(0, Math.min(100, (pm[k]||5) + shiftPct));
+    });
+    const prevMatrix = eclModelSettings.provisionMatrix;
+    eclModelSettings.provisionMatrix = shiftedMatrix;
+    const results = eclPortfolioRows.map(r => eclComputeRow(r, shiftedSettings, settings.inflationRate, settings.gdpGrowthRate));
+    const ecl = results.reduce((s,r)=>s+r.ecl,0);
+    eclModelSettings.provisionMatrix = prevMatrix;
+    return ecl;
+  };
+
+  const baseECL  = eclResults.reduce((s,r)=>s+r.eclBase,0);
+  const sensData = [
+    { label:'+5% shift',  shift:+5,  ecl: shiftECL(+5) },
+    { label:'+2% shift',  shift:+2,  ecl: shiftECL(+2) },
+    { label:'+1% shift',  shift:+1,  ecl: shiftECL(+1) },
+    { label:'Base (0%)',  shift:0,   ecl: baseECL },
+    { label:'−1% shift',  shift:-1,  ecl: shiftECL(-1) },
+    { label:'−2% shift',  shift:-2,  ecl: shiftECL(-2) },
+    { label:'−5% shift',  shift:-5,  ecl: shiftECL(-5) },
+  ];
+
+  const pmRows = [
+    {bk:'current',  lbl:'Current (0 days)', key:'current'},
+    {bk:'1_30',     lbl:'1–30 Days',        key:'days1_30'},
+    {bk:'31_60',    lbl:'31–60 Days',       key:'days31_60'},
+    {bk:'61_90',    lbl:'61–90 Days',       key:'days61_90'},
+    {bk:'91_180',   lbl:'91–180 Days',      key:'days91_180'},
+    {bk:'180_plus', lbl:'180+ Days',        key:'days180plus'},
+  ];
+
+  lastAssumptionLog = { settings, scenarios, pm, sensData, totalEAD, totalECL, coverage, s1:s1.length, s2:s2.length, s3:s3.length, userName, computedAt:new Date() };
+
+  // ── Render ──────────────────────────────────────────────────
+  const sensCards = sensData.map(sd => {
+    const delta = sd.ecl - baseECL;
+    const deltaPct = baseECL>0 ? (delta/baseECL*100).toFixed(1) : '0.0';
+    const cls = sd.shift > 0 ? 'dn' : sd.shift < 0 ? 'up' : 'base';
+    return `<div class="sensitivity-card ${cls}">
+      <div class="sc-lbl">${sd.label}</div>
+      <div class="sc-val">₦${fN(sd.ecl)}</div>
+      <div class="sc-delta">${sd.shift===0?'Weighted base ECL':delta>=0?'+₦'+fN(delta)+' (+'+deltaPct+'%)':'−₦'+fN(Math.abs(delta))+' ('+deltaPct+'%)'}</div>
+    </div>`;
+  }).join('');
+
+  el.innerHTML = `
+    <div class="assump-section">
+      <div class="assump-section-title">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Model Identification
+      </div>
+      <div class="assump-row"><span class="ar-lbl">Model Name</span><span class="ar-val">FM Finance Suite — IFRS 9 ECL Model</span></div>
+      <div class="assump-row"><span class="ar-lbl">Computation Date</span><span class="ar-val highlight">${new Date().toLocaleString('en-GB',{day:'2-digit',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'})}</span></div>
+      <div class="assump-row"><span class="ar-lbl">Prepared By</span><span class="ar-val">${userName}</span></div>
+      <div class="assump-row"><span class="ar-lbl">IFRS Standard</span><span class="ar-val">IFRS 9 Financial Instruments — Expected Credit Loss</span></div>
+      <div class="assump-row"><span class="ar-lbl">Applicable Paragraphs</span><span class="ar-val">§5.5.1–5.5.20, §B5.5.1–B5.5.55, IFRS 7 §35G</span></div>
+    </div>
+
+    <div class="assump-section">
+      <div class="assump-section-title">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+        Methodology
+      </div>
+      <div class="assump-row"><span class="ar-lbl">Staging Approach</span><span class="ar-val">3-Stage IFRS 9 Framework (§5.5.3–5.5.5)</span></div>
+      <div class="assump-row"><span class="ar-lbl">Stage 1 ECL Horizon</span><span class="ar-val">12 months</span></div>
+      <div class="assump-row"><span class="ar-lbl">Stage 2 &amp; 3 ECL Horizon</span><span class="ar-val">Remaining lifetime of each instrument</span></div>
+      <div class="assump-row"><span class="ar-lbl">Trade Receivables Approach</span><span class="ar-val">${settings.simplifiedApproach?'Simplified — lifetime ECL for all trade receivables (§5.5.15)':'General model'}</span></div>
+      <div class="assump-row"><span class="ar-lbl">PD Estimation Method</span><span class="ar-val">${settings.useMatrix?'Provision Matrix — loss rates by ageing bucket (§5.5.15)':'Formula-based (classification + DPD + macro overlay)'}</span></div>
+      <div class="assump-row"><span class="ar-lbl">LGD Estimation</span><span class="ar-val">Collateral haircut model (haircut rates: RE 70%, Equipment 50%, Cash 95%, Unsecured 0%)</span></div>
+      <div class="assump-row"><span class="ar-lbl">Discount Rate</span><span class="ar-val">Per-invoice EIR where available; fallback ${settings.defaultDiscount}% p.a.</span></div>
+      <div class="assump-row"><span class="ar-lbl">Stage 2 DPD Trigger</span><span class="ar-val highlight">${settings.stage2Dpd} days past due</span></div>
+      <div class="assump-row"><span class="ar-lbl">Stage 3 DPD Trigger</span><span class="ar-val highlight">${settings.stage3Dpd} days past due</span></div>
+      <div class="assump-row"><span class="ar-lbl">SICR Qualitative Indicators</span><span class="ar-val">Restructuring, financial difficulty, covenant breach, sector stress (§B5.5.17)</span></div>
+      <div class="assump-row"><span class="ar-lbl">Forward-Looking Information</span><span class="ar-val">Macro overlay: Inflation ${settings.inflationRate}%, GDP growth ${settings.gdpGrowthRate}% (§5.5.49)</span></div>
+    </div>
+
+    <div class="assump-section">
+      <div class="assump-section-title">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg>
+        Provision Matrix Rates Applied
+      </div>
+      ${pmRows.map(r=>`<div class="assump-row"><span class="ar-lbl">${r.lbl}</span><span class="ar-val highlight">${(pm[r.key]??'—')}%</span></div>`).join('')}
+    </div>
+
+    <div class="assump-section">
+      <div class="assump-section-title">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m22 12-4-4v3H3v2h15v3l4-4z"/></svg>
+        Probability-Weighted Scenarios (§5.5.17)
+      </div>
+      <div class="assump-row"><span class="ar-lbl">Base Case Weight</span><span class="ar-val highlight">${scenarios.baseWeight}%</span></div>
+      <div class="assump-row"><span class="ar-lbl">Upside Scenario Weight</span><span class="ar-val highlight">${scenarios.upsideWeight}%</span></div>
+      <div class="assump-row"><span class="ar-lbl">Downside Scenario Weight</span><span class="ar-val highlight">${scenarios.downWeight}%</span></div>
+      <div class="assump-row"><span class="ar-lbl">Upside Macro Adjustment</span><span class="ar-val">Inflation ${scenarios.upsideInflAdj>0?'+':''}${scenarios.upsideInflAdj}%, GDP ${scenarios.upsideGdpAdj>0?'+':''}${scenarios.upsideGdpAdj}%</span></div>
+      <div class="assump-row"><span class="ar-lbl">Downside Macro Adjustment</span><span class="ar-val">Inflation ${scenarios.downInflAdj>0?'+':''}${scenarios.downInflAdj}%, GDP ${scenarios.downGdpAdj>0?'+':''}${scenarios.downGdpAdj}%</span></div>
+    </div>
+
+    <div class="assump-section">
+      <div class="assump-section-title">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        Computed ECL Summary
+      </div>
+      <div class="assump-row"><span class="ar-lbl">Total Exposure (EAD)</span><span class="ar-val highlight">₦${fN(totalEAD)}</span></div>
+      <div class="assump-row"><span class="ar-lbl">Probability-Weighted ECL</span><span class="ar-val highlight">₦${fN(totalECL)}</span></div>
+      <div class="assump-row"><span class="ar-lbl">Coverage Ratio</span><span class="ar-val highlight">${(coverage*100).toFixed(2)}%</span></div>
+      <div class="assump-row"><span class="ar-lbl">Stage 1 Instruments</span><span class="ar-val">${s1.length} invoices</span></div>
+      <div class="assump-row"><span class="ar-lbl">Stage 2 Instruments</span><span class="ar-val">${s2.length} invoices</span></div>
+      <div class="assump-row"><span class="ar-lbl">Stage 3 Instruments</span><span class="ar-val">${s3.length} invoices</span></div>
+    </div>
+
+    <div class="assump-section">
+      <div class="assump-section-title">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Sensitivity Analysis — IFRS 7 §35G
+      </div>
+      <p style="font-size:12px;color:var(--tx2);margin-bottom:1rem;line-height:1.6">
+        The table below shows how the computed ECL changes when all provision matrix rates are shifted uniformly by the stated percentage points. This satisfies IFRS 7 paragraph 35G which requires disclosure of the sensitivity of the loss allowance to changes in key assumptions.
+      </p>
+      <div class="sensitivity-grid">${sensCards}</div>
+      <div class="tw">
+        <table>
+          <thead><tr><th>Scenario</th><th>Rate Shift</th><th style="text-align:right">ECL Amount</th><th style="text-align:right">Change vs Base</th><th style="text-align:right">% Change</th></tr></thead>
+          <tbody>
+            ${sensData.map(sd=>{
+              const delta = sd.ecl - baseECL;
+              const deltaPct = baseECL>0?(delta/baseECL*100).toFixed(2):'0.00';
+              return `<tr>
+                <td style="font-weight:${sd.shift===0?'600':'400'}">${sd.label}</td>
+                <td style="font-family:var(--mo);font-size:11px">${sd.shift===0?'Baseline':sd.shift>0?'+'+sd.shift+'pp':sd.shift+'pp'}</td>
+                <td class="nm" style="color:${sd.shift===0?'var(--bl)':sd.shift>0?'var(--rd)':'var(--gr)'}">₦${fN(sd.ecl)}</td>
+                <td class="nm" style="color:${delta>0?'var(--rd)':delta<0?'var(--gr)':'var(--tx3)'}">${delta===0?'—':delta>0?'+₦'+fN(delta):'−₦'+fN(Math.abs(delta))}</td>
+                <td class="nm" style="color:${delta>0?'var(--rd)':delta<0?'var(--gr)':'var(--tx3)'}">${sd.shift===0?'—':(delta>=0?'+':'')+deltaPct+'%'}</td>
+              </tr>`;
+            }).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="assump-section">
+      <div class="assump-section-title">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        Management Representations
+      </div>
+      <div style="font-size:12px;color:var(--tx2);line-height:1.8">
+        <div style="margin-bottom:8px">☐ &nbsp;Management has reviewed the staging classification of all financial assets and agrees with the assigned stages.</div>
+        <div style="margin-bottom:8px">☐ &nbsp;Management confirms that the provision matrix rates used are based on reasonable and supportable information available at the reporting date.</div>
+        <div style="margin-bottom:8px">☐ &nbsp;Management has considered all available forward-looking information and believes the macro adjustments applied are appropriate.</div>
+        <div style="margin-bottom:8px">☐ &nbsp;Management confirms that all known SICR indicators have been reflected in the staging of individual financial assets.</div>
+        <div>☐ &nbsp;Management is satisfied that the ECL allowance recognised represents the entity's best estimate of expected credit losses at the reporting date.</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:1.5rem">
+        <div style="border-top:1px solid var(--b2);padding-top:.75rem">
+          <div style="font-size:10px;font-family:var(--mo);color:var(--tx3);text-transform:uppercase;letter-spacing:.06em">Prepared by</div>
+          <div style="font-size:12px;color:var(--tx2);margin-top:4px">${userName}</div>
+          <div style="font-size:11px;color:var(--tx3);font-family:var(--mo);margin-top:2px">${new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'})}</div>
+        </div>
+        <div style="border-top:1px solid var(--b2);padding-top:.75rem">
+          <div style="font-size:10px;font-family:var(--mo);color:var(--tx3);text-transform:uppercase;letter-spacing:.06em">Reviewed &amp; Approved by</div>
+          <div style="font-size:12px;color:var(--tx3);margin-top:4px;font-style:italic">________________________</div>
+          <div style="font-size:11px;color:var(--tx3);font-family:var(--mo);margin-top:2px">Date: ________________________</div>
+        </div>
+      </div>
+    </div>`;
+
+  $('assump-pdf-btn').disabled = false;
+  toast('Assumption log generated.');
+}
+
+async function downloadAssumptionPDF() {
+  if(!lastAssumptionLog) { toast('Generate the log first.','err'); return; }
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ orientation:'portrait', unit:'pt', format:'a4' });
+  const W = doc.internal.pageSize.getWidth();
+  const { settings, scenarios, pm, sensData, totalEAD, totalECL, coverage, s1, s2, s3, userName, computedAt } = lastAssumptionLog;
+  const N = n => Number(n||0).toLocaleString('en-NG',{minimumFractionDigits:2,maximumFractionDigits:2});
+  const baseECL = sensData.find(s=>s.shift===0)?.ecl || totalECL;
+
+  // ── Header ──────────────────────────────────────────────────
+  doc.setFillColor(10,22,40); doc.rect(0,0,W,60,'F');
+  doc.setFillColor(0,201,167); doc.rect(0,0,6,60,'F');
+  doc.setFont('helvetica','bold'); doc.setFontSize(14); doc.setTextColor(232,237,245);
+  doc.text('FM Finance Suite — IFRS 9 ECL Model',22,25);
+  doc.setFont('helvetica','normal'); doc.setFontSize(10); doc.setTextColor(143,163,191);
+  doc.text('Assumption Log & Model Documentation',22,40);
+  doc.setFontSize(9); doc.setTextColor(74,96,128);
+  doc.text(`Generated: ${computedAt.toLocaleString('en-GB')} | Prepared by: ${userName}`, 22, 54);
+
+  let y = 78;
+
+  const sectionHeader = (title) => {
+    doc.setFillColor(15,31,61); doc.rect(20,y,W-40,18,'F');
+    doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(0,201,167);
+    doc.text(title, 26, y+12); y += 26;
+  };
+
+  const row = (label, value, highlight=false) => {
+    if(y > 760) { doc.addPage(); y = 30; }
+    doc.setFont('helvetica','normal'); doc.setFontSize(9); doc.setTextColor(143,163,191);
+    doc.text(label, 26, y);
+    doc.setFont('helvetica', highlight?'bold':'normal');
+    doc.setTextColor(highlight?0:200, highlight?201:210, highlight?167:230);
+    doc.text(String(value), W-26, y, { align:'right' });
+    doc.setDrawColor(255,255,255,15); doc.line(26, y+4, W-26, y+4);
+    y += 16;
+  };
+
+  sectionHeader('1. METHODOLOGY');
+  row('Staging Approach','3-Stage IFRS 9 Framework (§5.5.3–5.5.5)');
+  row('Trade Receivables',settings.simplifiedApproach?'Simplified Approach — Lifetime ECL (§5.5.15)':'General Model');
+  row('PD Estimation',settings.useMatrix?'Provision Matrix — Loss Rates by Ageing Bucket':'Formula-Based');
+  row('Stage 2 DPD Trigger', settings.stage2Dpd + ' days', true);
+  row('Stage 3 DPD Trigger', settings.stage3Dpd + ' days', true);
+  row('Base Inflation Rate', settings.inflationRate + '%', true);
+  row('Base GDP Growth Rate', settings.gdpGrowthRate + '%', true);
+  row('Fallback Discount Rate', settings.defaultDiscount + '%');
+  y += 8;
+
+  sectionHeader('2. PROVISION MATRIX RATES');
+  [{k:'current',l:'Current (0 days)'},{k:'days1_30',l:'1–30 Days'},{k:'days31_60',l:'31–60 Days'},{k:'days61_90',l:'61–90 Days'},{k:'days91_180',l:'91–180 Days'},{k:'days180plus',l:'180+ Days'}]
+    .forEach(r=>row(r.l, (pm[r.k]??'—')+'%', true));
+  y += 8;
+
+  sectionHeader('3. PROBABILITY-WEIGHTED SCENARIOS (§5.5.17)');
+  row('Base Case Weight', scenarios.baseWeight + '%', true);
+  row('Upside Scenario Weight', scenarios.upsideWeight + '%', true);
+  row('Downside Scenario Weight', scenarios.downWeight + '%', true);
+  row('Upside Macro Adjustment', `Inflation ${scenarios.upsideInflAdj>0?'+':''}${scenarios.upsideInflAdj}%, GDP ${scenarios.upsideGdpAdj>0?'+':''}${scenarios.upsideGdpAdj}%`);
+  row('Downside Macro Adjustment', `Inflation ${scenarios.downInflAdj>0?'+':''}${scenarios.downInflAdj}%, GDP ${scenarios.downGdpAdj>0?'+':''}${scenarios.downGdpAdj}%`);
+  y += 8;
+
+  sectionHeader('4. COMPUTED ECL SUMMARY');
+  row('Total Exposure (EAD)', '₦' + N(totalEAD), true);
+  row('Probability-Weighted ECL', '₦' + N(totalECL), true);
+  row('Coverage Ratio', (coverage*100).toFixed(2) + '%', true);
+  row('Stage 1 Instruments', s1 + ' invoices');
+  row('Stage 2 Instruments', s2 + ' invoices');
+  row('Stage 3 Instruments', s3 + ' invoices');
+  y += 8;
+
+  sectionHeader('5. SENSITIVITY ANALYSIS — IFRS 7 §35G');
+  doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(143,163,191);
+  doc.text('Impact of uniform ±1%, ±2%, ±5% shift in all provision matrix rates on total ECL:', 26, y); y += 14;
+
+  doc.autoTable({
+    startY: y, margin:{left:20,right:20},
+    head:[['Scenario','Rate Shift','ECL Amount','Change vs Base','% Change']],
+    body: sensData.map(sd => {
+      const delta = sd.ecl - baseECL;
+      const deltaPct = baseECL>0?(delta/baseECL*100).toFixed(2):'0.00';
+      return [
+        sd.label,
+        sd.shift===0?'Baseline':sd.shift>0?'+'+sd.shift+'pp':sd.shift+'pp',
+        '₦'+N(sd.ecl),
+        delta===0?'—':delta>0?'+₦'+N(delta):'−₦'+N(Math.abs(delta)),
+        sd.shift===0?'—':(delta>=0?'+':'')+deltaPct+'%'
+      ];
+    }),
+    headStyles:{fillColor:[10,22,40],textColor:[0,201,167],fontSize:8,fontStyle:'bold'},
+    bodyStyles:{fontSize:8,textColor:[200,210,230]},
+    alternateRowStyles:{fillColor:[15,31,61]},
+    styles:{fillColor:[10,22,40],lineColor:[255,255,255,15],lineWidth:0.3},
+    columnStyles:{2:{halign:'right'},3:{halign:'right'},4:{halign:'right'}},
+    didParseCell: c => {
+      if(c.row.index===3){c.cell.styles.fontStyle='bold';c.cell.styles.textColor=[99,179,237];}
+    }
+  });
+
+  y = doc.lastAutoTable.finalY + 20;
+
+  // ── Signature block ────────────────────────────────────────
+  if(y > 700) { doc.addPage(); y = 30; }
+  doc.setFillColor(10,22,40); doc.rect(20,y,W-40,90,'F');
+  doc.setFillColor(0,201,167); doc.rect(20,y,3,90,'F');
+  doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(0,201,167);
+  doc.text('MANAGEMENT SIGN-OFF', 30, y+14);
+  doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(143,163,191);
+  doc.text('Prepared by: ' + userName, 30, y+28);
+  doc.text('Date: ' + computedAt.toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'}), 30, y+40);
+  doc.setTextColor(74,96,128);
+  doc.text('Approved by: _________________________', 30, y+58);
+  doc.text('Date: _________________________', 30, y+70);
+  doc.text('Designation: _________________________', W/2, y+58);
+  doc.text('Signature: _________________________', W/2, y+70);
+
+  // ── Footer ─────────────────────────────────────────────────
+  const pageCount = doc.internal.getNumberOfPages();
+  for(let i=1; i<=pageCount; i++) {
+    doc.setPage(i);
+    doc.setFont('helvetica','italic'); doc.setFontSize(7); doc.setTextColor(74,96,128);
+    doc.text('FM Finance Suite — IFRS 9 ECL Model Documentation | Developed by Michael Felix Happy', W/2, doc.internal.pageSize.getHeight()-12, {align:'center'});
+    doc.text(`Page ${i} of ${pageCount}`, W-20, doc.internal.pageSize.getHeight()-12, {align:'right'});
+  }
+
+  doc.save(`FM-IFRS9-Assumption-Log-${ts()}.pdf`);
+  toast('Assumption log PDF downloaded.');
 }
 
 // ── SETTINGS ───────────────────────────────────────────────────
