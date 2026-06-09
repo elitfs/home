@@ -1,943 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FSCF Treasury Intelligence Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/recharts@2.12.7/umd/Recharts.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#07101f;font-family:'Syne','IBM Plex Mono',sans-serif;color:#e2eaf5}
+  ::-webkit-scrollbar{width:4px;height:4px}
+  ::-webkit-scrollbar-track{background:transparent}
+  ::-webkit-scrollbar-thumb{background:#1a2e4a;border-radius:2px}
+  input[type=range]{height:4px;border-radius:2px;cursor:pointer}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+  .fade-in{animation:fadeIn 0.3s ease forwards}
+  .nav-btn:hover{background:rgba(0,201,167,0.08)!important;color:#00c9a7!important}
+  .row-hover:hover{background:#112240!important}
+  .upload-zone:hover{border-color:#00c9a7!important}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel" data-presets="react">
+const { useState, useMemo, useCallback, useEffect } = React;
+const {
+  LineChart, Line, BarChart, Bar, AreaChart, Area,
+  PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid,
+  Tooltip, Legend, ResponsiveContainer, ReferenceLine, ComposedChart
+} = Recharts;
 
-import { useState, useMemo, useCallback } from "react";
-import {
-  LineChart, Line, BarChart, Bar, AreaChart, Area, PieChart, Pie, Cell,
-  XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ReferenceLine
-} from "recharts";
-
-// ─── DESIGN TOKENS ────────────────────────────────────────────────────────────
-const T = {
-  navy: "#07101f",
-  card: "#0d1b2e",
-  cardHover: "#112240",
-  border: "#1a2e4a",
-  borderLight: "#243a5e",
-  teal: "#00c9a7",
-  tealDim: "#007a66",
-  gold: "#f5a623",
-  red: "#ff4560",
-  green: "#06d6a0",
-  blue: "#4cc9f0",
-  purple: "#9b5de5",
-  textPrimary: "#e2eaf5",
-  textSecondary: "#7a90b0",
-  textMuted: "#4a607a",
+// ── TOKENS ─────────────────────────────────────────────────────────────────
+const C = {
+  navy:   "#07101f", card:   "#0d1b2e", cardHover: "#112240",
+  border: "#1a2e4a", borderL:"#243a5e",
+  teal:   "#00c9a7", tealD:  "#007a66",
+  gold:   "#f5a623", red:    "#ff4560", green: "#06d6a0",
+  blue:   "#4cc9f0", purple: "#9b5de5",
+  t1:     "#e2eaf5", t2:     "#7a90b0", t3:    "#4a607a",
 };
 
-// ─── SAMPLE DATA ───────────────────────────────────────────────────────────────
+// ── DATA ───────────────────────────────────────────────────────────────────
 const LOANS = [
-  { id:"LN-001", customer:"Dangote Industries Ltd", product:"Invoice Discounting", principal:450, rate:22, dpd:0, stage:1, rating:"A", start:"2024-01-15", maturity:"2024-07-15", outstanding:420 },
-  { id:"LN-002", customer:"Flour Mills Nigeria Plc", product:"Supply Chain Finance", principal:320, rate:20, dpd:18, stage:1, rating:"A-", start:"2024-02-01", maturity:"2024-08-01", outstanding:310 },
-  { id:"LN-003", customer:"MTN Nigeria Comms", product:"Factoring", principal:280, rate:21, dpd:0, stage:1, rating:"AA", start:"2024-03-10", maturity:"2024-09-10", outstanding:280 },
-  { id:"LN-004", customer:"Zenith Bank Plc", product:"Reverse Factoring", principal:500, rate:19, dpd:45, stage:2, rating:"BBB+", start:"2023-11-01", maturity:"2024-05-01", outstanding:480 },
-  { id:"LN-005", customer:"BUA Foods Plc", product:"Invoice Discounting", principal:190, rate:23, dpd:0, stage:1, rating:"A", start:"2024-04-05", maturity:"2024-10-05", outstanding:190 },
-  { id:"LN-006", customer:"Unilever Nigeria Plc", product:"Supply Chain Finance", principal:150, rate:21, dpd:62, stage:2, rating:"BB+", start:"2023-10-15", maturity:"2024-04-15", outstanding:145 },
-  { id:"LN-007", customer:"Nigerian Breweries Plc", product:"Factoring", principal:220, rate:22, dpd:5, stage:1, rating:"A-", start:"2024-03-20", maturity:"2024-09-20", outstanding:215 },
-  { id:"LN-008", customer:"Cadbury Nigeria Plc", product:"Invoice Discounting", principal:85, rate:24, dpd:120, stage:3, rating:"CCC", start:"2023-08-01", maturity:"2024-02-01", outstanding:82 },
-  { id:"LN-009", customer:"PZ Cussons Nigeria", product:"Factoring", principal:110, rate:22, dpd:95, stage:3, rating:"B-", start:"2023-09-10", maturity:"2024-03-10", outstanding:108 },
-  { id:"LN-010", customer:"Nestle Nigeria Plc", product:"Supply Chain Finance", principal:340, rate:20, dpd:0, stage:1, rating:"AA-", start:"2024-04-01", maturity:"2024-10-01", outstanding:340 },
-  { id:"LN-011", customer:"NNPC Gas & Power Ltd", product:"Reverse Factoring", principal:600, rate:18, dpd:30, stage:1, rating:"A+", start:"2024-01-20", maturity:"2024-07-20", outstanding:580 },
-  { id:"LN-012", customer:"Access Bank Plc", product:"Invoice Discounting", principal:250, rate:20, dpd:0, stage:1, rating:"AA", start:"2024-02-15", maturity:"2024-08-15", outstanding:250 },
-  { id:"LN-013", customer:"Total Energies Nigeria", product:"Supply Chain Finance", principal:180, rate:21, dpd:75, stage:2, rating:"BB", start:"2023-12-01", maturity:"2024-06-01", outstanding:172 },
-  { id:"LN-014", customer:"Lafarge Africa Plc", product:"Factoring", principal:130, rate:23, dpd:0, stage:1, rating:"A-", start:"2024-03-01", maturity:"2024-09-01", outstanding:130 },
-  { id:"LN-015", customer:"Julius Berger Nigeria", product:"Invoice Discounting", principal:200, rate:22, dpd:155, stage:3, rating:"D", start:"2023-06-15", maturity:"2023-12-15", outstanding:195 },
+  {id:"LN-001",customer:"Dangote Industries Ltd",    product:"Invoice Discounting",  principal:450,rate:22,dpd:0,  stage:1,rating:"A",  start:"2024-01-15",maturity:"2024-07-15",outstanding:420},
+  {id:"LN-002",customer:"Flour Mills Nigeria Plc",   product:"Supply Chain Finance", principal:320,rate:20,dpd:18, stage:1,rating:"A-", start:"2024-02-01",maturity:"2024-08-01",outstanding:310},
+  {id:"LN-003",customer:"MTN Nigeria Comms",          product:"Factoring",            principal:280,rate:21,dpd:0,  stage:1,rating:"AA", start:"2024-03-10",maturity:"2024-09-10",outstanding:280},
+  {id:"LN-004",customer:"Zenith Bank Plc",            product:"Reverse Factoring",    principal:500,rate:19,dpd:45, stage:2,rating:"BBB+",start:"2023-11-01",maturity:"2024-05-01",outstanding:480},
+  {id:"LN-005",customer:"BUA Foods Plc",              product:"Invoice Discounting",  principal:190,rate:23,dpd:0,  stage:1,rating:"A",  start:"2024-04-05",maturity:"2024-10-05",outstanding:190},
+  {id:"LN-006",customer:"Unilever Nigeria Plc",       product:"Supply Chain Finance", principal:150,rate:21,dpd:62, stage:2,rating:"BB+",start:"2023-10-15",maturity:"2024-04-15",outstanding:145},
+  {id:"LN-007",customer:"Nigerian Breweries Plc",     product:"Factoring",            principal:220,rate:22,dpd:5,  stage:1,rating:"A-", start:"2024-03-20",maturity:"2024-09-20",outstanding:215},
+  {id:"LN-008",customer:"Cadbury Nigeria Plc",        product:"Invoice Discounting",  principal:85, rate:24,dpd:120,stage:3,rating:"CCC",start:"2023-08-01",maturity:"2024-02-01",outstanding:82},
+  {id:"LN-009",customer:"PZ Cussons Nigeria",         product:"Factoring",            principal:110,rate:22,dpd:95, stage:3,rating:"B-", start:"2023-09-10",maturity:"2024-03-10",outstanding:108},
+  {id:"LN-010",customer:"Nestle Nigeria Plc",         product:"Supply Chain Finance", principal:340,rate:20,dpd:0,  stage:1,rating:"AA-",start:"2024-04-01",maturity:"2024-10-01",outstanding:340},
+  {id:"LN-011",customer:"NNPC Gas & Power Ltd",       product:"Reverse Factoring",    principal:600,rate:18,dpd:30, stage:1,rating:"A+", start:"2024-01-20",maturity:"2024-07-20",outstanding:580},
+  {id:"LN-012",customer:"Access Bank Plc",            product:"Invoice Discounting",  principal:250,rate:20,dpd:0,  stage:1,rating:"AA", start:"2024-02-15",maturity:"2024-08-15",outstanding:250},
+  {id:"LN-013",customer:"Total Energies Nigeria",     product:"Supply Chain Finance", principal:180,rate:21,dpd:75, stage:2,rating:"BB", start:"2023-12-01",maturity:"2024-06-01",outstanding:172},
+  {id:"LN-014",customer:"Lafarge Africa Plc",         product:"Factoring",            principal:130,rate:23,dpd:0,  stage:1,rating:"A-", start:"2024-03-01",maturity:"2024-09-01",outstanding:130},
+  {id:"LN-015",customer:"Julius Berger Nigeria",      product:"Invoice Discounting",  principal:200,rate:22,dpd:155,stage:3,rating:"D",  start:"2023-06-15",maturity:"2023-12-15",outstanding:195},
 ];
-
 const BORROWINGS = [
-  { id:"BW-001", lender:"FCMB Ltd", type:"Term Loan", principal:500, rate:19.5, tenor:24, outstanding:420, maturity:"2025-06-30", repayment:"Monthly" },
-  { id:"BW-002", lender:"Stanbic IBTC Bank", type:"Overdraft Facility", principal:200, rate:23, tenor:12, outstanding:150, maturity:"2024-12-31", repayment:"Revolving" },
-  { id:"BW-003", lender:"DBN Nigeria", type:"On-lending Facility", principal:800, rate:14, tenor:36, outstanding:720, maturity:"2026-09-30", repayment:"Quarterly" },
-  { id:"BW-004", lender:"Bank of Industry", type:"SME Fund", principal:300, rate:12, tenor:48, outstanding:280, maturity:"2027-03-31", repayment:"Monthly" },
-  { id:"BW-005", lender:"LAPO MfB", type:"Wholesale Borrowing", principal:150, rate:21, tenor:12, outstanding:100, maturity:"2024-10-31", repayment:"Monthly" },
-  { id:"BW-006", lender:"Pan-African Holdings", type:"Intercompany Loan", principal:1000, rate:16, tenor:60, outstanding:1000, maturity:"2028-01-31", repayment:"Bullet" },
+  {id:"BW-001",lender:"FCMB Ltd",            type:"Term Loan",           principal:500, rate:19.5,tenor:24,outstanding:420, maturity:"2025-06-30",repayment:"Monthly"},
+  {id:"BW-002",lender:"Stanbic IBTC Bank",   type:"Overdraft Facility",  principal:200, rate:23,  tenor:12,outstanding:150, maturity:"2024-12-31",repayment:"Revolving"},
+  {id:"BW-003",lender:"DBN Nigeria",          type:"On-lending Facility", principal:800, rate:14,  tenor:36,outstanding:720, maturity:"2026-09-30",repayment:"Quarterly"},
+  {id:"BW-004",lender:"Bank of Industry",    type:"SME Fund",            principal:300, rate:12,  tenor:48,outstanding:280, maturity:"2027-03-31",repayment:"Monthly"},
+  {id:"BW-005",lender:"LAPO MfB",            type:"Wholesale Borrowing", principal:150, rate:21,  tenor:12,outstanding:100, maturity:"2024-10-31",repayment:"Monthly"},
+  {id:"BW-006",lender:"Pan-African Holdings",type:"Intercompany Loan",   principal:1000,rate:16,  tenor:60,outstanding:1000,maturity:"2028-01-31",repayment:"Bullet"},
 ];
-
 const INVESTMENTS = [
-  { id:"INV-001", counterparty:"Access Bank Plc", type:"Fixed Deposit", principal:300, rate:22, dateInvested:"2024-03-01", days:180, maturity:"2024-08-28" },
-  { id:"INV-002", counterparty:"GTBank Ltd", type:"Fixed Deposit", principal:200, rate:21.5, dateInvested:"2024-02-15", days:91, maturity:"2024-05-17" },
-  { id:"INV-003", counterparty:"FGN Bond (10yr)", type:"Government Securities", principal:500, rate:17.5, dateInvested:"2023-10-01", days:365, maturity:"2033-10-01" },
-  { id:"INV-004", counterparty:"NTB (91-day)", type:"Treasury Bills", principal:250, rate:20.5, dateInvested:"2024-04-01", days:91, maturity:"2024-07-01" },
-  { id:"INV-005", counterparty:"Zenith Bank Plc", type:"Fixed Deposit", principal:150, rate:22, dateInvested:"2024-04-10", days:60, maturity:"2024-06-09" },
-  { id:"INV-006", counterparty:"NTB (182-day)", type:"Treasury Bills", principal:400, rate:21, dateInvested:"2024-01-15", days:182, maturity:"2024-07-15" },
+  {id:"INV-001",counterparty:"Access Bank Plc",    type:"Fixed Deposit",       principal:300,rate:22,  dateInvested:"2024-03-01",days:180,maturity:"2024-08-28"},
+  {id:"INV-002",counterparty:"GTBank Ltd",          type:"Fixed Deposit",       principal:200,rate:21.5,dateInvested:"2024-02-15",days:91, maturity:"2024-05-17"},
+  {id:"INV-003",counterparty:"FGN Bond (10yr)",     type:"Government Security", principal:500,rate:17.5,dateInvested:"2023-10-01",days:365,maturity:"2033-10-01"},
+  {id:"INV-004",counterparty:"NTB (91-day)",        type:"Treasury Bills",      principal:250,rate:20.5,dateInvested:"2024-04-01",days:91, maturity:"2024-07-01"},
+  {id:"INV-005",counterparty:"Zenith Bank Plc",     type:"Fixed Deposit",       principal:150,rate:22,  dateInvested:"2024-04-10",days:60, maturity:"2024-06-09"},
+  {id:"INV-006",counterparty:"NTB (182-day)",       type:"Treasury Bills",      principal:400,rate:21,  dateInvested:"2024-01-15",days:182,maturity:"2024-07-15"},
 ];
-
-const CASH_ACCOUNTS = [
-  { id:"CA-001", bank:"Access Bank Plc", account:"001-234567-001", type:"Current", balance:124.5, restricted:false, currency:"NGN" },
-  { id:"CA-002", bank:"GTBank Ltd", account:"0123456789", type:"Current", balance:87.3, restricted:false, currency:"NGN" },
-  { id:"CA-003", bank:"First Bank Nigeria", account:"2012345678", type:"Current", balance:43.8, restricted:true, currency:"NGN" },
-  { id:"CA-004", bank:"Zenith Bank Plc", account:"1012345678", type:"Savings", balance:210.0, restricted:false, currency:"NGN" },
-  { id:"CA-005", bank:"UBA Plc", account:"2012398765", type:"Current", balance:32.1, restricted:false, currency:"NGN" },
-  { id:"CA-006", bank:"Access Bank Plc", account:"001-234567-002", type:"Dom (USD)", balance:18.4, restricted:false, currency:"USD" },
+const CASH = [
+  {id:"CA-001",bank:"Access Bank Plc",  account:"001-234567-001",type:"Current", balance:124.5,restricted:false,currency:"NGN"},
+  {id:"CA-002",bank:"GTBank Ltd",        account:"0123456789",    type:"Current", balance:87.3, restricted:false,currency:"NGN"},
+  {id:"CA-003",bank:"First Bank Nigeria",account:"2012345678",    type:"Current", balance:43.8, restricted:true, currency:"NGN"},
+  {id:"CA-004",bank:"Zenith Bank Plc",   account:"1012345678",    type:"Savings", balance:210.0,restricted:false,currency:"NGN"},
+  {id:"CA-005",bank:"UBA Plc",           account:"2012398765",    type:"Current", balance:32.1, restricted:false,currency:"NGN"},
+  {id:"CA-006",bank:"Access Bank Plc",   account:"001-234567-002",type:"Dom (USD)",balance:18.4,restricted:false,currency:"USD"},
 ];
-
 const CASH_TREND = [
-  { month:"Nov", cash:410 }, { month:"Dec", cash:380 }, { month:"Jan", cash:445 },
-  { month:"Feb", cash:398 }, { month:"Mar", cash:462 }, { month:"Apr", cash:490 },
-  { month:"May", cash:517 }, { month:"Jun", cash:498 },
+  {m:"Nov",v:410},{m:"Dec",v:380},{m:"Jan",v:445},{m:"Feb",v:398},{m:"Mar",v:462},{m:"Apr",v:490},{m:"May",v:517},{m:"Jun",v:498}
 ];
-
 const ECL_TREND = [
-  { month:"Jan", provision:45.2, coverage:3.1 }, { month:"Feb", provision:48.1, coverage:3.3 },
-  { month:"Mar", provision:52.4, coverage:3.6 }, { month:"Apr", provision:55.8, coverage:3.8 },
-  { month:"May", provision:61.2, coverage:4.1 }, { month:"Jun", provision:67.4, coverage:4.4 },
+  {m:"Jan",prov:45.2,cov:3.1},{m:"Feb",prov:48.1,cov:3.3},{m:"Mar",prov:52.4,cov:3.6},
+  {m:"Apr",prov:55.8,cov:3.8},{m:"May",prov:61.2,cov:4.1},{m:"Jun",prov:67.4,cov:4.4}
+];
+const LIQ_FORECAST = [
+  {p:"Now",net:498,cum:498},{p:"30d",net:312,cum:810},{p:"60d",net:185,cum:995},
+  {p:"90d",net:-240,cum:755},{p:"120d",net:420,cum:1175},{p:"150d",net:380,cum:1555},{p:"180d",net:290,cum:1845}
+];
+const GAP_DATA = [
+  {p:"0-7d",in:245,out:180},{p:"8-30d",in:380,out:420},{p:"31-60d",in:510,out:290},
+  {p:"61-90d",in:180,out:480},{p:"91-180d",in:620,out:210},{p:"181-365d",in:850,out:320}
 ];
 
-const LIQUIDITY_FORECAST = [
-  { period:"Now", net:498, cumulative:498 },
-  { period:"30d", net:312, cumulative:810 },
-  { period:"60d", net:185, cumulative:995 },
-  { period:"90d", net:-240, cumulative:755 },
-  { period:"120d", net:420, cumulative:1175 },
-  { period:"150d", net:380, cumulative:1555 },
-  { period:"180d", net:290, cumulative:1845 },
-];
+// ── UTILS ──────────────────────────────────────────────────────────────────
+const sum  = (arr,k) => arr.reduce((a,b)=>a+(b[k]||0),0);
+const fmt  = (n,d=1) => n>=1000 ? `₦${(n/1000).toFixed(d)}B` : `₦${(+n).toFixed(d)}M`;
+const pct  = n => `${(+n).toFixed(2)}%`;
+const TP   = {background:C.card,border:`1px solid ${C.border}`,borderRadius:8,color:C.t1,fontSize:12};
 
-// ─── ECL CALCULATION ENGINE ────────────────────────────────────────────────────
-function calcECL(loans) {
-  const PD_PARAMS = {
-    1: { pd12m: 0.02, pdLifetime: 0.05, lgd: 0.45 },
-    2: { pd12m: 0.15, pdLifetime: 0.35, lgd: 0.55 },
-    3: { pd12m: 0.75, pdLifetime: 0.90, lgd: 0.65 },
-  };
+// ── ECL ENGINE ─────────────────────────────────────────────────────────────
+const PD = {1:{pd12:.02,pdL:.05,lgd:.45},2:{pd12:.15,pdL:.35,lgd:.55},3:{pd12:.75,pdL:.90,lgd:.65}};
+function calcECL(loans, pdMult=1) {
   return loans.map(l => {
-    const p = PD_PARAMS[l.stage];
-    const ead = l.outstanding;
-    const ecl12m = p.pd12m * p.lgd * ead;
-    const eclLifetime = p.pdLifetime * p.lgd * ead;
-    const ecl = l.stage === 1 ? ecl12m : eclLifetime;
-    return { ...l, pd: l.stage === 1 ? p.pd12m : p.pdLifetime, lgd: p.lgd, ead, ecl: +ecl.toFixed(2), eclRate: +(ecl / ead * 100).toFixed(2) };
+    const p  = PD[l.stage];
+    const pd = (l.stage===1 ? p.pd12 : p.pdL) * pdMult;
+    const ecl = pd * p.lgd * l.outstanding;
+    return {...l, pd:+pd.toFixed(4), lgd:p.lgd, ead:l.outstanding, ecl:+ecl.toFixed(2), eclRate:+(ecl/l.outstanding*100).toFixed(2)};
   });
 }
 
-// ─── UTILITY HELPERS ──────────────────────────────────────────────────────────
-const fmt = (n, d = 1) => n >= 1000 ? `₦${(n / 1000).toFixed(d)}B` : `₦${n.toFixed(d)}M`;
-const fmtPct = n => `${n.toFixed(2)}%`;
-const sum = (arr, key) => arr.reduce((a, b) => a + (b[key] || 0), 0);
-
-function stageBadge(stage) {
-  const cfg = { 1: ["#06d6a0", "#0d2b23", "Stage 1"], 2: ["#f5a623", "#2b200a", "Stage 2"], 3: ["#ff4560", "#2b0d12", "Stage 3"] };
-  const [color, bg, label] = cfg[stage];
-  return <span style={{ color, background: bg, border: `1px solid ${color}40`, padding: "2px 8px", borderRadius: 4, fontSize: 11, fontFamily: "IBM Plex Mono, monospace", fontWeight: 600 }}>{label}</span>;
+// ── SHARED COMPONENTS ──────────────────────────────────────────────────────
+function StageBadge({stage}) {
+  const cfg = {1:[C.green,"#0d2b23"],2:[C.gold,"#2b200a"],3:[C.red,"#2b0d12"]};
+  const [col,bg] = cfg[stage]||[C.t2,C.card];
+  return <span style={{color:col,background:bg,border:`1px solid ${col}40`,padding:"2px 8px",borderRadius:4,fontSize:11,fontFamily:"IBM Plex Mono,monospace",fontWeight:600}}>Stage {stage}</span>;
 }
 
-function KpiCard({ label, value, sub, color = T.teal, icon, delta }) {
+function KpiCard({label,value,sub,color=C.teal,delta}) {
   return (
-    <div style={{ background: T.card, border: `1px solid ${T.border}`, borderRadius: 10, padding: "18px 20px", position: "relative", overflow: "hidden" }}>
-      <div style={{ position: "absolute", top: 0, left: 0, width: 3, height: "100%", background: color, borderRadius: "10px 0 0 10px" }} />
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-        <div>
-          <div style={{ color: T.textSecondary, fontSize: 11, fontFamily: "IBM Plex Mono, monospace", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 6 }}>{label}</div>
-          <div style={{ color: T.textPrimary, fontSize: 22, fontWeight: 700, fontFamily: "IBM Plex Mono, monospace", letterSpacing: "-0.02em" }}>{value}</div>
-          {sub && <div style={{ color: T.textSecondary, fontSize: 11, marginTop: 4 }}>{sub}</div>}
-          {delta !== undefined && (
-            <div style={{ color: delta >= 0 ? T.green : T.red, fontSize: 11, marginTop: 4, fontFamily: "IBM Plex Mono, monospace" }}>
-              {delta >= 0 ? "▲" : "▼"} {Math.abs(delta).toFixed(1)}% MoM
-            </div>
-          )}
-        </div>
-        {icon && <div style={{ fontSize: 24, opacity: 0.4 }}>{icon}</div>}
-      </div>
+    <div style={{background:C.card,border:`1px solid ${C.border}`,borderRadius:10,padding:"18px 20px",position:"relative",overflow:"hidden"}}>
+      <div style={{position:"absolute",top:0,left:0,width:3,height:"100%",background:color,borderRadius:"10px 0 0 10px"}}/>
+      <div style={{color:C.t2,fontSize:10,fontFamily:"IBM Plex Mono,monospace",textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:6}}>{label}</div>
+      <div style={{color:C.t1,fontSize:22,fontWeight:700,fontFamily:"IBM Plex Mono,monospace",letterSpacing:"-0.02em"}}>{value}</div>
+      {sub && <div style={{color:C.t3,fontSize:11,marginTop:4}}>{sub}</div>}
+      {delta!==undefined && <div style={{color:delta>=0?C.green:C.red,fontSize:10,marginTop:4,fontFamily:"IBM Plex Mono,monospace"}}>{delta>=0?"▲":"▼"} {Math.abs(delta).toFixed(1)}% MoM</div>}
     </div>
   );
 }
 
-function SectionHeader({ title, sub }) {
+function SectionHead({title,sub}) {
   return (
-    <div style={{ marginBottom: 20 }}>
-      <h2 style={{ color: T.textPrimary, fontSize: 16, fontWeight: 700, margin: 0, letterSpacing: "-0.01em" }}>{title}</h2>
-      {sub && <p style={{ color: T.textSecondary, fontSize: 12, margin: "4px 0 0", fontFamily: "IBM Plex Mono, monospace" }}>{sub}</p>}
+    <div style={{marginBottom:20}} className="fade-in">
+      <h2 style={{color:C.t1,fontSize:16,fontWeight:700,letterSpacing:"-0.01em"}}>{title}</h2>
+      {sub && <p style={{color:C.t2,fontSize:11,marginTop:4,fontFamily:"IBM Plex Mono,monospace"}}>{sub}</p>}
     </div>
   );
 }
 
-function Table({ cols, rows, compact }) {
+function Card({children,style={}}) {
+  return <div style={{background:C.card,border:`1px solid ${C.border}`,borderRadius:10,padding:20,...style}}>{children}</div>;
+}
+
+function CardLabel({children}) {
+  return <div style={{color:C.t2,fontSize:10,fontFamily:"IBM Plex Mono,monospace",textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:14}}>{children}</div>;
+}
+
+function DataTable({cols,rows,compact=false}) {
+  const fs = compact?11:12, py = compact?7:10, px = compact?10:12;
   return (
-    <div style={{ overflowX: "auto" }}>
-      <table style={{ width: "100%", borderCollapse: "collapse", fontSize: compact ? 11 : 12 }}>
+    <div style={{overflowX:"auto"}}>
+      <table style={{width:"100%",borderCollapse:"collapse",fontSize:fs}}>
         <thead>
-          <tr>{cols.map(c => (
-            <th key={c.key} style={{ textAlign: c.align || "left", padding: compact ? "8px 10px" : "10px 12px", borderBottom: `1px solid ${T.border}`, color: T.textSecondary, fontFamily: "IBM Plex Mono, monospace", fontWeight: 600, fontSize: 10, textTransform: "uppercase", letterSpacing: "0.06em", whiteSpace: "nowrap" }}>{c.label}</th>
+          <tr>{cols.map(c=>(
+            <th key={c.key} style={{textAlign:c.align||"left",padding:`8px ${px}px`,borderBottom:`1px solid ${C.border}`,color:C.t2,fontFamily:"IBM Plex Mono,monospace",fontWeight:600,fontSize:10,textTransform:"uppercase",letterSpacing:"0.06em",whiteSpace:"nowrap"}}>{c.label}</th>
           ))}</tr>
         </thead>
-        <tbody>
-          {rows.map((r, i) => (
-            <tr key={i} style={{ borderBottom: `1px solid ${T.border}20`, transition: "background 0.15s" }}
-              onMouseEnter={e => e.currentTarget.style.background = T.cardHover}
-              onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
-              {cols.map(c => (
-                <td key={c.key} style={{ padding: compact ? "7px 10px" : "10px 12px", textAlign: c.align || "left", color: c.color ? c.color(r) : T.textPrimary, fontFamily: c.mono ? "IBM Plex Mono, monospace" : "inherit", whiteSpace: "nowrap" }}>
-                  {c.render ? c.render(r) : r[c.key]}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
+        <tbody>{rows.map((r,i)=>(
+          <tr key={i} className="row-hover" style={{borderBottom:`1px solid ${C.border}20`}}>
+            {cols.map(c=>(
+              <td key={c.key} style={{padding:`${py}px ${px}px`,textAlign:c.align||"left",color:c.color?c.color(r):C.t1,fontFamily:c.mono?"IBM Plex Mono,monospace":"inherit",whiteSpace:"nowrap"}}>
+                {c.render?c.render(r):r[c.key]}
+              </td>
+            ))}
+          </tr>
+        ))}</tbody>
       </table>
     </div>
   );
 }
 
-const ChartTooltipStyle = { background: T.card, border: `1px solid ${T.border}`, borderRadius: 8, color: T.textPrimary, fontSize: 12 };
+const PALETTE = [C.teal,C.blue,C.purple,C.gold,C.green,C.red];
 
-// ─── MODULE: EXECUTIVE DASHBOARD ──────────────────────────────────────────────
-function DashboardView({ loans, borrowings, investments, cashAccounts }) {
-  const eclLoans = useMemo(() => calcECL(loans), [loans]);
-  const totalCash = useMemo(() => sum(cashAccounts.filter(a => a.currency === "NGN"), "balance"), [cashAccounts]);
-  const totalLoans = useMemo(() => sum(loans, "outstanding"), [loans]);
-  const totalECL = useMemo(() => sum(eclLoans, "ecl"), [eclLoans]);
-  const totalBorrowings = useMemo(() => sum(borrowings, "outstanding"), [borrowings]);
-  const totalInvestments = useMemo(() => sum(investments, "principal"), [investments]);
-  const netLiquidity = totalCash + totalInvestments - totalBorrowings * 0.1;
+// ── MODULE: DASHBOARD ──────────────────────────────────────────────────────
+function Dashboard() {
+  const eclLoans   = useMemo(()=>calcECL(LOANS),[]);
+  const totalCash  = sum(CASH.filter(a=>a.currency==="NGN"),"balance");
+  const totalLoans = sum(LOANS,"outstanding");
+  const totalECL   = sum(eclLoans,"ecl");
+  const totalDebt  = sum(BORROWINGS,"outstanding");
+  const totalInv   = sum(INVESTMENTS,"principal");
+  const netLiq     = totalCash+totalInv-totalDebt*0.1;
 
-  const stageData = useMemo(() => {
-    const s1 = eclLoans.filter(l => l.stage === 1);
-    const s2 = eclLoans.filter(l => l.stage === 2);
-    const s3 = eclLoans.filter(l => l.stage === 3);
-    return [
-      { name: "Stage 1", value: sum(s1, "outstanding"), ecl: sum(s1, "ecl"), count: s1.length, fill: T.green },
-      { name: "Stage 2", value: sum(s2, "outstanding"), ecl: sum(s2, "ecl"), count: s2.length, fill: T.gold },
-      { name: "Stage 3", value: sum(s3, "outstanding"), ecl: sum(s3, "ecl"), count: s3.length, fill: T.red },
-    ];
-  }, [eclLoans]);
+  const stageData = useMemo(()=>[1,2,3].map(s=>{
+    const sl = eclLoans.filter(l=>l.stage===s);
+    return {name:`Stage ${s}`,value:sum(sl,"outstanding"),ecl:sum(sl,"ecl"),count:sl.length,fill:[C.green,C.gold,C.red][s-1]};
+  }),[eclLoans]);
 
-  const productData = useMemo(() => {
-    const map = {};
-    loans.forEach(l => { map[l.product] = (map[l.product] || 0) + l.outstanding; });
-    return Object.entries(map).map(([name, value]) => ({ name, value }));
-  }, [loans]);
+  const prodData = useMemo(()=>{
+    const m={};
+    LOANS.forEach(l=>{m[l.product]=(m[l.product]||0)+l.outstanding});
+    return Object.entries(m).map(([name,value])=>({name,value}));
+  },[]);
 
-  const maturityData = useMemo(() => {
-    const buckets = { "0-30d": 0, "31-60d": 0, "61-90d": 0, "91-180d": 0, ">180d": 0 };
-    const now = new Date("2024-06-01");
-    loans.forEach(l => {
-      const days = Math.max(0, (new Date(l.maturity) - now) / 86400000);
-      if (days <= 30) buckets["0-30d"] += l.outstanding;
-      else if (days <= 60) buckets["31-60d"] += l.outstanding;
-      else if (days <= 90) buckets["61-90d"] += l.outstanding;
-      else if (days <= 180) buckets["91-180d"] += l.outstanding;
-      else buckets[">180d"] += l.outstanding;
+  const matData = useMemo(()=>{
+    const now=new Date("2024-06-01"),b={"0-30d":0,"31-60d":0,"61-90d":0,"91-180d":0,">180d":0};
+    LOANS.forEach(l=>{
+      const d=Math.max(0,(new Date(l.maturity)-now)/86400000);
+      if(d<=30)b["0-30d"]+=l.outstanding;
+      else if(d<=60)b["31-60d"]+=l.outstanding;
+      else if(d<=90)b["61-90d"]+=l.outstanding;
+      else if(d<=180)b["91-180d"]+=l.outstanding;
+      else b[">180d"]+=l.outstanding;
     });
-    return Object.entries(buckets).map(([period, loans]) => ({ period, loans }));
-  }, [loans]);
-
-  const COLORS = [T.teal, T.blue, T.purple, T.gold, T.green];
+    return Object.entries(b).map(([period,loans])=>({period,loans}));
+  },[]);
 
   return (
-    <div>
-      <SectionHeader title="Executive Dashboard" sub="Consolidated treasury & credit position — as at 01 June 2024" />
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 14, marginBottom: 24 }}>
-        <KpiCard label="Total Cash" value={fmt(totalCash)} sub="Across 6 accounts" color={T.teal} delta={2.4} />
-        <KpiCard label="Net Liquidity" value={fmt(netLiquidity)} sub="Cash + Investments − Obligations" color={T.blue} delta={1.8} />
-        <KpiCard label="Loan Book" value={fmt(totalLoans)} sub="15 active facilities" color={T.green} delta={4.2} />
-        <KpiCard label="ECL Provision" value={fmt(totalECL)} sub={`Coverage: ${fmtPct(totalECL / totalLoans * 100)}`} color={T.gold} delta={8.6} />
-        <KpiCard label="Total Borrowings" value={fmt(totalBorrowings)} sub="6 facilities" color={T.purple} delta={-1.2} />
-        <KpiCard label="Investment Portfolio" value={fmt(totalInvestments)} sub="Avg yield: 20.9%" color={T.teal} delta={3.1} />
+    <div className="fade-in">
+      <SectionHead title="Executive Dashboard" sub="Consolidated treasury & credit position — 01 June 2024" />
+      <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:14,marginBottom:24}}>
+        <KpiCard label="Total Cash"         value={fmt(totalCash)}  sub="Across 6 accounts"               color={C.teal}   delta={2.4}/>
+        <KpiCard label="Net Liquidity"      value={fmt(netLiq)}     sub="Cash + Investments − Obligations" color={C.blue}   delta={1.8}/>
+        <KpiCard label="Loan Book"          value={fmt(totalLoans)} sub="15 active facilities"             color={C.green}  delta={4.2}/>
+        <KpiCard label="ECL Provision"      value={fmt(totalECL)}   sub={`Coverage: ${pct(totalECL/totalLoans*100)}`} color={C.gold} delta={8.6}/>
+        <KpiCard label="Total Borrowings"   value={fmt(totalDebt)}  sub="6 facilities"                    color={C.purple} delta={-1.2}/>
+        <KpiCard label="Investment Portfolio" value={fmt(totalInv)} sub="Avg yield: 20.9%"                color={C.teal}   delta={3.1}/>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 }}>
-        <div style={{ background: T.card, border: `1px solid ${T.border}`, borderRadius: 10, padding: 20 }}>
-          <div style={{ color: T.textSecondary, fontSize: 11, fontFamily: "IBM Plex Mono, monospace", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 14 }}>Cash Position Trend (₦M)</div>
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16,marginBottom:16}}>
+        <Card>
+          <CardLabel>Cash Position Trend (₦M)</CardLabel>
           <ResponsiveContainer width="100%" height={180}>
             <AreaChart data={CASH_TREND}>
-              <defs><linearGradient id="cg" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor={T.teal} stopOpacity={0.3} /><stop offset="95%" stopColor={T.teal} stopOpacity={0} /></linearGradient></defs>
-              <CartesianGrid stroke={T.border} strokeDasharray="3 3" />
-              <XAxis dataKey="month" tick={{ fill: T.textMuted, fontSize: 10 }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fill: T.textMuted, fontSize: 10 }} axisLine={false} tickLine={false} />
-              <Tooltip contentStyle={ChartTooltipStyle} />
-              <Area type="monotone" dataKey="cash" stroke={T.teal} strokeWidth={2} fill="url(#cg)" dot={{ fill: T.teal, r: 3 }} />
+              <defs><linearGradient id="cg1" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor={C.teal} stopOpacity={0.3}/><stop offset="95%" stopColor={C.teal} stopOpacity={0}/></linearGradient></defs>
+              <CartesianGrid stroke={C.border} strokeDasharray="3 3"/>
+              <XAxis dataKey="m" tick={{fill:C.t3,fontSize:10}} axisLine={false} tickLine={false}/>
+              <YAxis tick={{fill:C.t3,fontSize:10}} axisLine={false} tickLine={false}/>
+              <Tooltip contentStyle={TP}/>
+              <Area type="monotone" dataKey="v" name="Cash" stroke={C.teal} strokeWidth={2} fill="url(#cg1)" dot={{fill:C.teal,r:3}}/>
             </AreaChart>
           </ResponsiveContainer>
-        </div>
-
-        <div style={{ background: T.card, border: `1px solid ${T.border}`, borderRadius: 10, padding: 20 }}>
-          <div style={{ color: T.textSecondary, fontSize: 11, fontFamily: "IBM Plex Mono, monospace", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 14 }}>Loan Stage Distribution (₦M)</div>
-          <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+        </Card>
+        <Card>
+          <CardLabel>Loan Stage Distribution (₦M)</CardLabel>
+          <div style={{display:"flex",alignItems:"center",gap:16}}>
             <ResponsiveContainer width="50%" height={180}>
               <PieChart>
                 <Pie data={stageData} cx="50%" cy="50%" innerRadius={50} outerRadius={75} paddingAngle={3} dataKey="value">
-                  {stageData.map((s, i) => <Cell key={i} fill={s.fill} />)}
+                  {stageData.map((s,i)=><Cell key={i} fill={s.fill}/>)}
                 </Pie>
-                <Tooltip contentStyle={ChartTooltipStyle} formatter={(v) => fmt(v)} />
+                <Tooltip contentStyle={TP} formatter={v=>fmt(v)}/>
               </PieChart>
             </ResponsiveContainer>
-            <div style={{ flex: 1 }}>
-              {stageData.map((s, i) => (
-                <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "6px 0", borderBottom: `1px solid ${T.border}30` }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                    <div style={{ width: 8, height: 8, borderRadius: 2, background: s.fill }} />
-                    <span style={{ color: T.textSecondary, fontSize: 11 }}>{s.name}</span>
+            <div style={{flex:1}}>
+              {stageData.map((s,i)=>(
+                <div key={i} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"6px 0",borderBottom:`1px solid ${C.border}30`}}>
+                  <div style={{display:"flex",alignItems:"center",gap:8}}>
+                    <div style={{width:8,height:8,borderRadius:2,background:s.fill}}/>
+                    <span style={{color:C.t2,fontSize:11}}>{s.name}</span>
                   </div>
-                  <div style={{ textAlign: "right" }}>
-                    <div style={{ color: T.textPrimary, fontFamily: "IBM Plex Mono, monospace", fontSize: 12 }}>{fmt(s.value)}</div>
-                    <div style={{ color: T.textMuted, fontSize: 10 }}>ECL: {fmt(s.ecl)}</div>
+                  <div style={{textAlign:"right"}}>
+                    <div style={{color:C.t1,fontFamily:"IBM Plex Mono,monospace",fontSize:12}}>{fmt(s.value)}</div>
+                    <div style={{color:C.t3,fontSize:10}}>ECL: {fmt(s.ecl)}</div>
                   </div>
                 </div>
               ))}
             </div>
           </div>
-        </div>
+        </Card>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-        <div style={{ background: T.card, border: `1px solid ${T.border}`, borderRadius: 10, padding: 20 }}>
-          <div style={{ color: T.textSecondary, fontSize: 11, fontFamily: "IBM Plex Mono, monospace", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 14 }}>Portfolio by Product (₦M)</div>
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16}}>
+        <Card>
+          <CardLabel>Portfolio by Product (₦M)</CardLabel>
           <ResponsiveContainer width="100%" height={180}>
-            <BarChart data={productData} layout="vertical">
-              <CartesianGrid stroke={T.border} strokeDasharray="3 3" horizontal={false} />
-              <XAxis type="number" tick={{ fill: T.textMuted, fontSize: 10 }} axisLine={false} tickLine={false} />
-              <YAxis type="category" dataKey="name" tick={{ fill: T.textSecondary, fontSize: 10 }} axisLine={false} tickLine={false} width={120} />
-              <Tooltip contentStyle={ChartTooltipStyle} formatter={(v) => fmt(v)} />
-              <Bar dataKey="value" radius={[0, 4, 4, 0]}>
-                {productData.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
+            <BarChart data={prodData} layout="vertical">
+              <CartesianGrid stroke={C.border} strokeDasharray="3 3" horizontal={false}/>
+              <XAxis type="number" tick={{fill:C.t3,fontSize:10}} axisLine={false} tickLine={false}/>
+              <YAxis type="category" dataKey="name" tick={{fill:C.t2,fontSize:10}} axisLine={false} tickLine={false} width={130}/>
+              <Tooltip contentStyle={TP} formatter={v=>fmt(v)}/>
+              <Bar dataKey="value" radius={[0,4,4,0]}>
+                {prodData.map((_,i)=><Cell key={i} fill={PALETTE[i%PALETTE.length]}/>)}
               </Bar>
             </BarChart>
           </ResponsiveContainer>
-        </div>
-
-        <div style={{ background: T.card, border: `1px solid ${T.border}`, borderRadius: 10, padding: 20 }}>
-          <div style={{ color: T.textSecondary, fontSize: 11, fontFamily: "IBM Plex Mono, monospace", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 14 }}>Loan Maturity Ladder (₦M)</div>
+        </Card>
+        <Card>
+          <CardLabel>Loan Maturity Ladder (₦M)</CardLabel>
           <ResponsiveContainer width="100%" height={180}>
-            <BarChart data={maturityData}>
-              <CartesianGrid stroke={T.border} strokeDasharray="3 3" />
-              <XAxis dataKey="period" tick={{ fill: T.textMuted, fontSize: 10 }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fill: T.textMuted, fontSize: 10 }} axisLine={false} tickLine={false} />
-              <Tooltip contentStyle={ChartTooltipStyle} formatter={(v) => fmt(v)} />
-              <Bar dataKey="loans" fill={T.blue} radius={[4, 4, 0, 0]} />
+            <BarChart data={matData}>
+              <CartesianGrid stroke={C.border} strokeDasharray="3 3"/>
+              <XAxis dataKey="period" tick={{fill:C.t3,fontSize:10}} axisLine={false} tickLine={false}/>
+              <YAxis tick={{fill:C.t3,fontSize:10}} axisLine={false} tickLine={false}/>
+              <Tooltip contentStyle={TP} formatter={v=>fmt(v)}/>
+              <Bar dataKey="loans" radius={[4,4,0,0]}>
+                {matData.map((_,i)=><Cell key={i} fill={PALETTE[i%PALETTE.length]}/>)}
+              </Bar>
             </BarChart>
           </ResponsiveContainer>
-        </div>
+        </Card>
       </div>
     </div>
   );
 }
 
-// ─── MODULE: LOAN PORTFOLIO ───────────────────────────────────────────────────
-function LoanPortfolioView({ loans }) {
-  const [filter, setFilter] = useState("all");
-  const [search, setSearch] = useState("");
-
-  const filtered = useMemo(() => {
-    let l = loans;
-    if (filter !== "all") l = l.filter(x => x.stage === parseInt(filter));
-    if (search) l = l.filter(x => x.customer.toLowerCase().includes(search.toLowerCase()) || x.id.toLowerCase().includes(search.toLowerCase()));
+// ── MODULE: LOANS ──────────────────────────────────────────────────────────
+function Loans() {
+  const [filter,setFilter]=useState("all");
+  const [search,setSearch]=useState("");
+  const filtered=useMemo(()=>{
+    let l=LOANS;
+    if(filter!=="all") l=l.filter(x=>x.stage===+filter);
+    if(search) l=l.filter(x=>x.customer.toLowerCase().includes(search.toLowerCase())||x.id.toLowerCase().includes(search.toLowerCase()));
     return l;
-  }, [loans, filter, search]);
+  },[filter,search]);
 
-  const total = sum(loans, "outstanding");
-  const perf = loans.filter(l => l.dpd < 90);
-  const nonPerf = loans.filter(l => l.dpd >= 90);
-
-  const agingData = [
-    { bucket: "Current", count: loans.filter(l => l.dpd === 0).length, value: sum(loans.filter(l => l.dpd === 0), "outstanding") },
-    { bucket: "1-30d", count: loans.filter(l => l.dpd > 0 && l.dpd <= 30).length, value: sum(loans.filter(l => l.dpd > 0 && l.dpd <= 30), "outstanding") },
-    { bucket: "31-60d", count: loans.filter(l => l.dpd > 30 && l.dpd <= 60).length, value: sum(loans.filter(l => l.dpd > 30 && l.dpd <= 60), "outstanding") },
-    { bucket: "61-90d", count: loans.filter(l => l.dpd > 60 && l.dpd <= 90).length, value: sum(loans.filter(l => l.dpd > 60 && l.dpd <= 90), "outstanding") },
-    { bucket: "91-180d", count: loans.filter(l => l.dpd > 90 && l.dpd <= 180).length, value: sum(loans.filter(l => l.dpd > 90 && l.dpd <= 180), "outstanding") },
-    { bucket: ">180d", count: loans.filter(l => l.dpd > 180).length, value: sum(loans.filter(l => l.dpd > 180), "outstanding") },
+  const total=sum(LOANS,"outstanding");
+  const npl=LOANS.filter(l=>l.dpd>=90);
+  const aging=[
+    {b:"Current",v:sum(LOANS.filter(l=>l.dpd===0),"outstanding")},
+    {b:"1-30d",  v:sum(LOANS.filter(l=>l.dpd>0&&l.dpd<=30),"outstanding")},
+    {b:"31-60d", v:sum(LOANS.filter(l=>l.dpd>30&&l.dpd<=60),"outstanding")},
+    {b:"61-90d", v:sum(LOANS.filter(l=>l.dpd>60&&l.dpd<=90),"outstanding")},
+    {b:"91-180d",v:sum(LOANS.filter(l=>l.dpd>90&&l.dpd<=180),"outstanding")},
+    {b:">180d",  v:sum(LOANS.filter(l=>l.dpd>180),"outstanding")},
   ];
-
-  const cols = [
-    { key: "id", label: "Loan ID", mono: true, color: () => T.teal },
-    { key: "customer", label: "Customer" },
-    { key: "product", label: "Product", color: () => T.textSecondary },
-    { key: "outstanding", label: "Outstanding (₦M)", align: "right", mono: true, render: r => fmt(r.outstanding) },
-    { key: "rate", label: "Rate", align: "right", mono: true, render: r => `${r.rate}%` },
-    { key: "dpd", label: "DPD", align: "right", mono: true, color: r => r.dpd >= 90 ? T.red : r.dpd >= 30 ? T.gold : T.green },
-    { key: "stage", label: "Stage", render: r => stageBadge(r.stage) },
-    { key: "rating", label: "Rating", mono: true, color: r => r.rating?.startsWith("A") ? T.green : r.rating?.startsWith("B") ? T.gold : T.red },
-    { key: "maturity", label: "Maturity", color: () => T.textSecondary, mono: true },
+  const bstyle=(active)=>({background:active?C.teal:"transparent",color:active?"#000":C.t2,border:`1px solid ${active?C.teal:C.border}`,borderRadius:6,padding:"6px 14px",fontSize:11,cursor:"pointer",fontFamily:"IBM Plex Mono,monospace",fontWeight:600});
+  const cols=[
+    {key:"id",label:"Loan ID",mono:true,color:()=>C.teal},
+    {key:"customer",label:"Customer"},
+    {key:"product",label:"Product",color:()=>C.t2},
+    {key:"outstanding",label:"Outstanding (₦M)",align:"right",mono:true,render:r=>fmt(r.outstanding)},
+    {key:"rate",label:"Rate",align:"right",mono:true,render:r=>`${r.rate}%`},
+    {key:"dpd",label:"DPD",align:"right",mono:true,color:r=>r.dpd>=90?C.red:r.dpd>=30?C.gold:C.green},
+    {key:"stage",label:"Stage",render:r=><StageBadge stage={r.stage}/>},
+    {key:"rating",label:"Rating",mono:true,color:r=>r.rating?.startsWith("A")?C.green:r.rating?.startsWith("B")?C.gold:C.red},
+    {key:"maturity",label:"Maturity",mono:true,color:()=>C.t2},
   ];
-
-  const inputStyle = { background: T.navy, border: `1px solid ${T.border}`, borderRadius: 6, color: T.textPrimary, padding: "7px 12px", fontSize: 12, fontFamily: "IBM Plex Mono, monospace", outline: "none" };
-  const btnStyle = (active) => ({ background: active ? T.teal : "transparent", color: active ? "#000" : T.textSecondary, border: `1px solid ${active ? T.teal : T.border}`, borderRadius: 6, padding: "6px 14px", fontSize: 11, cursor: "pointer", fontFamily: "IBM Plex Mono, monospace", fontWeight: 600 });
 
   return (
-    <div>
-      <SectionHeader title="Loan Portfolio Management" sub={`${loans.length} facilities · Total outstanding: ${fmt(total)}`} />
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 12, marginBottom: 20 }}>
-        <KpiCard label="Total Exposure" value={fmt(total)} color={T.teal} />
-        <KpiCard label="Performing (NPL < 90d)" value={fmt(sum(perf, "outstanding"))} sub={`${perf.length} loans`} color={T.green} />
-        <KpiCard label="Non-Performing" value={fmt(sum(nonPerf, "outstanding"))} sub={`${nonPerf.length} loans`} color={T.red} />
-        <KpiCard label="NPL Ratio" value={fmtPct(sum(nonPerf, "outstanding") / total * 100)} sub="IFRS 9 Stage 3" color={T.gold} />
+    <div className="fade-in">
+      <SectionHead title="Loan Portfolio Management" sub={`${LOANS.length} facilities · Total outstanding: ${fmt(total)}`}/>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:12,marginBottom:20}}>
+        <KpiCard label="Total Exposure"    value={fmt(total)}                              color={C.teal}/>
+        <KpiCard label="Performing (<90d)" value={fmt(sum(LOANS.filter(l=>l.dpd<90),"outstanding"))} sub={`${LOANS.filter(l=>l.dpd<90).length} loans`} color={C.green}/>
+        <KpiCard label="Non-Performing"    value={fmt(sum(npl,"outstanding"))}             sub={`${npl.length} loans`}     color={C.red}/>
+        <KpiCard label="NPL Ratio"         value={pct(sum(npl,"outstanding")/total*100)}  sub="IFRS 9 Stage 3"            color={C.gold}/>
       </div>
-
-      <div style={{ background: T.card, border: `1px solid ${T.border}`, borderRadius: 10, padding: 20, marginBottom: 16 }}>
-        <div style={{ color: T.textSecondary, fontSize: 11, fontFamily: "IBM Plex Mono, monospace", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 14 }}>Loan Aging Distribution (₦M)</div>
+      <Card style={{marginBottom:16}}>
+        <CardLabel>Loan Aging Distribution (₦M)</CardLabel>
         <ResponsiveContainer width="100%" height={160}>
-          <BarChart data={agingData}>
-            <CartesianGrid stroke={T.border} strokeDasharray="3 3" />
-            <XAxis dataKey="bucket" tick={{ fill: T.textMuted, fontSize: 10 }} axisLine={false} tickLine={false} />
-            <YAxis tick={{ fill: T.textMuted, fontSize: 10 }} axisLine={false} tickLine={false} />
-            <Tooltip contentStyle={ChartTooltipStyle} formatter={(v, n) => [fmt(v), "Outstanding"]} />
-            <Bar dataKey="value" radius={[4, 4, 0, 0]}>
-              {agingData.map((d, i) => <Cell key={i} fill={i === 0 ? T.green : i <= 1 ? T.teal : i <= 2 ? T.blue : i <= 3 ? T.gold : T.red} />)}
+          <BarChart data={aging}>
+            <CartesianGrid stroke={C.border} strokeDasharray="3 3"/>
+            <XAxis dataKey="b" tick={{fill:C.t3,fontSize:10}} axisLine={false} tickLine={false}/>
+            <YAxis tick={{fill:C.t3,fontSize:10}} axisLine={false} tickLine={false}/>
+            <Tooltip contentStyle={TP} formatter={v=>fmt(v)}/>
+            <Bar dataKey="v" name="Outstanding" radius={[4,4,0,0]}>
+              {aging.map((_,i)=><Cell key={i} fill={[C.green,C.teal,C.blue,C.gold,C.red,C.red][i]}/>)}
             </Bar>
           </BarChart>
         </ResponsiveContainer>
-      </div>
-
-      <div style={{ background: T.card, border: `1px solid ${T.border}`, borderRadius: 10, padding: 20 }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-          <div style={{ display: "flex", gap: 6 }}>
-            {[["all","All"],["1","Stage 1"],["2","Stage 2"],["3","Stage 3"]].map(([v,l]) => (
-              <button key={v} style={btnStyle(filter === v)} onClick={() => setFilter(v)}>{l}</button>
+      </Card>
+      <Card>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:16,gap:12,flexWrap:"wrap"}}>
+          <div style={{display:"flex",gap:6}}>
+            {[["all","All"],["1","Stage 1"],["2","Stage 2"],["3","Stage 3"]].map(([v,l])=>(
+              <button key={v} style={bstyle(filter===v)} onClick={()=>setFilter(v)}>{l}</button>
             ))}
           </div>
-          <input style={{ ...inputStyle, width: 220 }} placeholder="Search customer / ID..." value={search} onChange={e => setSearch(e.target.value)} />
+          <input style={{background:C.navy,border:`1px solid ${C.border}`,borderRadius:6,color:C.t1,padding:"7px 12px",fontSize:12,fontFamily:"IBM Plex Mono,monospace",outline:"none",width:220}} placeholder="Search customer / ID…" value={search} onChange={e=>setSearch(e.target.value)}/>
         </div>
-        <Table cols={cols} rows={filtered} compact />
-        <div style={{ marginTop: 12, color: T.textMuted, fontSize: 10, fontFamily: "IBM Plex Mono, monospace" }}>
-          Showing {filtered.length} of {loans.length} facilities · Total: {fmt(sum(filtered, "outstanding"))}
-        </div>
-      </div>
+        <DataTable cols={cols} rows={filtered} compact/>
+        <div style={{marginTop:12,color:C.t3,fontSize:10,fontFamily:"IBM Plex Mono,monospace"}}>Showing {filtered.length} of {LOANS.length} · Total: {fmt(sum(filtered,"outstanding"))}</div>
+      </Card>
     </div>
   );
 }
 
-// ─── MODULE: ECL MODEL ────────────────────────────────────────────────────────
-function ECLModelView({ loans }) {
-  const [pdAdj, setPdAdj] = useState(0);
-  const eclLoans = useMemo(() => {
-    const adj = 1 + pdAdj / 100;
-    return calcECL(loans).map(l => ({ ...l, pd: +(l.pd * adj).toFixed(4), ecl: +(l.ecl * adj).toFixed(2) }));
-  }, [loans, pdAdj]);
+// ── MODULE: ECL ────────────────────────────────────────────────────────────
+function ECLModule() {
+  const [pdAdj,setPdAdj]=useState(0);
+  const eclLoans=useMemo(()=>calcECL(LOANS,1+pdAdj/100),[pdAdj]);
+  const totalECL=sum(eclLoans,"ecl");
+  const totalEAD=sum(eclLoans,"ead");
+  const coverage=totalECL/totalEAD*100;
+  const stageStats=[1,2,3].map(s=>{const sl=eclLoans.filter(l=>l.stage===s);return{stage:s,count:sl.length,ead:sum(sl,"ead"),ecl:sum(sl,"ecl")};});
 
-  const totalECL = sum(eclLoans, "ecl");
-  const totalEAD = sum(eclLoans, "ead");
-  const coverage = totalECL / totalEAD * 100;
-
-  const stageStats = [1, 2, 3].map(s => {
-    const sl = eclLoans.filter(l => l.stage === s);
-    return { stage: s, count: sl.length, ead: sum(sl, "ead"), ecl: sum(sl, "ecl") };
-  });
-
-  const heatmapData = eclLoans.map(l => ({
-    name: l.customer.split(" ")[0],
-    ecl: l.ecl,
-    ead: l.ead,
-    eclRate: l.eclRate,
-    stage: l.stage,
-  }));
-
-  const cols = [
-    { key: "id", label: "Loan ID", mono: true, color: () => T.teal },
-    { key: "customer", label: "Customer" },
-    { key: "stage", label: "Stage", render: r => stageBadge(r.stage) },
-    { key: "ead", label: "EAD (₦M)", align: "right", mono: true, render: r => fmt(r.ead) },
-    { key: "pd", label: "PD", align: "right", mono: true, render: r => fmtPct(r.pd * 100), color: r => r.pd > 0.5 ? T.red : r.pd > 0.1 ? T.gold : T.green },
-    { key: "lgd", label: "LGD", align: "right", mono: true, render: r => fmtPct(r.lgd * 100) },
-    { key: "ecl", label: "ECL (₦M)", align: "right", mono: true, render: r => fmt(r.ecl), color: r => r.ecl > 50 ? T.red : r.ecl > 20 ? T.gold : T.green },
-    { key: "eclRate", label: "ECL Rate", align: "right", mono: true, render: r => `${r.eclRate}%`, color: r => r.eclRate > 50 ? T.red : r.eclRate > 15 ? T.gold : T.teal },
+  const cols=[
+    {key:"id",label:"Loan ID",mono:true,color:()=>C.teal},
+    {key:"customer",label:"Customer"},
+    {key:"stage",label:"Stage",render:r=><StageBadge stage={r.stage}/>},
+    {key:"ead",label:"EAD (₦M)",align:"right",mono:true,render:r=>fmt(r.ead)},
+    {key:"pd",label:"PD",align:"right",mono:true,render:r=>pct(r.pd*100),color:r=>r.pd>.5?C.red:r.pd>.1?C.gold:C.green},
+    {key:"lgd",label:"LGD",align:"right",mono:true,render:r=>pct(r.lgd*100)},
+    {key:"ecl",label:"ECL (₦M)",align:"right",mono:true,render:r=>fmt(r.ecl),color:r=>r.ecl>50?C.red:r.ecl>20?C.gold:C.green},
+    {key:"eclRate",label:"ECL Rate",align:"right",mono:true,render:r=>`${r.eclRate}%`,color:r=>r.eclRate>50?C.red:r.eclRate>15?C.gold:C.teal},
   ];
 
   return (
-    <div>
-      <SectionHeader title="Expected Credit Loss (ECL) Model" sub="IFRS 9 compliant · Stage 1: 12-month ECL · Stage 2 & 3: Lifetime ECL" />
-
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 12, marginBottom: 20 }}>
-        <KpiCard label="Total ECL Provision" value={fmt(totalECL)} color={T.gold} />
-        <KpiCard label="Coverage Ratio" value={fmtPct(coverage)} sub="ECL / EAD" color={T.teal} />
-        <KpiCard label="Stage 2 Exposure" value={fmt(stageStats[1].ead)} sub={`${stageStats[1].count} loans`} color={T.gold} />
-        <KpiCard label="Stage 3 Exposure" value={fmt(stageStats[2].ead)} sub={`${stageStats[2].count} loans`} color={T.red} />
+    <div className="fade-in">
+      <SectionHead title="Expected Credit Loss (ECL) Model" sub="IFRS 9 compliant · Stage 1: 12-month ECL · Stage 2 & 3: Lifetime ECL"/>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:12,marginBottom:20}}>
+        <KpiCard label="Total ECL Provision" value={fmt(totalECL)}              color={C.gold}/>
+        <KpiCard label="Coverage Ratio"      value={pct(coverage)}             sub="ECL / EAD" color={C.teal}/>
+        <KpiCard label="Stage 2 Exposure"    value={fmt(stageStats[1].ead)}    sub={`${stageStats[1].count} loans`} color={C.gold}/>
+        <KpiCard label="Stage 3 Exposure"    value={fmt(stageStats[2].ead)}    sub={`${stageStats[2].count} loans`} color={C.red}/>
       </div>
-
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 }}>
-        <div style={{ background: T.card, border: `1px solid ${T.border}`, borderRadius: 10, padding: 20 }}>
-          <div style={{ color: T.textSecondary, fontSize: 11, fontFamily: "IBM Plex Mono, monospace", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 14 }}>ECL Provision Trend (₦M)</div>
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16,marginBottom:16}}>
+        <Card>
+          <CardLabel>ECL Provision Trend (₦M)</CardLabel>
           <ResponsiveContainer width="100%" height={160}>
             <LineChart data={ECL_TREND}>
-              <CartesianGrid stroke={T.border} strokeDasharray="3 3" />
-              <XAxis dataKey="month" tick={{ fill: T.textMuted, fontSize: 10 }} axisLine={false} tickLine={false} />
-              <YAxis yAxisId="left" tick={{ fill: T.textMuted, fontSize: 10 }} axisLine={false} tickLine={false} />
-              <YAxis yAxisId="right" orientation="right" tick={{ fill: T.textMuted, fontSize: 10 }} axisLine={false} tickLine={false} />
-              <Tooltip contentStyle={ChartTooltipStyle} />
-              <Legend wrapperStyle={{ fontSize: 10, color: T.textSecondary }} />
-              <Line yAxisId="left" type="monotone" dataKey="provision" stroke={T.gold} strokeWidth={2} dot={{ fill: T.gold, r: 3 }} name="Provision (₦M)" />
-              <Line yAxisId="right" type="monotone" dataKey="coverage" stroke={T.teal} strokeWidth={2} dot={{ fill: T.teal, r: 3 }} name="Coverage %" strokeDasharray="5 5" />
+              <CartesianGrid stroke={C.border} strokeDasharray="3 3"/>
+              <XAxis dataKey="m" tick={{fill:C.t3,fontSize:10}} axisLine={false} tickLine={false}/>
+              <YAxis yAxisId="l" tick={{fill:C.t3,fontSize:10}} axisLine={false} tickLine={false}/>
+              <YAxis yAxisId="r" orientation="right" tick={{fill:C.t3,fontSize:10}} axisLine={false} tickLine={false}/>
+              <Tooltip contentStyle={TP}/>
+              <Legend wrapperStyle={{fontSize:10,color:C.t2}}/>
+              <Line yAxisId="l" type="monotone" dataKey="prov" stroke={C.gold}  strokeWidth={2} dot={{fill:C.gold,r:3}}  name="Provision (₦M)"/>
+              <Line yAxisId="r" type="monotone" dataKey="cov"  stroke={C.teal}  strokeWidth={2} dot={{fill:C.teal,r:3}}  name="Coverage %" strokeDasharray="5 5"/>
             </LineChart>
           </ResponsiveContainer>
-        </div>
-
-        <div style={{ background: T.card, border: `1px solid ${T.border}`, borderRadius: 10, padding: 20 }}>
-          <div style={{ color: T.textSecondary, fontSize: 11, fontFamily: "IBM Plex Mono, monospace", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 14 }}>Stage Distribution</div>
-          {stageStats.map((s, i) => {
-            const pct = s.ead / totalEAD * 100;
-            const colors = [T.green, T.gold, T.red];
+        </Card>
+        <Card>
+          <CardLabel>Stage Distribution</CardLabel>
+          {stageStats.map((s,i)=>{
+            const p=s.ead/totalEAD*100,cols=[C.green,C.gold,C.red];
             return (
-              <div key={i} style={{ marginBottom: 14 }}>
-                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
-                  <span style={{ color: T.textSecondary, fontSize: 11 }}>Stage {s.stage} ({s.count} loans)</span>
-                  <span style={{ color: colors[i], fontFamily: "IBM Plex Mono, monospace", fontSize: 11 }}>{fmt(s.ead)} · ECL: {fmt(s.ecl)}</span>
+              <div key={i} style={{marginBottom:14}}>
+                <div style={{display:"flex",justifyContent:"space-between",marginBottom:4}}>
+                  <span style={{color:C.t2,fontSize:11}}>Stage {s.stage} ({s.count} loans)</span>
+                  <span style={{color:cols[i],fontFamily:"IBM Plex Mono,monospace",fontSize:11}}>{fmt(s.ead)} · ECL: {fmt(s.ecl)}</span>
                 </div>
-                <div style={{ background: T.navy, borderRadius: 4, height: 8, overflow: "hidden" }}>
-                  <div style={{ width: `${pct}%`, height: "100%", background: colors[i], borderRadius: 4, transition: "width 0.6s ease" }} />
+                <div style={{background:C.navy,borderRadius:4,height:8,overflow:"hidden"}}>
+                  <div style={{width:`${p}%`,height:"100%",background:cols[i],borderRadius:4,transition:"width 0.6s ease"}}/>
                 </div>
-                <div style={{ color: T.textMuted, fontSize: 10, marginTop: 2, fontFamily: "IBM Plex Mono, monospace" }}>{pct.toFixed(1)}% of portfolio</div>
+                <div style={{color:C.t3,fontSize:10,marginTop:2,fontFamily:"IBM Plex Mono,monospace"}}>{p.toFixed(1)}% of portfolio</div>
               </div>
             );
           })}
-
-          <div style={{ marginTop: 16, borderTop: `1px solid ${T.border}`, paddingTop: 14 }}>
-            <div style={{ color: T.textSecondary, fontSize: 11, marginBottom: 8 }}>Scenario Analysis — PD Stress Test</div>
-            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-              <input type="range" min={-50} max={100} value={pdAdj} onChange={e => setPdAdj(+e.target.value)}
-                style={{ flex: 1, accentColor: T.teal }} />
-              <span style={{ color: pdAdj > 0 ? T.red : T.green, fontFamily: "IBM Plex Mono, monospace", fontSize: 12, minWidth: 60 }}>
-                {pdAdj > 0 ? "+" : ""}{pdAdj}%
-              </span>
+          <div style={{marginTop:16,borderTop:`1px solid ${C.border}`,paddingTop:14}}>
+            <div style={{color:C.t2,fontSize:11,marginBottom:8}}>PD Stress Test — Scenario Analysis</div>
+            <div style={{display:"flex",alignItems:"center",gap:12}}>
+              <input type="range" min={-50} max={100} value={pdAdj} onChange={e=>setPdAdj(+e.target.value)} style={{flex:1,accentColor:C.teal}}/>
+              <span style={{color:pdAdj>0?C.red:C.green,fontFamily:"IBM Plex Mono,monospace",fontSize:12,minWidth:55}}>{pdAdj>0?"+":""}{pdAdj}%</span>
             </div>
-            <div style={{ color: T.textMuted, fontSize: 10, marginTop: 4 }}>
-              Stressed ECL: <span style={{ color: T.gold, fontFamily: "IBM Plex Mono, monospace" }}>{fmt(totalECL)}</span> · Coverage: <span style={{ color: T.teal, fontFamily: "IBM Plex Mono, monospace" }}>{fmtPct(coverage)}</span>
+            <div style={{color:C.t3,fontSize:10,marginTop:6}}>
+              Stressed ECL: <span style={{color:C.gold,fontFamily:"IBM Plex Mono,monospace"}}>{fmt(totalECL)}</span> · Coverage: <span style={{color:C.teal,fontFamily:"IBM Plex Mono,monospace"}}>{pct(coverage)}</span>
             </div>
           </div>
-        </div>
+        </Card>
       </div>
-
-      <div style={{ background: T.card, border: `1px solid ${T.border}`, borderRadius: 10, padding: 20, marginBottom: 16 }}>
-        <div style={{ color: T.textSecondary, fontSize: 11, fontFamily: "IBM Plex Mono, monospace", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 14 }}>Credit Risk Heatmap — ECL Rate by Facility (₦M)</div>
+      <Card style={{marginBottom:16}}>
+        <CardLabel>Credit Risk Heatmap — EAD vs ECL per Facility (₦M)</CardLabel>
         <ResponsiveContainer width="100%" height={200}>
-          <BarChart data={heatmapData} margin={{ left: 60 }}>
-            <CartesianGrid stroke={T.border} strokeDasharray="3 3" />
-            <XAxis dataKey="name" tick={{ fill: T.textMuted, fontSize: 9 }} axisLine={false} tickLine={false} />
-            <YAxis tick={{ fill: T.textMuted, fontSize: 10 }} axisLine={false} tickLine={false} />
-            <Tooltip contentStyle={ChartTooltipStyle} formatter={(v, n, p) => [n === "ead" ? fmt(v) : `${v}%`, n === "ead" ? "EAD" : "ECL Rate"]} />
-            <Bar dataKey="ead" name="EAD" fill={T.blue} opacity={0.5} radius={[2, 2, 0, 0]} />
-            <Bar dataKey="ecl" name="ECL" fill={T.gold} radius={[2, 2, 0, 0]} />
+          <BarChart data={eclLoans.map(l=>({name:l.customer.split(" ")[0],ead:l.ead,ecl:l.ecl}))}>
+            <CartesianGrid stroke={C.border} strokeDasharray="3 3"/>
+            <XAxis dataKey="name" tick={{fill:C.t3,fontSize:9}} axisLine={false} tickLine={false}/>
+            <YAxis tick={{fill:C.t3,fontSize:10}} axisLine={false} tickLine={false}/>
+            <Tooltip contentStyle={TP} formatter={v=>fmt(v)}/>
+            <Legend wrapperStyle={{fontSize:10,color:C.t2}}/>
+            <Bar dataKey="ead" name="EAD" fill={C.blue}  opacity={0.5} radius={[2,2,0,0]}/>
+            <Bar dataKey="ecl" name="ECL" fill={C.gold}  radius={[2,2,0,0]}/>
           </BarChart>
         </ResponsiveContainer>
-      </div>
-
-      <div style={{ background: T.card, border: `1px solid ${T.border}`, borderRadius: 10, padding: 20 }}>
-        <div style={{ color: T.textSecondary, fontSize: 11, fontFamily: "IBM Plex Mono, monospace", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 14 }}>Loan-level ECL Schedule</div>
-        <Table cols={cols} rows={eclLoans} compact />
-        <div style={{ marginTop: 12, padding: "10px 0", borderTop: `1px solid ${T.border}`, display: "flex", justifyContent: "space-between" }}>
-          <span style={{ color: T.textSecondary, fontSize: 11, fontFamily: "IBM Plex Mono, monospace" }}>TOTAL ECL PROVISION</span>
-          <span style={{ color: T.gold, fontSize: 14, fontFamily: "IBM Plex Mono, monospace", fontWeight: 700 }}>{fmt(totalECL)}</span>
+      </Card>
+      <Card>
+        <CardLabel>Loan-level ECL Schedule</CardLabel>
+        <DataTable cols={cols} rows={eclLoans} compact/>
+        <div style={{marginTop:12,padding:"10px 0",borderTop:`1px solid ${C.border}`,display:"flex",justifyContent:"space-between"}}>
+          <span style={{color:C.t2,fontSize:11,fontFamily:"IBM Plex Mono,monospace"}}>TOTAL ECL PROVISION</span>
+          <span style={{color:C.gold,fontSize:14,fontFamily:"IBM Plex Mono,monospace",fontWeight:700}}>{fmt(totalECL)}</span>
         </div>
-      </div>
+      </Card>
     </div>
   );
 }
 
-// ─── MODULE: BORROWINGS ───────────────────────────────────────────────────────
-function BorrowingsView({ borrowings }) {
-  const total = sum(borrowings, "outstanding");
-  const wacd = borrowings.reduce((acc, b) => acc + (b.outstanding / total) * b.rate, 0);
-
-  const maturityData = useMemo(() => {
-    const now = new Date("2024-06-01");
-    return borrowings.map(b => ({
-      lender: b.lender.split(" ")[0],
-      outstanding: b.outstanding,
-      days: Math.max(0, Math.round((new Date(b.maturity) - now) / 86400000)),
-      rate: b.rate,
-      type: b.type,
-    })).sort((a, b) => a.days - b.days);
-  }, [borrowings]);
-
-  const debtByType = useMemo(() => {
-    const map = {};
-    borrowings.forEach(b => { map[b.type] = (map[b.type] || 0) + b.outstanding; });
-    return Object.entries(map).map(([name, value]) => ({ name, value }));
-  }, [borrowings]);
-
-  const COLORS = [T.teal, T.blue, T.purple, T.gold, T.green, T.red];
-
-  const cols = [
-    { key: "id", label: "ID", mono: true, color: () => T.teal },
-    { key: "lender", label: "Lender" },
-    { key: "type", label: "Type", color: () => T.textSecondary },
-    { key: "outstanding", label: "Outstanding (₦M)", align: "right", mono: true, render: r => fmt(r.outstanding) },
-    { key: "rate", label: "Rate", align: "right", mono: true, render: r => `${r.rate}%`, color: r => r.rate > 20 ? T.red : r.rate > 16 ? T.gold : T.green },
-    { key: "tenor", label: "Tenor (mo)", align: "right", mono: true },
-    { key: "repayment", label: "Repayment", color: () => T.textSecondary },
-    { key: "maturity", label: "Maturity", mono: true, color: () => T.textSecondary },
+// ── MODULE: BORROWINGS ─────────────────────────────────────────────────────
+function Borrowings() {
+  const total=sum(BORROWINGS,"outstanding");
+  const wacd=BORROWINGS.reduce((a,b)=>a+(b.outstanding/total)*b.rate,0);
+  const matData=useMemo(()=>{
+    const now=new Date("2024-06-01");
+    return BORROWINGS.map(b=>({lender:b.lender.split(" ")[0],outstanding:b.outstanding,days:Math.max(0,Math.round((new Date(b.maturity)-now)/86400000))})).sort((a,b)=>a.days-b.days);
+  },[]);
+  const typeData=useMemo(()=>{const m={};BORROWINGS.forEach(b=>{m[b.type]=(m[b.type]||0)+b.outstanding});return Object.entries(m).map(([name,value])=>({name,value}));},[]);
+  const cols=[
+    {key:"id",label:"ID",mono:true,color:()=>C.teal},
+    {key:"lender",label:"Lender"},
+    {key:"type",label:"Type",color:()=>C.t2},
+    {key:"outstanding",label:"Outstanding (₦M)",align:"right",mono:true,render:r=>fmt(r.outstanding)},
+    {key:"rate",label:"Rate",align:"right",mono:true,render:r=>`${r.rate}%`,color:r=>r.rate>20?C.red:r.rate>16?C.gold:C.green},
+    {key:"tenor",label:"Tenor",align:"right",mono:true,render:r=>`${r.tenor}mo`},
+    {key:"repayment",label:"Repayment",color:()=>C.t2},
+    {key:"maturity",label:"Maturity",mono:true,color:()=>C.t2},
   ];
-
   return (
-    <div>
-      <SectionHeader title="Borrowings Management" sub="Debt facilities · Cost of funds analysis" />
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 12, marginBottom: 20 }}>
-        <KpiCard label="Total Debt" value={fmt(total)} color={T.purple} />
-        <KpiCard label="WACD" value={fmtPct(wacd)} sub="Wtd. avg. cost of debt" color={T.gold} />
-        <KpiCard label="Facilities" value={borrowings.length} sub="Active borrowings" color={T.teal} />
-        <KpiCard label="Interco. Debt" value={fmt(borrowings.find(b => b.type === "Intercompany Loan")?.outstanding || 0)} sub="Pan-African Holdings" color={T.blue} />
+    <div className="fade-in">
+      <SectionHead title="Borrowings Management" sub="Debt facilities · Cost of funds analysis"/>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:12,marginBottom:20}}>
+        <KpiCard label="Total Debt"      value={fmt(total)}               color={C.purple}/>
+        <KpiCard label="WACD"            value={pct(wacd)}                sub="Weighted avg. cost of debt" color={C.gold}/>
+        <KpiCard label="Facilities"      value={BORROWINGS.length}        sub="Active borrowings"          color={C.teal}/>
+        <KpiCard label="Interco. Debt"   value={fmt(BORROWINGS.find(b=>b.type==="Intercompany Loan")?.outstanding||0)} sub="Pan-African Holdings" color={C.blue}/>
       </div>
-
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 }}>
-        <div style={{ background: T.card, border: `1px solid ${T.border}`, borderRadius: 10, padding: 20 }}>
-          <div style={{ color: T.textSecondary, fontSize: 11, fontFamily: "IBM Plex Mono, monospace", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 14 }}>Debt Maturity Profile (₦M)</div>
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16,marginBottom:16}}>
+        <Card>
+          <CardLabel>Debt Maturity Profile (₦M) — colour by time to maturity</CardLabel>
           <ResponsiveContainer width="100%" height={180}>
-            <BarChart data={maturityData}>
-              <CartesianGrid stroke={T.border} strokeDasharray="3 3" />
-              <XAxis dataKey="lender" tick={{ fill: T.textMuted, fontSize: 10 }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fill: T.textMuted, fontSize: 10 }} axisLine={false} tickLine={false} />
-              <Tooltip contentStyle={ChartTooltipStyle} formatter={(v) => fmt(v)} />
-              <Bar dataKey="outstanding" radius={[4, 4, 0, 0]}>
-                {maturityData.map((d, i) => <Cell key={i} fill={d.days < 180 ? T.red : d.days < 360 ? T.gold : T.teal} />)}
+            <BarChart data={matData}>
+              <CartesianGrid stroke={C.border} strokeDasharray="3 3"/>
+              <XAxis dataKey="lender" tick={{fill:C.t3,fontSize:10}} axisLine={false} tickLine={false}/>
+              <YAxis tick={{fill:C.t3,fontSize:10}} axisLine={false} tickLine={false}/>
+              <Tooltip contentStyle={TP} formatter={v=>fmt(v)}/>
+              <Bar dataKey="outstanding" name="Outstanding" radius={[4,4,0,0]}>
+                {matData.map((d,i)=><Cell key={i} fill={d.days<180?C.red:d.days<360?C.gold:C.teal}/>)}
               </Bar>
             </BarChart>
           </ResponsiveContainer>
-          <div style={{ display: "flex", gap: 12, marginTop: 10 }}>
-            {[["< 180d", T.red], ["180-360d", T.gold], ["> 360d", T.teal]].map(([l, c]) => (
-              <div key={l} style={{ display: "flex", alignItems: "center", gap: 4 }}>
-                <div style={{ width: 8, height: 8, borderRadius: 2, background: c }} />
-                <span style={{ color: T.textMuted, fontSize: 10 }}>{l}</span>
-              </div>
+          <div style={{display:"flex",gap:14,marginTop:10}}>
+            {[["< 180d",C.red],["180-360d",C.gold],["> 360d",C.teal]].map(([l,col])=>(
+              <div key={l} style={{display:"flex",alignItems:"center",gap:5}}><div style={{width:8,height:8,borderRadius:2,background:col}}/><span style={{color:C.t3,fontSize:10}}>{l}</span></div>
             ))}
           </div>
-        </div>
-
-        <div style={{ background: T.card, border: `1px solid ${T.border}`, borderRadius: 10, padding: 20 }}>
-          <div style={{ color: T.textSecondary, fontSize: 11, fontFamily: "IBM Plex Mono, monospace", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 14 }}>Debt by Facility Type</div>
-          <ResponsiveContainer width="100%" height={180}>
-            <PieChart>
-              <Pie data={debtByType} cx="50%" cy="50%" outerRadius={75} paddingAngle={3} dataKey="value" label={({ name, percent }) => `${name.split(" ")[0]} ${(percent * 100).toFixed(0)}%`} labelLine={false} fontSize={9}>
-                {debtByType.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
-              </Pie>
-              <Tooltip contentStyle={ChartTooltipStyle} formatter={(v) => fmt(v)} />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
-
-      <div style={{ background: T.card, border: `1px solid ${T.border}`, borderRadius: 10, padding: 20 }}>
-        <div style={{ color: T.textSecondary, fontSize: 11, fontFamily: "IBM Plex Mono, monospace", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 14 }}>Borrowings Schedule</div>
-        <Table cols={cols} rows={borrowings} />
-      </div>
-    </div>
-  );
-}
-
-// ─── MODULE: INVESTMENTS ──────────────────────────────────────────────────────
-function InvestmentsView({ investments }) {
-  const total = sum(investments, "principal");
-  const interest = useMemo(() => investments.reduce((acc, inv) => {
-    const days = inv.days;
-    return acc + inv.principal * (inv.rate / 100) * (days / 365);
-  }, 0), [investments]);
-
-  const avgYield = investments.reduce((acc, inv) => acc + (inv.principal / total) * inv.rate, 0);
-
-  const maturityData = investments.map(inv => ({
-    counterparty: inv.counterparty.split(" ")[0],
-    principal: inv.principal,
-    interest: +(inv.principal * (inv.rate / 100) * (inv.days / 365)).toFixed(2),
-    rate: inv.rate,
-    days: inv.days,
-  }));
-
-  const typeData = useMemo(() => {
-    const map = {};
-    investments.forEach(inv => { map[inv.type] = (map[inv.type] || 0) + inv.principal; });
-    return Object.entries(map).map(([name, value]) => ({ name, value }));
-  }, [investments]);
-
-  const COLORS = [T.teal, T.blue, T.gold, T.purple];
-
-  const cols = [
-    { key: "id", label: "ID", mono: true, color: () => T.teal },
-    { key: "counterparty", label: "Counterparty" },
-    { key: "type", label: "Type", color: () => T.textSecondary },
-    { key: "principal", label: "Principal (₦M)", align: "right", mono: true, render: r => fmt(r.principal) },
-    { key: "rate", label: "Rate", align: "right", mono: true, render: r => `${r.rate}%`, color: () => T.green },
-    { key: "days", label: "Tenor", align: "right", mono: true, render: r => `${r.days}d` },
-    { key: "dateInvested", label: "Date Invested", mono: true, color: () => T.textSecondary },
-    { key: "maturity", label: "Maturity", mono: true, color: () => T.textSecondary },
-    { key: "interest", label: "Interest (₦M)", align: "right", mono: true, render: r => fmt(r.principal * (r.rate / 100) * (r.days / 365)), color: () => T.gold },
-  ];
-
-  return (
-    <div>
-      <SectionHeader title="Investment Portfolio" sub="Treasury placements · Yield analysis" />
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 12, marginBottom: 20 }}>
-        <KpiCard label="Portfolio Value" value={fmt(total)} color={T.teal} />
-        <KpiCard label="Projected Interest" value={fmt(interest)} sub="Full tenor" color={T.gold} />
-        <KpiCard label="Avg. Yield" value={fmtPct(avgYield)} sub="Wtd. average" color={T.green} />
-        <KpiCard label="Instruments" value={investments.length} sub="Active placements" color={T.blue} />
-      </div>
-
-      <div style={{ display: "grid", gridTemplateColumns: "3fr 2fr", gap: 16, marginBottom: 16 }}>
-        <div style={{ background: T.card, border: `1px solid ${T.border}`, borderRadius: 10, padding: 20 }}>
-          <div style={{ color: T.textSecondary, fontSize: 11, fontFamily: "IBM Plex Mono, monospace", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 14 }}>Investment Maturity Ladder & Accrued Interest (₦M)</div>
-          <ResponsiveContainer width="100%" height={180}>
-            <BarChart data={maturityData}>
-              <CartesianGrid stroke={T.border} strokeDasharray="3 3" />
-              <XAxis dataKey="counterparty" tick={{ fill: T.textMuted, fontSize: 10 }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fill: T.textMuted, fontSize: 10 }} axisLine={false} tickLine={false} />
-              <Tooltip contentStyle={ChartTooltipStyle} formatter={(v) => fmt(v)} />
-              <Legend wrapperStyle={{ fontSize: 10, color: T.textSecondary }} />
-              <Bar dataKey="principal" name="Principal" fill={T.teal} radius={[0, 0, 0, 0]} stackId="a" />
-              <Bar dataKey="interest" name="Interest" fill={T.gold} radius={[4, 4, 0, 0]} stackId="a" />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-
-        <div style={{ background: T.card, border: `1px solid ${T.border}`, borderRadius: 10, padding: 20 }}>
-          <div style={{ color: T.textSecondary, fontSize: 11, fontFamily: "IBM Plex Mono, monospace", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 14 }}>Portfolio Mix</div>
+        </Card>
+        <Card>
+          <CardLabel>Debt by Facility Type</CardLabel>
           <ResponsiveContainer width="100%" height={180}>
             <PieChart>
               <Pie data={typeData} cx="50%" cy="50%" outerRadius={75} paddingAngle={3} dataKey="value">
-                {typeData.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
+                {typeData.map((_,i)=><Cell key={i} fill={PALETTE[i%PALETTE.length]}/>)}
               </Pie>
-              <Tooltip contentStyle={ChartTooltipStyle} formatter={(v) => fmt(v)} />
-              <Legend wrapperStyle={{ fontSize: 10, color: T.textSecondary }} />
+              <Tooltip contentStyle={TP} formatter={v=>fmt(v)}/>
+              <Legend wrapperStyle={{fontSize:10,color:C.t2}}/>
             </PieChart>
           </ResponsiveContainer>
-        </div>
+        </Card>
       </div>
-
-      <div style={{ background: T.card, border: `1px solid ${T.border}`, borderRadius: 10, padding: 20 }}>
-        <Table cols={cols} rows={investments} />
-      </div>
+      <Card>
+        <CardLabel>Borrowings Schedule</CardLabel>
+        <DataTable cols={cols} rows={BORROWINGS}/>
+      </Card>
     </div>
   );
 }
 
-// ─── MODULE: CASH POSITION ────────────────────────────────────────────────────
-function CashView({ cashAccounts }) {
-  const ngnAccounts = cashAccounts.filter(a => a.currency === "NGN");
-  const usdAccounts = cashAccounts.filter(a => a.currency === "USD");
-  const totalNGN = sum(ngnAccounts, "balance");
-  const totalUnrestricted = sum(ngnAccounts.filter(a => !a.restricted), "balance");
-  const totalRestricted = sum(ngnAccounts.filter(a => a.restricted), "balance");
-  const totalUSD = sum(usdAccounts, "balance");
-
-  const cols = [
-    { key: "id", label: "Account ID", mono: true, color: () => T.teal },
-    { key: "bank", label: "Bank" },
-    { key: "account", label: "Account No.", mono: true, color: () => T.textSecondary },
-    { key: "type", label: "Type", color: () => T.textSecondary },
-    { key: "currency", label: "CCY", mono: true, color: r => r.currency === "USD" ? T.gold : T.textPrimary },
-    { key: "balance", label: "Balance", align: "right", mono: true, render: r => r.currency === "USD" ? `$${r.balance.toFixed(2)}M` : fmt(r.balance), color: r => r.restricted ? T.textMuted : T.textPrimary },
-    { key: "restricted", label: "Status", render: r => <span style={{ color: r.restricted ? T.red : T.green, fontFamily: "IBM Plex Mono, monospace", fontSize: 11 }}>{r.restricted ? "🔒 Restricted" : "✓ Available"}</span> },
+// ── MODULE: INVESTMENTS ────────────────────────────────────────────────────
+function Investments() {
+  const total=sum(INVESTMENTS,"principal");
+  const interest=useMemo(()=>INVESTMENTS.reduce((a,inv)=>a+inv.principal*(inv.rate/100)*(inv.days/365),0),[]);
+  const avgYield=INVESTMENTS.reduce((a,inv)=>a+(inv.principal/total)*inv.rate,0);
+  const typeData=useMemo(()=>{const m={};INVESTMENTS.forEach(i=>{m[i.type]=(m[i.type]||0)+i.principal});return Object.entries(m).map(([name,value])=>({name,value}));},[]);
+  const matData=INVESTMENTS.map(i=>({cp:i.counterparty.split(" ")[0],principal:i.principal,interest:+(i.principal*(i.rate/100)*(i.days/365)).toFixed(2)}));
+  const cols=[
+    {key:"id",label:"ID",mono:true,color:()=>C.teal},
+    {key:"counterparty",label:"Counterparty"},
+    {key:"type",label:"Type",color:()=>C.t2},
+    {key:"principal",label:"Principal (₦M)",align:"right",mono:true,render:r=>fmt(r.principal)},
+    {key:"rate",label:"Rate",align:"right",mono:true,render:r=>`${r.rate}%`,color:()=>C.green},
+    {key:"days",label:"Tenor",align:"right",mono:true,render:r=>`${r.days}d`},
+    {key:"dateInvested",label:"Date",mono:true,color:()=>C.t2},
+    {key:"maturity",label:"Maturity",mono:true,color:()=>C.t2},
+    {key:"int",label:"Interest (₦M)",align:"right",mono:true,render:r=>fmt(r.principal*(r.rate/100)*(r.days/365)),color:()=>C.gold},
   ];
-
-  const bankData = ngnAccounts.map(a => ({ bank: a.bank.split(" ")[0], balance: a.balance, restricted: a.restricted }));
-
   return (
-    <div>
-      <SectionHeader title="Cash Position" sub="Real-time treasury balances across all accounts" />
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 12, marginBottom: 20 }}>
-        <KpiCard label="Total NGN Cash" value={fmt(totalNGN)} color={T.teal} delta={1.5} />
-        <KpiCard label="Unrestricted Cash" value={fmt(totalUnrestricted)} sub="Available for use" color={T.green} />
-        <KpiCard label="Restricted Cash" value={fmt(totalRestricted)} sub="Encumbered" color={T.red} />
-        <KpiCard label="FX Holdings (USD)" value={`$${totalUSD.toFixed(1)}M`} sub={`≈ ₦${(totalUSD * 1580).toFixed(0)}M`} color={T.gold} />
+    <div className="fade-in">
+      <SectionHead title="Investment Portfolio" sub="Treasury placements · Yield analysis"/>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:12,marginBottom:20}}>
+        <KpiCard label="Portfolio Value"  value={fmt(total)}         color={C.teal}/>
+        <KpiCard label="Projected Interest" value={fmt(interest)}   sub="Full tenor"       color={C.gold}/>
+        <KpiCard label="Avg. Yield"       value={pct(avgYield)}     sub="Weighted avg."    color={C.green}/>
+        <KpiCard label="Instruments"      value={INVESTMENTS.length} sub="Active placements" color={C.blue}/>
       </div>
+      <div style={{display:"grid",gridTemplateColumns:"3fr 2fr",gap:16,marginBottom:16}}>
+        <Card>
+          <CardLabel>Investment Maturity Ladder — Principal + Interest (₦M)</CardLabel>
+          <ResponsiveContainer width="100%" height={180}>
+            <BarChart data={matData}>
+              <CartesianGrid stroke={C.border} strokeDasharray="3 3"/>
+              <XAxis dataKey="cp" tick={{fill:C.t3,fontSize:10}} axisLine={false} tickLine={false}/>
+              <YAxis tick={{fill:C.t3,fontSize:10}} axisLine={false} tickLine={false}/>
+              <Tooltip contentStyle={TP} formatter={v=>fmt(v)}/>
+              <Legend wrapperStyle={{fontSize:10,color:C.t2}}/>
+              <Bar dataKey="principal" name="Principal" fill={C.teal}  stackId="a"/>
+              <Bar dataKey="interest"  name="Interest"  fill={C.gold}  stackId="a" radius={[4,4,0,0]}/>
+            </BarChart>
+          </ResponsiveContainer>
+        </Card>
+        <Card>
+          <CardLabel>Portfolio Mix</CardLabel>
+          <ResponsiveContainer width="100%" height={180}>
+            <PieChart>
+              <Pie data={typeData} cx="50%" cy="50%" outerRadius={75} paddingAngle={3} dataKey="value">
+                {typeData.map((_,i)=><Cell key={i} fill={PALETTE[i%PALETTE.length]}/>)}
+              </Pie>
+              <Tooltip contentStyle={TP} formatter={v=>fmt(v)}/>
+              <Legend wrapperStyle={{fontSize:10,color:C.t2}}/>
+            </PieChart>
+          </ResponsiveContainer>
+        </Card>
+      </div>
+      <Card>
+        <CardLabel>Investment Schedule</CardLabel>
+        <DataTable cols={cols} rows={INVESTMENTS}/>
+      </Card>
+    </div>
+  );
+}
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 }}>
-        <div style={{ background: T.card, border: `1px solid ${T.border}`, borderRadius: 10, padding: 20 }}>
-          <div style={{ color: T.textSecondary, fontSize: 11, fontFamily: "IBM Plex Mono, monospace", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 14 }}>Cash Trend (₦M)</div>
+// ── MODULE: CASH ───────────────────────────────────────────────────────────
+function CashPosition() {
+  const ngn=CASH.filter(a=>a.currency==="NGN");
+  const usd=CASH.filter(a=>a.currency==="USD");
+  const totalNGN=sum(ngn,"balance");
+  const unres=sum(ngn.filter(a=>!a.restricted),"balance");
+  const res=sum(ngn.filter(a=>a.restricted),"balance");
+  const totalUSD=sum(usd,"balance");
+  const bankData=ngn.map(a=>({bank:a.bank.split(" ")[0],balance:a.balance,restricted:a.restricted}));
+  const cols=[
+    {key:"id",label:"Account ID",mono:true,color:()=>C.teal},
+    {key:"bank",label:"Bank"},
+    {key:"account",label:"Account No.",mono:true,color:()=>C.t2},
+    {key:"type",label:"Type",color:()=>C.t2},
+    {key:"currency",label:"CCY",mono:true,color:r=>r.currency==="USD"?C.gold:C.t1},
+    {key:"balance",label:"Balance",align:"right",mono:true,render:r=>r.currency==="USD"?`$${r.balance.toFixed(2)}M`:fmt(r.balance)},
+    {key:"status",label:"Status",render:r=><span style={{color:r.restricted?C.red:C.green,fontFamily:"IBM Plex Mono,monospace",fontSize:11}}>{r.restricted?"🔒 Restricted":"✓ Available"}</span>},
+  ];
+  return (
+    <div className="fade-in">
+      <SectionHead title="Cash Position" sub="Real-time treasury balances across all accounts"/>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:12,marginBottom:20}}>
+        <KpiCard label="Total NGN Cash"     value={fmt(totalNGN)} color={C.teal}   delta={1.5}/>
+        <KpiCard label="Unrestricted Cash"  value={fmt(unres)}    sub="Available for use" color={C.green}/>
+        <KpiCard label="Restricted Cash"    value={fmt(res)}      sub="Encumbered"        color={C.red}/>
+        <KpiCard label="FX Holdings (USD)"  value={`$${totalUSD.toFixed(1)}M`} sub={`≈ ₦${(totalUSD*1580).toFixed(0)}M`} color={C.gold}/>
+      </div>
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16,marginBottom:16}}>
+        <Card>
+          <CardLabel>Cash Trend (₦M)</CardLabel>
           <ResponsiveContainer width="100%" height={180}>
             <AreaChart data={CASH_TREND}>
-              <defs><linearGradient id="cgt2" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor={T.teal} stopOpacity={0.25} /><stop offset="95%" stopColor={T.teal} stopOpacity={0} /></linearGradient></defs>
-              <CartesianGrid stroke={T.border} strokeDasharray="3 3" />
-              <XAxis dataKey="month" tick={{ fill: T.textMuted, fontSize: 10 }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fill: T.textMuted, fontSize: 10 }} axisLine={false} tickLine={false} />
-              <Tooltip contentStyle={ChartTooltipStyle} />
-              <Area type="monotone" dataKey="cash" stroke={T.teal} strokeWidth={2} fill="url(#cgt2)" dot={{ fill: T.teal, r: 3 }} />
+              <defs><linearGradient id="cg2" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor={C.teal} stopOpacity={0.25}/><stop offset="95%" stopColor={C.teal} stopOpacity={0}/></linearGradient></defs>
+              <CartesianGrid stroke={C.border} strokeDasharray="3 3"/>
+              <XAxis dataKey="m" tick={{fill:C.t3,fontSize:10}} axisLine={false} tickLine={false}/>
+              <YAxis tick={{fill:C.t3,fontSize:10}} axisLine={false} tickLine={false}/>
+              <Tooltip contentStyle={TP}/>
+              <Area type="monotone" dataKey="v" name="Cash" stroke={C.teal} strokeWidth={2} fill="url(#cg2)" dot={{fill:C.teal,r:3}}/>
             </AreaChart>
           </ResponsiveContainer>
-        </div>
-
-        <div style={{ background: T.card, border: `1px solid ${T.border}`, borderRadius: 10, padding: 20 }}>
-          <div style={{ color: T.textSecondary, fontSize: 11, fontFamily: "IBM Plex Mono, monospace", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 14 }}>Cash by Bank (₦M)</div>
+        </Card>
+        <Card>
+          <CardLabel>Cash by Bank (₦M)</CardLabel>
           <ResponsiveContainer width="100%" height={180}>
             <BarChart data={bankData}>
-              <CartesianGrid stroke={T.border} strokeDasharray="3 3" />
-              <XAxis dataKey="bank" tick={{ fill: T.textMuted, fontSize: 10 }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fill: T.textMuted, fontSize: 10 }} axisLine={false} tickLine={false} />
-              <Tooltip contentStyle={ChartTooltipStyle} formatter={(v) => fmt(v)} />
-              <Bar dataKey="balance" radius={[4, 4, 0, 0]}>
-                {bankData.map((d, i) => <Cell key={i} fill={d.restricted ? T.red : T.teal} />)}
+              <CartesianGrid stroke={C.border} strokeDasharray="3 3"/>
+              <XAxis dataKey="bank" tick={{fill:C.t3,fontSize:10}} axisLine={false} tickLine={false}/>
+              <YAxis tick={{fill:C.t3,fontSize:10}} axisLine={false} tickLine={false}/>
+              <Tooltip contentStyle={TP} formatter={v=>fmt(v)}/>
+              <Bar dataKey="balance" name="Balance" radius={[4,4,0,0]}>
+                {bankData.map((d,i)=><Cell key={i} fill={d.restricted?C.red:PALETTE[i%PALETTE.length]}/>)}
               </Bar>
             </BarChart>
           </ResponsiveContainer>
-        </div>
+        </Card>
       </div>
-
-      <div style={{ background: T.card, border: `1px solid ${T.border}`, borderRadius: 10, padding: 20 }}>
-        <div style={{ color: T.textSecondary, fontSize: 11, fontFamily: "IBM Plex Mono, monospace", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 14 }}>Bank Account Balances</div>
-        <Table cols={cols} rows={cashAccounts} />
-      </div>
+      <Card>
+        <CardLabel>Bank Account Balances</CardLabel>
+        <DataTable cols={cols} rows={CASH}/>
+      </Card>
     </div>
   );
 }
 
-// ─── MODULE: LIQUIDITY ────────────────────────────────────────────────────────
-function LiquidityView({ loans, borrowings, investments, cashAccounts }) {
-  const totalCash = sum(cashAccounts.filter(a => a.currency === "NGN"), "balance");
-  const totalInv = sum(investments, "principal");
-  const totalDebt = sum(borrowings, "outstanding");
-  const totalLoans = sum(loans, "outstanding");
-  const netLiq = totalCash + totalInv - totalDebt * 0.1;
-  const liqRatio = (totalCash + totalInv) / (totalDebt * 0.2 + totalLoans * 0.1) * 100;
-
-  const gapData = [
-    { period: "0-7d", inflows: 245, outflows: 180, gap: 65 },
-    { period: "8-30d", inflows: 380, outflows: 420, gap: -40 },
-    { period: "31-60d", inflows: 510, outflows: 290, gap: 220 },
-    { period: "61-90d", inflows: 180, outflows: 480, gap: -300 },
-    { period: "91-180d", inflows: 620, outflows: 210, gap: 410 },
-    { period: "181-365d", inflows: 850, outflows: 320, gap: 530 },
-  ];
+// ── MODULE: LIQUIDITY ──────────────────────────────────────────────────────
+function Liquidity() {
+  const totalCash=sum(CASH.filter(a=>a.currency==="NGN"),"balance");
+  const totalInv=sum(INVESTMENTS,"principal");
+  const totalDebt=sum(BORROWINGS,"outstanding");
+  const totalLoans=sum(LOANS,"outstanding");
+  const netLiq=totalCash+totalInv-totalDebt*0.1;
+  const liqRatio=(totalCash+totalInv)/(totalDebt*0.2+totalLoans*0.1)*100;
 
   return (
-    <div>
-      <SectionHeader title="Liquidity Management" sub="Net liquidity position · Cash flow forecast · Gap analysis" />
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 12, marginBottom: 20 }}>
-        <KpiCard label="Net Liquidity" value={fmt(netLiq)} color={T.teal} delta={2.1} />
-        <KpiCard label="Liquidity Ratio" value={fmtPct(liqRatio)} sub="Liquid assets / obligations" color={T.green} />
-        <KpiCard label="30d Cash Forecast" value={fmt(LIQUIDITY_FORECAST[1].cumulative)} sub="Projected balance" color={T.blue} />
-        <KpiCard label="90d Gap" value={fmt(LIQUIDITY_FORECAST.find(d => d.period === "90d")?.net || 0)} sub={`${LIQUIDITY_FORECAST.find(d => d.period === "90d")?.net < 0 ? "Deficit" : "Surplus"}`} color={LIQUIDITY_FORECAST.find(d => d.period === "90d")?.net < 0 ? T.red : T.green} />
+    <div className="fade-in">
+      <SectionHead title="Liquidity Management" sub="Net liquidity position · Cash flow forecast · Gap analysis"/>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:12,marginBottom:20}}>
+        <KpiCard label="Net Liquidity"    value={fmt(netLiq)}                     color={C.teal}  delta={2.1}/>
+        <KpiCard label="Liquidity Ratio"  value={pct(liqRatio)}                  sub="Liquid assets / obligations" color={C.green}/>
+        <KpiCard label="30d Forecast"     value={fmt(LIQ_FORECAST[1].cum)}       sub="Projected balance"  color={C.blue}/>
+        <KpiCard label="90d Gap"          value={fmt(LIQ_FORECAST[3].net)}       sub={LIQ_FORECAST[3].net<0?"Deficit":"Surplus"} color={LIQ_FORECAST[3].net<0?C.red:C.green}/>
       </div>
-
-      <div style={{ background: T.card, border: `1px solid ${T.border}`, borderRadius: 10, padding: 20, marginBottom: 16 }}>
-        <div style={{ color: T.textSecondary, fontSize: 11, fontFamily: "IBM Plex Mono, monospace", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 14 }}>180-Day Liquidity Forecast (₦M)</div>
-        <ResponsiveContainer width="100%" height={200}>
-          <AreaChart data={LIQUIDITY_FORECAST}>
-            <defs>
-              <linearGradient id="liqGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor={T.blue} stopOpacity={0.3} />
-                <stop offset="95%" stopColor={T.blue} stopOpacity={0} />
-              </linearGradient>
-            </defs>
-            <CartesianGrid stroke={T.border} strokeDasharray="3 3" />
-            <XAxis dataKey="period" tick={{ fill: T.textMuted, fontSize: 10 }} axisLine={false} tickLine={false} />
-            <YAxis tick={{ fill: T.textMuted, fontSize: 10 }} axisLine={false} tickLine={false} />
-            <Tooltip contentStyle={ChartTooltipStyle} formatter={(v) => fmt(v)} />
-            <Legend wrapperStyle={{ fontSize: 10, color: T.textSecondary }} />
-            <ReferenceLine y={0} stroke={T.border} strokeDasharray="4 4" />
-            <Area type="monotone" dataKey="cumulative" name="Cumulative" stroke={T.blue} strokeWidth={2} fill="url(#liqGrad)" dot={{ fill: T.blue, r: 3 }} />
-            <Bar dataKey="net" name="Net Flow" fill={T.teal} radius={[2, 2, 0, 0]} />
-          </AreaChart>
+      <Card style={{marginBottom:16}}>
+        <CardLabel>180-Day Liquidity Forecast — Net Flow & Cumulative Position (₦M)</CardLabel>
+        <ResponsiveContainer width="100%" height={220}>
+          <ComposedChart data={LIQ_FORECAST}>
+            <defs><linearGradient id="liqG" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor={C.blue} stopOpacity={0.3}/><stop offset="95%" stopColor={C.blue} stopOpacity={0}/></linearGradient></defs>
+            <CartesianGrid stroke={C.border} strokeDasharray="3 3"/>
+            <XAxis dataKey="p" tick={{fill:C.t3,fontSize:10}} axisLine={false} tickLine={false}/>
+            <YAxis tick={{fill:C.t3,fontSize:10}} axisLine={false} tickLine={false}/>
+            <Tooltip contentStyle={TP} formatter={v=>fmt(v)}/>
+            <Legend wrapperStyle={{fontSize:10,color:C.t2}}/>
+            <ReferenceLine y={0} stroke={C.border} strokeDasharray="4 4"/>
+            <Bar dataKey="net" name="Net Flow" fill={C.teal} radius={[2,2,0,0]} opacity={0.7}/>
+            <Area type="monotone" dataKey="cum" name="Cumulative" stroke={C.blue} strokeWidth={2} fill="url(#liqG)" dot={{fill:C.blue,r:3}}/>
+          </ComposedChart>
         </ResponsiveContainer>
-      </div>
-
-      <div style={{ background: T.card, border: `1px solid ${T.border}`, borderRadius: 10, padding: 20, marginBottom: 16 }}>
-        <div style={{ color: T.textSecondary, fontSize: 11, fontFamily: "IBM Plex Mono, monospace", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 14 }}>Liquidity Gap Analysis (₦M) — Inflows vs. Outflows</div>
+      </Card>
+      <Card style={{marginBottom:16}}>
+        <CardLabel>Liquidity Gap Analysis — Inflows vs. Outflows by Period (₦M)</CardLabel>
         <ResponsiveContainer width="100%" height={200}>
-          <BarChart data={gapData}>
-            <CartesianGrid stroke={T.border} strokeDasharray="3 3" />
-            <XAxis dataKey="period" tick={{ fill: T.textMuted, fontSize: 10 }} axisLine={false} tickLine={false} />
-            <YAxis tick={{ fill: T.textMuted, fontSize: 10 }} axisLine={false} tickLine={false} />
-            <Tooltip contentStyle={ChartTooltipStyle} formatter={(v) => fmt(v)} />
-            <Legend wrapperStyle={{ fontSize: 10, color: T.textSecondary }} />
-            <Bar dataKey="inflows" name="Inflows" fill={T.green} radius={[4, 4, 0, 0]} />
-            <Bar dataKey="outflows" name="Outflows" fill={T.red} radius={[4, 4, 0, 0]} />
+          <BarChart data={GAP_DATA}>
+            <CartesianGrid stroke={C.border} strokeDasharray="3 3"/>
+            <XAxis dataKey="p" tick={{fill:C.t3,fontSize:10}} axisLine={false} tickLine={false}/>
+            <YAxis tick={{fill:C.t3,fontSize:10}} axisLine={false} tickLine={false}/>
+            <Tooltip contentStyle={TP} formatter={v=>fmt(v)}/>
+            <Legend wrapperStyle={{fontSize:10,color:C.t2}}/>
+            <Bar dataKey="in"  name="Inflows"  fill={C.green} radius={[4,4,0,0]}/>
+            <Bar dataKey="out" name="Outflows" fill={C.red}   radius={[4,4,0,0]}/>
           </BarChart>
         </ResponsiveContainer>
-      </div>
-
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
-        <div style={{ background: T.card, border: `1px solid ${T.border}`, borderRadius: 10, padding: 20 }}>
-          <div style={{ color: T.textSecondary, fontSize: 11, fontFamily: "IBM Plex Mono, monospace", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 14 }}>Liquidity Sources</div>
+      </Card>
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:14}}>
+        <Card>
+          <CardLabel>Liquidity Sources</CardLabel>
           {[
-            { label: "Unrestricted Cash", value: sum(cashAccounts.filter(a => !a.restricted && a.currency === "NGN"), "balance"), color: T.teal },
-            { label: "Investment Maturities (<90d)", value: sum(investments.filter(inv => inv.days <= 90), "principal"), color: T.blue },
-            { label: "Loan Collections (est.)", value: totalLoans * 0.12, color: T.green },
-          ].map((item, i) => (
-            <div key={i} style={{ display: "flex", justifyContent: "space-between", padding: "10px 0", borderBottom: `1px solid ${T.border}30` }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <div style={{ width: 3, height: 16, background: item.color, borderRadius: 2 }} />
-                <span style={{ color: T.textSecondary, fontSize: 12 }}>{item.label}</span>
+            {label:"Unrestricted Cash",value:sum(CASH.filter(a=>!a.restricted&&a.currency==="NGN"),"balance"),color:C.teal},
+            {label:"Investment Maturities (<90d)",value:sum(INVESTMENTS.filter(i=>i.days<=90),"principal"),color:C.blue},
+            {label:"Loan Collections (est.)",value:totalLoans*0.12,color:C.green},
+          ].map((item,i)=>(
+            <div key={i} style={{display:"flex",justifyContent:"space-between",padding:"10px 0",borderBottom:`1px solid ${C.border}30`}}>
+              <div style={{display:"flex",alignItems:"center",gap:8}}>
+                <div style={{width:3,height:16,background:item.color,borderRadius:2}}/>
+                <span style={{color:C.t2,fontSize:12}}>{item.label}</span>
               </div>
-              <span style={{ color: item.color, fontFamily: "IBM Plex Mono, monospace", fontSize: 13, fontWeight: 600 }}>{fmt(item.value)}</span>
+              <span style={{color:item.color,fontFamily:"IBM Plex Mono,monospace",fontSize:13,fontWeight:600}}>{fmt(item.value)}</span>
             </div>
           ))}
-        </div>
-
-        <div style={{ background: T.card, border: `1px solid ${T.border}`, borderRadius: 10, padding: 20 }}>
-          <div style={{ color: T.textSecondary, fontSize: 11, fontFamily: "IBM Plex Mono, monospace", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 14 }}>Liquidity Obligations</div>
+        </Card>
+        <Card>
+          <CardLabel>Liquidity Obligations</CardLabel>
           {[
-            { label: "Debt Due (<90d)", value: sum(borrowings.filter(b => b.outstanding > 0 && b.type !== "Intercompany Loan"), "outstanding") * 0.15, color: T.red },
-            { label: "Operational Expenses", value: 45, color: T.gold },
-            { label: "Funding Commitments", value: 120, color: T.purple },
-          ].map((item, i) => (
-            <div key={i} style={{ display: "flex", justifyContent: "space-between", padding: "10px 0", borderBottom: `1px solid ${T.border}30` }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <div style={{ width: 3, height: 16, background: item.color, borderRadius: 2 }} />
-                <span style={{ color: T.textSecondary, fontSize: 12 }}>{item.label}</span>
+            {label:"Debt Due (<90d)",value:sum(BORROWINGS.filter(b=>b.type!=="Intercompany Loan"),"outstanding")*0.15,color:C.red},
+            {label:"Operational Expenses",value:45,color:C.gold},
+            {label:"Funding Commitments",value:120,color:C.purple},
+          ].map((item,i)=>(
+            <div key={i} style={{display:"flex",justifyContent:"space-between",padding:"10px 0",borderBottom:`1px solid ${C.border}30`}}>
+              <div style={{display:"flex",alignItems:"center",gap:8}}>
+                <div style={{width:3,height:16,background:item.color,borderRadius:2}}/>
+                <span style={{color:C.t2,fontSize:12}}>{item.label}</span>
               </div>
-              <span style={{ color: item.color, fontFamily: "IBM Plex Mono, monospace", fontSize: 13, fontWeight: 600 }}>{fmt(item.value)}</span>
+              <span style={{color:item.color,fontFamily:"IBM Plex Mono,monospace",fontSize:13,fontWeight:600}}>{fmt(item.value)}</span>
             </div>
           ))}
-        </div>
+        </Card>
       </div>
     </div>
   );
 }
 
-// ─── UPLOAD MODAL ─────────────────────────────────────────────────────────────
-function UploadModal({ onClose, module }) {
-  const [step, setStep] = useState("idle");
-  const [rows, setRows] = useState([]);
-
-  const handleFile = useCallback((e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+// ── UPLOAD MODAL ───────────────────────────────────────────────────────────
+function UploadModal({onClose,module}) {
+  const [step,setStep]=useState("idle");
+  const [rows,setRows]=useState([]);
+  const handleFile=useCallback(e=>{
+    if(!e.target.files[0]) return;
     setStep("validating");
-    setTimeout(() => {
+    setTimeout(()=>{
       setRows([
-        { status: "✓", row: 1, data: "Sample row validated" },
-        { status: "✓", row: 2, data: "Sample row validated" },
-        { status: "⚠", row: 3, data: "Warning: Rate field missing — defaulted to 0%" },
+        {s:"✓",r:1,d:"Row validated successfully"},
+        {s:"✓",r:2,d:"Row validated successfully"},
+        {s:"⚠",r:3,d:"Warning: Rate field missing — defaulted to 0%"},
       ]);
       setStep("preview");
-    }, 1200);
-  }, []);
-
+    },1100);
+  },[]);
   return (
-    <div style={{ position: "fixed", inset: 0, background: "#000a", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center" }}>
-      <div style={{ background: T.card, border: `1px solid ${T.border}`, borderRadius: 14, padding: 28, width: 480, boxShadow: "0 24px 64px #0008" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+    <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.7)",zIndex:200,display:"flex",alignItems:"center",justifyContent:"center"}}>
+      <div style={{background:C.card,border:`1px solid ${C.borderL}`,borderRadius:14,padding:28,width:460,boxShadow:"0 24px 64px rgba(0,0,0,0.5)"}}>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:20}}>
           <div>
-            <div style={{ color: T.textPrimary, fontWeight: 700, fontSize: 15 }}>Upload {module}</div>
-            <div style={{ color: T.textMuted, fontSize: 11, fontFamily: "IBM Plex Mono, monospace", marginTop: 2 }}>CSV / Excel (.xlsx) supported</div>
+            <div style={{color:C.t1,fontWeight:700,fontSize:15}}>Upload {module}</div>
+            <div style={{color:C.t3,fontSize:11,fontFamily:"IBM Plex Mono,monospace",marginTop:2}}>CSV / Excel (.xlsx) supported</div>
           </div>
-          <button onClick={onClose} style={{ background: "transparent", border: "none", color: T.textMuted, cursor: "pointer", fontSize: 20 }}>✕</button>
+          <button onClick={onClose} style={{background:"transparent",border:"none",color:C.t2,cursor:"pointer",fontSize:20,lineHeight:1}}>✕</button>
         </div>
-
-        {step === "idle" && (
-          <label style={{ display: "block", border: `2px dashed ${T.borderLight}`, borderRadius: 10, padding: 32, textAlign: "center", cursor: "pointer", transition: "border-color 0.2s" }}
-            onMouseEnter={e => e.currentTarget.style.borderColor = T.teal}
-            onMouseLeave={e => e.currentTarget.style.borderColor = T.borderLight}>
-            <div style={{ fontSize: 32, marginBottom: 8 }}>📂</div>
-            <div style={{ color: T.textPrimary, fontSize: 13, marginBottom: 4 }}>Drop file or click to browse</div>
-            <div style={{ color: T.textMuted, fontSize: 11 }}>Max 5MB · CSV or XLSX</div>
-            <input type="file" accept=".csv,.xlsx" onChange={handleFile} style={{ display: "none" }} />
+        {step==="idle" && (
+          <label className="upload-zone" style={{display:"block",border:`2px dashed ${C.border}`,borderRadius:10,padding:32,textAlign:"center",cursor:"pointer",transition:"border-color 0.2s"}}>
+            <div style={{fontSize:36,marginBottom:10}}>📂</div>
+            <div style={{color:C.t1,fontSize:13,marginBottom:4}}>Drop file or click to browse</div>
+            <div style={{color:C.t3,fontSize:11}}>Max 5MB · CSV or XLSX</div>
+            <input type="file" accept=".csv,.xlsx" onChange={handleFile} style={{display:"none"}}/>
           </label>
         )}
-
-        {step === "validating" && (
-          <div style={{ textAlign: "center", padding: 32 }}>
-            <div style={{ color: T.teal, fontSize: 24, marginBottom: 8 }}>⟳</div>
-            <div style={{ color: T.textSecondary, fontSize: 13 }}>Validating and parsing data...</div>
+        {step==="validating" && (
+          <div style={{textAlign:"center",padding:36}}>
+            <div style={{color:C.teal,fontSize:28,marginBottom:10}}>⟳</div>
+            <div style={{color:C.t2,fontSize:13}}>Validating and parsing data…</div>
           </div>
         )}
-
-        {step === "preview" && (
+        {step==="preview" && (
           <div>
-            <div style={{ background: T.navy, borderRadius: 8, padding: 16, marginBottom: 16, maxHeight: 160, overflowY: "auto" }}>
-              {rows.map((r, i) => (
-                <div key={i} style={{ display: "flex", gap: 12, padding: "4px 0", borderBottom: `1px solid ${T.border}30`, fontSize: 11 }}>
-                  <span style={{ color: r.status === "✓" ? T.green : T.gold, fontFamily: "IBM Plex Mono, monospace" }}>{r.status}</span>
-                  <span style={{ color: T.textMuted, fontFamily: "IBM Plex Mono, monospace" }}>Row {r.row}</span>
-                  <span style={{ color: T.textSecondary }}>{r.data}</span>
+            <div style={{background:C.navy,borderRadius:8,padding:16,marginBottom:16,maxHeight:160,overflowY:"auto"}}>
+              {rows.map((r,i)=>(
+                <div key={i} style={{display:"flex",gap:12,padding:"5px 0",borderBottom:`1px solid ${C.border}20`,fontSize:11}}>
+                  <span style={{color:r.s==="✓"?C.green:C.gold,fontFamily:"IBM Plex Mono,monospace"}}>{r.s}</span>
+                  <span style={{color:C.t3,fontFamily:"IBM Plex Mono,monospace"}}>Row {r.r}</span>
+                  <span style={{color:C.t2}}>{r.d}</span>
                 </div>
               ))}
             </div>
-            <button onClick={() => { setStep("done"); setTimeout(onClose, 1500); }}
-              style={{ width: "100%", background: T.teal, color: "#000", border: "none", borderRadius: 8, padding: "10px 0", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: "IBM Plex Mono, monospace" }}>
-              Confirm Import
-            </button>
+            <button onClick={()=>{setStep("done");setTimeout(onClose,1500);}} style={{width:"100%",background:C.teal,color:"#000",border:"none",borderRadius:8,padding:"10px 0",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"IBM Plex Mono,monospace"}}>Confirm Import</button>
           </div>
         )}
-
-        {step === "done" && (
-          <div style={{ textAlign: "center", padding: 24 }}>
-            <div style={{ fontSize: 32, marginBottom: 8 }}>✅</div>
-            <div style={{ color: T.green, fontSize: 13 }}>Data imported successfully</div>
+        {step==="done" && (
+          <div style={{textAlign:"center",padding:28}}>
+            <div style={{fontSize:36,marginBottom:10}}>✅</div>
+            <div style={{color:C.green,fontSize:13}}>Data imported successfully</div>
           </div>
         )}
       </div>
@@ -945,96 +824,84 @@ function UploadModal({ onClose, module }) {
   );
 }
 
-// ─── ROOT APP ─────────────────────────────────────────────────────────────────
-export default function App() {
-  const [activeTab, setActiveTab] = useState("dashboard");
-  const [showUpload, setShowUpload] = useState(false);
-  const [uploadModule, setUploadModule] = useState("");
+// ── ROOT APP ───────────────────────────────────────────────────────────────
+const TABS = [
+  {id:"dashboard", label:"Dashboard",   icon:"▣"},
+  {id:"loans",     label:"Loans",       icon:"🏦"},
+  {id:"ecl",       label:"ECL Model",   icon:"⚡"},
+  {id:"borrowings",label:"Borrowings",  icon:"↕"},
+  {id:"investments",label:"Investments",icon:"📈"},
+  {id:"cash",      label:"Cash",        icon:"💵"},
+  {id:"liquidity", label:"Liquidity",   icon:"💧"},
+];
+const UPLOAD_MAP={loans:"Loan Portfolio",borrowings:"Borrowings",investments:"Investment Portfolio",cash:"Cash Balances"};
+const eclSummary=calcECL(LOANS);
 
-  const tabs = [
-    { id: "dashboard", label: "Dashboard", icon: "▣" },
-    { id: "loans", label: "Loans", icon: "🏦" },
-    { id: "ecl", label: "ECL Model", icon: "⚡" },
-    { id: "borrowings", label: "Borrowings", icon: "↕" },
-    { id: "investments", label: "Investments", icon: "📈" },
-    { id: "cash", label: "Cash", icon: "💵" },
-    { id: "liquidity", label: "Liquidity", icon: "💧" },
-  ];
-
-  const uploadMap = { loans: "Loan Portfolio", borrowings: "Borrowings", investments: "Investment Portfolio", cash: "Cash Balances" };
+function App() {
+  const [tab,setTab]=useState("dashboard");
+  const [upload,setUpload]=useState(null);
 
   return (
-    <div style={{ minHeight: "100vh", background: T.navy, fontFamily: "'Syne', 'IBM Plex Mono', sans-serif", color: T.textPrimary }}>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        ::-webkit-scrollbar { width: 4px; height: 4px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #1a2e4a; border-radius: 2px; }
-        input[type=range] { height: 4px; border-radius: 2px; }
-      `}</style>
-
-      {/* TOP NAVIGATION */}
-      <div style={{ borderBottom: `1px solid ${T.border}`, background: T.card, padding: "0 28px", display: "flex", alignItems: "center", justifyContent: "space-between", height: 56, position: "sticky", top: 0, zIndex: 50 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          <div style={{ width: 30, height: 30, borderRadius: 8, background: `linear-gradient(135deg, ${T.teal}, ${T.blue})`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, fontWeight: 800 }}>⬡</div>
+    <div style={{minHeight:"100vh",background:C.navy,fontFamily:"'Syne','IBM Plex Mono',sans-serif",color:C.t1,paddingBottom:52}}>
+      {/* NAV */}
+      <div style={{borderBottom:`1px solid ${C.border}`,background:C.card,padding:"0 24px",display:"flex",alignItems:"center",justifyContent:"space-between",height:56,position:"sticky",top:0,zIndex:100}}>
+        <div style={{display:"flex",alignItems:"center",gap:10,minWidth:200}}>
+          <div style={{width:30,height:30,borderRadius:8,background:`linear-gradient(135deg,${C.teal},${C.blue})`,display:"flex",alignItems:"center",justifyContent:"center",fontWeight:800,fontSize:15}}>⬡</div>
           <div>
-            <div style={{ color: T.textPrimary, fontWeight: 800, fontSize: 13, letterSpacing: "-0.01em" }}>FSCF Treasury Intelligence</div>
-            <div style={{ color: T.textMuted, fontSize: 9, fontFamily: "IBM Plex Mono, monospace", letterSpacing: "0.06em" }}>FACTORING & SUPPLY CHAIN FINANCE LTD</div>
+            <div style={{color:C.t1,fontWeight:800,fontSize:12,letterSpacing:"-0.01em"}}>FSCF Treasury Intelligence</div>
+            <div style={{color:C.t3,fontSize:9,fontFamily:"IBM Plex Mono,monospace",letterSpacing:"0.05em"}}>FACTORING & SUPPLY CHAIN FINANCE LTD</div>
           </div>
         </div>
-
-        <div style={{ display: "flex", gap: 2 }}>
-          {tabs.map(t => (
-            <button key={t.id} onClick={() => setActiveTab(t.id)}
-              style={{ background: activeTab === t.id ? `${T.teal}15` : "transparent", color: activeTab === t.id ? T.teal : T.textSecondary, border: activeTab === t.id ? `1px solid ${T.teal}30` : "1px solid transparent", borderRadius: 6, padding: "6px 12px", fontSize: 11, cursor: "pointer", fontFamily: "IBM Plex Mono, monospace", fontWeight: activeTab === t.id ? 600 : 400, transition: "all 0.15s", whiteSpace: "nowrap" }}>
+        <div style={{display:"flex",gap:2,flexWrap:"wrap",justifyContent:"center"}}>
+          {TABS.map(t=>(
+            <button key={t.id} className="nav-btn" onClick={()=>setTab(t.id)} style={{background:tab===t.id?`${C.teal}18`:"transparent",color:tab===t.id?C.teal:C.t2,border:`1px solid ${tab===t.id?C.teal+"44":"transparent"}`,borderRadius:6,padding:"5px 11px",fontSize:11,cursor:"pointer",fontFamily:"IBM Plex Mono,monospace",fontWeight:tab===t.id?600:400,transition:"all 0.15s",whiteSpace:"nowrap"}}>
               {t.icon} {t.label}
             </button>
           ))}
         </div>
-
-        <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-          {uploadMap[activeTab] && (
-            <button onClick={() => { setUploadModule(uploadMap[activeTab]); setShowUpload(true); }}
-              style={{ background: T.teal, color: "#000", border: "none", borderRadius: 6, padding: "6px 14px", fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: "IBM Plex Mono, monospace" }}>
-              ↑ Upload
-            </button>
+        <div style={{display:"flex",gap:8,alignItems:"center",minWidth:200,justifyContent:"flex-end"}}>
+          {UPLOAD_MAP[tab] && (
+            <button onClick={()=>setUpload(UPLOAD_MAP[tab])} style={{background:C.teal,color:"#000",border:"none",borderRadius:6,padding:"5px 12px",fontSize:11,fontWeight:700,cursor:"pointer",fontFamily:"IBM Plex Mono,monospace"}}>↑ Upload</button>
           )}
-          <div style={{ background: T.navy, borderRadius: 6, padding: "5px 10px", fontSize: 10, fontFamily: "IBM Plex Mono, monospace", color: T.textMuted, border: `1px solid ${T.border}` }}>
-            01 Jun 2024 · 09:41 WAT
-          </div>
-          <div style={{ width: 30, height: 30, borderRadius: "50%", background: `linear-gradient(135deg, ${T.purple}, ${T.blue})`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 700, cursor: "pointer" }}>F</div>
+          <div style={{background:C.navy,borderRadius:6,padding:"4px 8px",fontSize:9,fontFamily:"IBM Plex Mono,monospace",color:C.t3,border:`1px solid ${C.border}`}}>01 Jun 2024 · WAT</div>
+          <div style={{width:28,height:28,borderRadius:"50%",background:`linear-gradient(135deg,${C.purple},${C.blue})`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,fontWeight:700,cursor:"pointer"}}>F</div>
         </div>
       </div>
 
-      {/* MAIN CONTENT */}
-      <div style={{ padding: 28, maxWidth: 1400, margin: "0 auto" }}>
-        {activeTab === "dashboard" && <DashboardView loans={LOANS} borrowings={BORROWINGS} investments={INVESTMENTS} cashAccounts={CASH_ACCOUNTS} />}
-        {activeTab === "loans" && <LoanPortfolioView loans={LOANS} />}
-        {activeTab === "ecl" && <ECLModelView loans={LOANS} />}
-        {activeTab === "borrowings" && <BorrowingsView borrowings={BORROWINGS} />}
-        {activeTab === "investments" && <InvestmentsView investments={INVESTMENTS} />}
-        {activeTab === "cash" && <CashView cashAccounts={CASH_ACCOUNTS} />}
-        {activeTab === "liquidity" && <LiquidityView loans={LOANS} borrowings={BORROWINGS} investments={INVESTMENTS} cashAccounts={CASH_ACCOUNTS} />}
+      {/* CONTENT */}
+      <div style={{padding:24,maxWidth:1400,margin:"0 auto"}}>
+        {tab==="dashboard"   && <Dashboard/>}
+        {tab==="loans"       && <Loans/>}
+        {tab==="ecl"         && <ECLModule/>}
+        {tab==="borrowings"  && <Borrowings/>}
+        {tab==="investments" && <Investments/>}
+        {tab==="cash"        && <CashPosition/>}
+        {tab==="liquidity"   && <Liquidity/>}
       </div>
 
       {/* STATUS BAR */}
-      <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: T.card, borderTop: `1px solid ${T.border}`, padding: "6px 28px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <div style={{ display: "flex", gap: 20 }}>
-          {[["Loans", fmt(sum(LOANS, "outstanding")), T.teal], ["ECL", fmt(sum(calcECL(LOANS), "ecl")), T.gold], ["Debt", fmt(sum(BORROWINGS, "outstanding")), T.purple], ["Cash", fmt(sum(CASH_ACCOUNTS.filter(a => a.currency === "NGN"), "balance")), T.green]].map(([l, v, c]) => (
-            <div key={l} style={{ display: "flex", gap: 6, alignItems: "center" }}>
-              <span style={{ color: T.textMuted, fontSize: 9, fontFamily: "IBM Plex Mono, monospace", textTransform: "uppercase" }}>{l}:</span>
-              <span style={{ color: c, fontSize: 10, fontFamily: "IBM Plex Mono, monospace", fontWeight: 600 }}>{v}</span>
+      <div style={{position:"fixed",bottom:0,left:0,right:0,background:C.card,borderTop:`1px solid ${C.border}`,padding:"5px 24px",display:"flex",justifyContent:"space-between",alignItems:"center",height:36,zIndex:100}}>
+        <div style={{display:"flex",gap:20}}>
+          {[["LOANS",sum(LOANS,"outstanding"),C.teal],["ECL",sum(eclSummary,"ecl"),C.gold],["DEBT",sum(BORROWINGS,"outstanding"),C.purple],["CASH",sum(CASH.filter(a=>a.currency==="NGN"),"balance"),C.green]].map(([l,v,col])=>(
+            <div key={l} style={{display:"flex",gap:5,alignItems:"center"}}>
+              <span style={{color:C.t3,fontSize:9,fontFamily:"IBM Plex Mono,monospace"}}>{l}:</span>
+              <span style={{color:col,fontSize:10,fontFamily:"IBM Plex Mono,monospace",fontWeight:600}}>{fmt(v)}</span>
             </div>
           ))}
         </div>
-        <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
-          <div style={{ width: 6, height: 6, borderRadius: "50%", background: T.green, animation: "pulse 2s infinite" }} />
-          <span style={{ color: T.textMuted, fontSize: 9, fontFamily: "IBM Plex Mono, monospace" }}>LIVE · CBN-licensed · IFRS 9 compliant</span>
+        <div style={{display:"flex",gap:6,alignItems:"center"}}>
+          <div style={{width:6,height:6,borderRadius:"50%",background:C.green,animation:"pulse 2s infinite"}}/>
+          <span style={{color:C.t3,fontSize:9,fontFamily:"IBM Plex Mono,monospace"}}>LIVE DATA · CBN-licensed · IFRS 9 compliant</span>
         </div>
       </div>
 
-      {showUpload && <UploadModal onClose={() => setShowUpload(false)} module={uploadModule} />}
+      {upload && <UploadModal onClose={()=>setUpload(null)} module={upload}/>}
     </div>
   );
 }
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(React.createElement(App));
+</script>
+</body>
+</html>
