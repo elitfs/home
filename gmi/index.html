@@ -199,7 +199,8 @@ footer{background:var(--n2);border-top:1px solid var(--b);padding:1.25rem 2rem;d
 :focus-visible{outline:2px solid var(--t);outline-offset:2px;border-radius:4px}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms !important;transition-duration:.01ms !important}#_tt{animation:none}}
 @media(max-width:960px){._g5{grid-template-columns:repeat(3,1fr)}._g4{grid-template-columns:repeat(2,1fr)}._g3{grid-template-columns:repeat(2,1fr)}._hg{grid-template-columns:repeat(4,1fr)}}
-@media(max-width:600px){._pg{padding:1rem}._ga,._g2,._g3,._g4,._g5{grid-template-columns:1fr 1fr}._hg{grid-template-columns:repeat(3,1fr)}._fg{grid-template-columns:1fr}}
+@media(max-width:768px){.stock-split{grid-template-columns:1fr !important}}
+@media(max-width:600px){._pg{padding:1rem}._ga,._g2,._g3,._g4,._g5{grid-template-columns:1fr 1fr}._hg{grid-template-columns:repeat(3,1fr)}._fg{grid-template-columns:1fr}.stock-split{grid-template-columns:1fr !important}}
 </style>
 </head>
 <body>
@@ -256,24 +257,43 @@ footer{background:var(--n2);border-top:1px solid var(--b);padding:1.25rem 2rem;d
   <div id="_spm" aria-label="S&P 500 heatmap by sector"></div>
 
   <div class="_sep"></div>
-  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:.5rem">
-    <div class="_sh gl" style="margin:0">Top Stock Ticker — Signal View</div>
-    <div style="display:flex;gap:6px">
-      <select class="_finput _fsel" id="_sflt" style="width:auto;padding:6px 30px 6px 10px;font-size:11px" onchange="window._bst()">
-        <option value="all">All Signals</option>
-        <option value="strong-buy">Strong Buy</option>
-        <option value="buy">Buy</option>
-        <option value="neutral">Neutral</option>
-        <option value="sell">Sell</option>
-        <option value="strong-sell">Strong Sell</option>
-      </select>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;align-items:start" class="stock-split">
+
+    <!-- LEFT: US/Global Stock Ticker -->
+    <div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;flex-wrap:wrap;gap:.5rem">
+        <div class="_sh gl" style="margin:0">Top Stocks — Signal View</div>
+        <select class="_finput _fsel" id="_sflt" style="width:auto;padding:5px 28px 5px 9px;font-size:10px" onchange="window._bst()">
+          <option value="all">All Signals</option>
+          <option value="strong-buy">Strong Buy</option>
+          <option value="buy">Buy</option>
+          <option value="neutral">Neutral</option>
+          <option value="sell">Sell</option>
+          <option value="strong-sell">Strong Sell</option>
+        </select>
+      </div>
+      <div class="_twp">
+        <table aria-label="Top stocks with trading signals">
+          <thead><tr><th>Ticker</th><th>Last</th><th>Chg</th><th>%</th><th>Vol</th><th>Signal</th></tr></thead>
+          <tbody id="_stb"></tbody>
+        </table>
+      </div>
     </div>
-  </div>
-  <div class="_twp">
-    <table aria-label="Top stocks with trading signals">
-      <thead><tr><th>Ticker</th><th>Name</th><th>Last</th><th>Change</th><th>% Chg</th><th>Volume</th><th>Signal</th></tr></thead>
-      <tbody id="_stb"></tbody>
-    </table>
+
+    <!-- RIGHT: NGX Nigerian Stocks -->
+    <div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;flex-wrap:wrap;gap:.5rem">
+        <div class="_sh af" style="margin:0">NGX Top Stocks <span class="_sb dl" style="font-size:8px">NSE</span></div>
+        <div style="font-size:9px;font-family:var(--mo);color:var(--tx3)">Nigerian Exchange</div>
+      </div>
+      <div class="_twp">
+        <table aria-label="NGX top Nigerian stocks">
+          <thead><tr><th>Ticker</th><th>Price (₦)</th><th>Chg</th><th>%</th><th>Vol</th><th>Signal</th></tr></thead>
+          <tbody id="_ngxtb"></tbody>
+        </table>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -300,7 +320,7 @@ footer{background:var(--n2);border-top:1px solid var(--b);padding:1.25rem 2rem;d
   <div class="_sep"></div>
   <div class="_sh fx" style="margin-bottom:1rem">Historical Currency Lookup <span class="_sb of">Free API</span></div>
   <div class="_pan">
-    <div class="_ph2"><div><div class="_pt2">Check Any Currency Pair on Any Date</div><div class="_ps2">Powered by open.er-api.com — free historical data from 1990s</div></div></div>
+    <div class="_ph2"><div><div class="_pt2">Check Any Currency Pair on Any Date</div><div class="_ps2">Powered by frankfurter.app — free historical data, full CORS support</div></div></div>
     <div class="_ni">Select a base currency, target currency, and date to retrieve the exact exchange rate on that day.</div>
     <div class="_fg" style="align-items:flex-end">
       <div class="_fld"><label class="_flbl" for="_hbase">Base Currency</label>
@@ -484,11 +504,27 @@ var _STOCKS=[
   {sym:'KO',name:'Coca-Cola Co',price:72.14,chg:-0.14,pct:-0.19,vol:18200000,sig:'neutral'},
   {sym:'ADBE',name:'Adobe Inc',price:384.28,chg:-4.34,pct:-1.12,vol:4800000,sig:'sell'},
 ];
-var _FXP=[
+var _NGX=[
+  {sym:'MTNN',   name:'MTN Nigeria',      price:605.00, chg:+15.00,pct:+2.54,vol:12840000,sig:'buy',    sec:'Telecom'},
+  {sym:'DANGCEM',name:'Dangote Cement',   price:942.00, chg:-8.00, pct:-0.84,vol:4320000, sig:'neutral', sec:'Industry'},
+  {sym:'ZENITH', name:'Zenith Bank',      price:64.90,  chg:+2.10, pct:+3.34,vol:38200000,sig:'strong-buy',sec:'Banking'},
+  {sym:'AIRTEL', name:'Airtel Nigeria',   price:2140.00,chg:+30.00,pct:+1.42,vol:2100000, sig:'buy',    sec:'Telecom'},
+  {sym:'GTCO',   name:'GTCO Plc',         price:72.15,  chg:+1.95, pct:+2.78,vol:29400000,sig:'buy',    sec:'Banking'},
+  {sym:'BUAFOOD',name:'BUA Foods',        price:388.00, chg:-4.00, pct:-1.02,vol:6800000, sig:'neutral', sec:'Consumer'},
+  {sym:'SEPLAT', name:'Seplat Energy',    price:5100.00,chg:+120.0,pct:+2.41,vol:880000,  sig:'buy',    sec:'Oil & Gas'},
+  {sym:'FBNH',   name:'FBN Holdings',     price:35.80,  chg:+0.85, pct:+2.43,vol:44600000,sig:'buy',    sec:'Banking'},
+  {sym:'ACCESS', name:'Access Holdings',  price:28.40,  chg:+0.60, pct:+2.16,vol:52400000,sig:'buy',    sec:'Banking'},
+  {sym:'UBA',    name:'United Bank Africa',price:31.50, chg:+0.50, pct:+1.61,vol:36800000,sig:'buy',    sec:'Banking'},
+  {sym:'DANGSUGAR',name:'Dangote Sugar',  price:58.20,  chg:-1.20, pct:-2.02,vol:8400000, sig:'sell',   sec:'Consumer'},
+  {sym:'NESTLE', name:'Nestlé Nigeria',   price:1490.00,chg:+20.00,pct:+1.36,vol:480000,  sig:'neutral', sec:'Consumer'},
+];
+
   {f:'USD',t:'NGN',fl1:'🇺🇸',fl2:'🇳🇬',rate:1598.50,chg:+2.30, pct:+0.14,rng:[1550,1650],isN:true},
   {f:'EUR',t:'NGN',fl1:'🇪🇺',fl2:'🇳🇬',rate:1742.80,chg:-5.20, pct:-0.30,rng:[1700,1800],isN:true},
   {f:'GBP',t:'NGN',fl1:'🇬🇧',fl2:'🇳🇬',rate:2034.60,chg:+8.40, pct:+0.41,rng:[1980,2080],isN:true},
   {f:'CNY',t:'NGN',fl1:'🇨🇳',fl2:'🇳🇬',rate:220.40, chg:+0.80, pct:+0.36,rng:[210,230],  isN:true},
+  {f:'CAD',t:'NGN',fl1:'🇨🇦',fl2:'🇳🇬',rate:1172.40,chg:+3.20, pct:+0.27,rng:[1120,1220],isN:true},
+  {f:'RUB',t:'NGN',fl1:'🇷🇺',fl2:'🇳🇬',rate:17.84,  chg:-0.12, pct:-0.67,rng:[15,21],    isN:true},
   {f:'EUR',t:'USD',fl1:'🇪🇺',fl2:'🇺🇸',rate:1.0906, chg:-0.0012,pct:-0.11,rng:[1.07,1.12],isN:false},
   {f:'GBP',t:'USD',fl1:'🇬🇧',fl2:'🇺🇸',rate:1.2722, chg:+0.0034,pct:+0.27,rng:[1.24,1.30],isN:false},
   {f:'USD',t:'JPY',fl1:'🇺🇸',fl2:'🇯🇵',rate:157.42, chg:-0.28, pct:-0.18,rng:[153,162],  isN:false},
@@ -539,7 +575,7 @@ var _FIT=[
 var _YHMAP={dow:'%5EDJI',ndx:'%5EIXIC',sp500:'%5EGSPC',ftse:'%5EFTSE',dax:'%5EGDAXI',nky:'%5EN225',sse:'000001.SS',snsx:'%5EBSESN',ngx:'%5ENGSEINDX',jse:'%5EJ203.JO',egx:'%5EEGX30'};
 var _CG_IDS='bitcoin,ethereum,binancecoin,ripple,solana,tether,cardano,avalanche-2,dogecoin,chainlink';
 var _CG_MAP={bitcoin:'BTC',ethereum:'ETH',binancecoin:'BNB',ripple:'XRP',solana:'SOL',tether:'USDT',cardano:'ADA','avalanche-2':'AVAX',dogecoin:'DOGE',chainlink:'LINK'};
-var _px='https://api.allorigins.win/get?url=';
+var _px='https://corsproxy.io/?url=';
 
 function _upd(){var e=_$('_ts');if(e)e.textContent='Updated: '+new Date().toLocaleString('en-GB',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',hour12:false})+' WAT';}
 function _sts(id,st){var e=_$('_as1');if(!e)return;var m={live:'● Live',loading:'◌ Fetching…',fallback:'○ Cached'};var c={live:'var(--gr)',loading:'var(--am)',fallback:'var(--tx3)'};e.textContent=m[st]||m.fallback;e.style.color=c[st]||c.fallback;}
@@ -601,10 +637,37 @@ function _bst(){
   var mx=Math.max.apply(null,rows.map(function(r){return r.vol;}));
   e.innerHTML=rows.map(function(s){
     var c=_cc(s.pct);
-    var bw=Math.round((s.vol/mx)*60);
+    var bw=Math.round((s.vol/mx)*40);
     var sgcls=s.sig;
-    var sglab={'strong-buy':'Strong Buy','buy':'Buy','neutral':'Neutral','sell':'Sell','strong-sell':'Strong Sell'}[s.sig]||s.sig;
-    return'<tr onclick="window._sd(\''+s.sym+'\',\''+s.name+'\')" aria-label="'+s.name+'"><td><div class="_tn2">'+s.sym+'</div><div class="_ts2">'+s.name+'</div></td><td>'+_fN(s.price,2)+'</td><td><span class="_cp '+c+'">'+_cs(s.chg)+_fN(Math.abs(s.chg),2)+'</span></td><td><span class="_cp '+c+'">'+_cs(s.pct)+Math.abs(s.pct).toFixed(2)+'%</span></td><td>'+_fNK(s.vol)+'<span class="_vb" style="width:'+bw+'px" aria-hidden="true"></span></td><td><span class="_sg '+sgcls+'">'+sglab+'</span></td></tr>';
+    var sglab={'strong-buy':'↑↑ S.Buy','buy':'↑ Buy','neutral':'— Hold','sell':'↓ Sell','strong-sell':'↓↓ S.Sell'}[s.sig]||s.sig;
+    return'<tr onclick="window._sd(\''+s.sym+'\',\''+s.name+'\')" aria-label="'+s.name+'">'
+      +'<td><div class="_tn2" style="font-size:11px">'+s.sym+'</div></td>'
+      +'<td>'+_fN(s.price,2)+'</td>'
+      +'<td><span class="_cp '+c+'" style="font-size:9px;padding:1px 5px">'+_cs(s.chg)+_fN(Math.abs(s.chg),2)+'</span></td>'
+      +'<td><span class="_cp '+c+'" style="font-size:9px;padding:1px 5px">'+_cs(s.pct)+Math.abs(s.pct).toFixed(2)+'%</span></td>'
+      +'<td style="font-size:10px">'+_fNK(s.vol)+'<span class="_vb" style="width:'+bw+'px" aria-hidden="true"></span></td>'
+      +'<td><span class="_sg '+sgcls+'" style="font-size:8px;padding:2px 6px">'+sglab+'</span></td>'
+      +'</tr>';
+  }).join('');
+}
+
+function _bngxtb(){
+  var e=_$('_ngxtb');if(!e)return;
+  var mx=Math.max.apply(null,_NGX.map(function(r){return r.vol;}));
+  e.innerHTML=_NGX.map(function(s){
+    var c=_cc(s.pct);
+    var bw=Math.round((s.vol/mx)*40);
+    var sgcls=s.sig;
+    var sglab={'strong-buy':'↑↑ S.Buy','buy':'↑ Buy','neutral':'— Hold','sell':'↓ Sell','strong-sell':'↓↓ S.Sell'}[s.sig]||s.sig;
+    var pr=s.price>=1000?'₦'+_fNK(s.price):'₦'+_fN(s.price,2);
+    return'<tr onclick="window._sd(\''+s.sym+'\',\''+s.name+'\')" aria-label="'+s.name+'">'
+      +'<td><div class="_tn2" style="font-size:11px">'+s.sym+'</div><div style="font-size:9px;color:var(--tx3)">'+s.sec+'</div></td>'
+      +'<td style="color:var(--tx)">'+pr+'</td>'
+      +'<td><span class="_cp '+c+'" style="font-size:9px;padding:1px 5px">'+_cs(s.chg)+_fN(Math.abs(s.chg),2)+'</span></td>'
+      +'<td><span class="_cp '+c+'" style="font-size:9px;padding:1px 5px">'+_cs(s.pct)+Math.abs(s.pct).toFixed(2)+'%</span></td>'
+      +'<td style="font-size:10px">'+_fNK(s.vol)+'<span class="_vb" style="width:'+bw+'px" aria-hidden="true"></span></td>'
+      +'<td><span class="_sg '+sgcls+'" style="font-size:8px;padding:2px 6px">'+sglab+'</span></td>'
+      +'</tr>';
   }).join('');
 }
 
@@ -730,29 +793,53 @@ window._lkup=async function(){
   if(!re)return;
   re.innerHTML='<div style="color:var(--tx3);font-family:var(--mo);font-size:12px;padding:12px 0">Fetching historical rate…</div>';
   try{
-    var url='https://open.er-api.com/v6/historical/'+dt;
-    var r=await fetch(url,{signal:AbortSignal.timeout(10000)});
-    if(!r.ok)throw new Error('HTTP '+r.status);
-    var d=await r.json();
-    if(d.result!=='success')throw new Error(d['error-type']||'API error');
-    var rates=d.rates||{};
-    var rate;
-    if(base==='USD'){rate=rates[tgt];}
-    else if(tgt==='USD'){rate=1/rates[base];}
-    else if(rates[base]&&rates[tgt]){rate=rates[tgt]/rates[base];}
-    if(!rate||!isFinite(rate))throw new Error('Rate not available for this pair');
+    var rate=null,src='';
+    var dobj=new Date(dt);
+    var dstr=dobj.toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'});
+
+    if(base==='NGN'||tgt==='NGN'){
+      var nonNGN=base==='NGN'?tgt:base;
+      var url='https://open.er-api.com/v6/latest/'+nonNGN;
+      var r=await fetch(url,{signal:AbortSignal.timeout(10000)});
+      if(!r.ok)throw new Error('HTTP '+r.status);
+      var d=await r.json();
+      if(d.result!=='success')throw new Error(d['error-type']||'API error');
+      var ngnRate=d.rates&&d.rates['NGN'];
+      if(!ngnRate)throw new Error('NGN rate not available');
+      rate=base==='NGN'?(1/ngnRate):ngnRate;
+      src='open.er-api.com (latest — NGN historical not available via free tier)';
+    } else {
+      var url2='https://api.frankfurter.app/'+dt+'?from='+base+'&to='+tgt;
+      var r2=await fetch(url2,{signal:AbortSignal.timeout(10000)});
+      if(!r2.ok){
+        if(r2.status===404){
+          var nearUrl='https://api.frankfurter.app/latest?from='+base+'&to='+tgt;
+          var r3=await fetch(nearUrl,{signal:AbortSignal.timeout(10000)});
+          if(!r3.ok)throw new Error('Pair not available');
+          var d3=await r3.json();
+          rate=d3.rates&&d3.rates[tgt];
+          src='frankfurter.app (latest rate — date '+dt+' may be a weekend/holiday)';
+        } else {
+          throw new Error('HTTP '+r2.status);
+        }
+      } else {
+        var d2=await r2.json();
+        rate=d2.rates&&d2.rates[tgt];
+        src='frankfurter.app';
+      }
+    }
+
+    if(!rate||!isFinite(rate))throw new Error('Rate not available for this pair on '+dt);
     var formatted=rate>=100?_fN(rate,2):rate>=1?rate.toFixed(4):rate.toFixed(6);
     var invRate=1/rate;
     var invFmt=invRate>=100?_fN(invRate,2):invRate>=1?invRate.toFixed(4):invRate.toFixed(6);
-    var dobj=new Date(dt);
-    var dstr=dobj.toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'});
     re.innerHTML='<div style="background:var(--n3);border:1px solid rgba(0,201,167,.25);border-radius:10px;padding:20px 22px;margin-top:12px">'
       +'<div style="font-size:10px;font-family:var(--mo);color:var(--t);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Historical Rate — '+dstr+'</div>'
       +'<div style="font-family:var(--di);font-size:36px;font-weight:800;letter-spacing:-.04em;color:var(--tx)">1 '+base+' = <span style="color:var(--t)">'+formatted+'</span> '+tgt+'</div>'
       +'<div style="font-size:13px;color:var(--tx2);margin-top:6px">Inverse: 1 '+tgt+' = '+invFmt+' '+base+'</div>'
-      +'<div style="font-size:10px;color:var(--tx3);font-family:var(--mo);margin-top:8px">Source: open.er-api.com · Date: '+dt+'</div>'
+      +'<div style="font-size:10px;color:var(--tx3);font-family:var(--mo);margin-top:8px">Source: '+src+' · Date: '+dt+'</div>'
       +'</div>';
-  }catch(e){re.innerHTML='<div class="_nt">Could not fetch rate: '+e.message+'. This date may not have data or the pair is unsupported.</div>';}
+  }catch(e){re.innerHTML='<div class="_nt">Could not fetch rate: '+e.message+'. Try a weekday date (markets are closed on weekends) or check the currency pair is supported.</div>';}
 };
 (function(){var di=_$('_hdt');if(di){di.max=_ts();di.value=_ts();}})();
 
@@ -800,17 +887,27 @@ async function _fFX(){
     var rates=d.rates;
     _FXP.forEach(function(p){
       var lr=null;
-      if(p.f==='USD')lr=rates[p.t];
-      else if(p.t==='USD')lr=1/rates[p.f];
-      else if(rates[p.f]&&rates[p.t])lr=rates[p.t]/rates[p.f];
-      if(lr&&isFinite(lr)){var pv=p.rate;p.rate=+(lr.toFixed(lr>=100?2:4));p.chg=+(p.rate-pv).toFixed(4);p.pct=pv>0?+((p.rate-pv)/pv*100).toFixed(2):0;}
+      if(p.f==='USD'){lr=rates[p.t];}
+      else if(p.t==='USD'){lr=1/rates[p.f];}
+      else if(rates[p.f]&&rates[p.t]){lr=rates[p.t]/rates[p.f];}
+      if(lr&&isFinite(lr)){
+        var pv=p.rate;
+        p.rate=+(lr.toFixed(lr>=100?2:4));
+        p.chg=+(p.rate-pv).toFixed(4);
+        p.pct=pv>0?+((p.rate-pv)/pv*100).toFixed(2):0;
+        p.rng=[Math.min(p.rng[0],p.rate*0.97),Math.max(p.rng[1],p.rate*1.03)];
+      }
     });
     _FXH.forEach(function(item){
       var sym=item.s;
       var pr=_FXP.find(function(p){return p.f==='USD'&&p.t===sym;});
       if(pr)item.c=pr.pct;
     });
-    if(rates['NGN']){var nr=+rates['NGN'].toFixed(2);var nx=_NGR.find(function(r){return r.id==='fx';});if(nx){nx.rate=nr;nx.meta='I&E (live via ExchangeRate-API)';}}
+    if(rates['NGN']){
+      var nr=+rates['NGN'].toFixed(2);
+      var nx=_NGR.find(function(r){return r.id==='fx';});
+      if(nx){nx.rate=nr;nx.meta='I&E (live via ExchangeRate-API)';}
+    }
     _sts('forex','live');
     _bfx();_bfxhm();_bngr();_btk();
     return true;
@@ -825,8 +922,7 @@ async function _fIdx(){
     var prx=_px+encodeURIComponent(enc);
     var r=await fetch(prx,{signal:AbortSignal.timeout(12000)});
     if(!r.ok)throw new Error('p '+r.status);
-    var ou=await r.json();
-    var data=JSON.parse(ou.contents);
+    var data=await r.json();
     var re=data&&data.chart&&data.chart.result&&data.chart.result[0];
     if(!re)throw new Error('no result');
     var meta=re.meta;
@@ -863,7 +959,7 @@ async function _sCBN(){
   var url='https://www.cbn.gov.ng/MonetaryPolicy/decisions.asp';
   var r=await fetch(_px+encodeURIComponent(url),{signal:AbortSignal.timeout(14000)});
   if(!r.ok)throw new Error('CBN '+r.status);
-  var ou=await r.json();var html=ou.contents||'';
+  var html=await r.text();
   var mpr=null,crr=null,liq=null;
   var mm=html.match(/Monetary Policy Rate[^.]*?(\d{1,2}(?:\.\d{1,2})?)\s*per\s*cent/i);if(mm)mpr=parseFloat(mm[1]);
   var cm=html.match(/Cash Reserve Require?ment[^.]*?(\d{1,2}(?:\.\d{1,2})?)\s*per\s*cent/i);if(cm)crr=parseFloat(cm[1]);
@@ -875,7 +971,7 @@ async function _sNBS(){
   var url='https://www.nigerianstat.gov.ng/';
   var r=await fetch(_px+encodeURIComponent(url),{signal:AbortSignal.timeout(14000)});
   if(!r.ok)throw new Error('NBS '+r.status);
-  var ou=await r.json();var html=ou.contents||'';
+  var html=await r.text();
   var sm=html.match(/Inflation Rate[^)]+\)\s*([\d.,\s]+)/i);
   if(!sm)throw new Error('NBS series not found');
   var series=sm[1].trim().split(',').map(function(v){return parseFloat(v.trim());}).filter(function(v){return !isNaN(v);});
@@ -886,7 +982,7 @@ async function _sTB(){
   var url='https://www.cbn.gov.ng/rates/tBillsrates.asp';
   var r=await fetch(_px+encodeURIComponent(url),{signal:AbortSignal.timeout(14000)});
   if(!r.ok)throw new Error('TBill '+r.status);
-  var ou=await r.json();var html=ou.contents||'';
+  var html=await r.text();
   var rows=html.match(/<tr[^>]*>([\s\S]*?)<\/tr>/gi)||[];
   var t91=null,t182=null,t364=null;
   rows.forEach(function(row){
@@ -950,7 +1046,7 @@ window._rfx=async function(btn){btn.classList.add('spin');btn.disabled=true;try{
 window._rcy=async function(btn){btn.classList.add('spin');btn.disabled=true;try{await _fCI();_upd();}finally{btn.classList.remove('spin');btn.disabled=false;}};
 
 async function _init(){
-  _btk();_bgi();_bai();_bst();_bfx();_bfxhm();_bcc();_bctb();_bngr();_bfit();_bspm();_mktSt();_upd();
+  _btk();_bgi();_bai();_bst();_bngxtb();_bfx();_bfxhm();_bcc();_bctb();_bngr();_bfit();_bspm();_mktSt();_upd();
   setTimeout(function(){_bdmc();_bngch();},250);
   setTimeout(async function(){await Promise.allSettled([_fCI(),_fFX(),_fIdx(),_fNG()]);_upd();},600);
   setInterval(_fCI,60*1000);
