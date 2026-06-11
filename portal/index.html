@@ -784,10 +784,139 @@ async function loadUsers(){
   tbody.innerHTML='<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--tx3);font-family:var(--mo);font-size:12px">Loading...</td></tr>';
   try{
     var d=await apiFetch('/users');
-    if(!d.users.length){tbody.innerHTML='<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--tx3);font-family:var(--mo);font-size:12px">No users found.</td></tr>';return;}
-    tbody.innerHTML=d.users.map(function(u){
-      return'<tr><td style="font-family:var(--mo);font-size:12px">'+u.username+'</td><td>'+u.name+'</td><td style="font-size:12px;color:var(--tx2)">'+u.email+'</td><td><span class="role-badge '+u.role+'">'+u.role+'</span></td><td><span class="sdot '+(u.active?'active':'inactive')+'"></span> '+(u.active?'Active':'Inactive')+'</td><td style="font-family:var(--mo);font-size:11px;color:var(--tx3)">'+(u.lastLogin?new Date(u.lastLogin).toLocaleDateString('en-GB'):'—')+'</td><td style="display:flex;gap:6px"><button class="act-btn" onclick="editUser(\''+u._id+'\',\''+u.username+'\',\''+u.name+'\',\''+u.email+'\',\''+u.role+'\','+u.active+')">Edit</button><button class="act-btn danger" onclick="delUser(\''+u._id+'\',\''+u.username+'\')">Delete</button></td></tr>';
-    }).join('');
+    if (!d.users || !Array.isArray(d.users) || d.users.length === 0) {
+    tbody.innerHTML = `
+        <tr>
+            <td colspan="7" style="
+                text-align:center;
+                padding:2rem;
+                color:var(--tx3);
+                font-family:var(--mo);
+                font-size:12px
+            ">
+                No users found.
+            </td>
+        </tr>
+    `;
+    return;
+}
+
+// Escape HTML
+function escapeHtml(value) {
+    if (value === null || value === undefined) return '';
+
+    return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
+// Safe string conversion
+function safeText(value) {
+    if (value === null || value === undefined) return '—';
+
+    if (typeof value === 'object') {
+        try {
+            return JSON.stringify(value);
+        } catch {
+            return '—';
+        }
+    }
+
+    return String(value);
+}
+
+tbody.innerHTML = d.users.map((u) => {
+
+    const id = safeText(u._id);
+    const username = safeText(u.username);
+    const name = safeText(u.name);
+    const email = safeText(u.email);
+    const role = safeText(u.role);
+    const active = Boolean(u.active);
+
+    let lastLogin = '—';
+
+    if (u.lastLogin) {
+        try {
+            lastLogin = new Date(u.lastLogin)
+                .toLocaleDateString('en-GB');
+        } catch (e) {
+            lastLogin = '—';
+        }
+    }
+
+    return `
+        <tr>
+            <td style="font-family:var(--mo);font-size:12px">
+                ${escapeHtml(username)}
+            </td>
+
+            <td>
+                ${escapeHtml(name)}
+            </td>
+
+            <td style="font-size:12px;color:var(--tx2)">
+                ${escapeHtml(email)}
+            </td>
+
+            <td>
+                <span class="role-badge ${escapeHtml(role)}">
+                    ${escapeHtml(role)}
+                </span>
+            </td>
+
+            <td>
+                <span class="sdot ${active ? 'active' : 'inactive'}"></span>
+                ${active ? 'Active' : 'Inactive'}
+            </td>
+
+            <td style="font-family:var(--mo);font-size:11px;color:var(--tx3)">
+                ${lastLogin}
+            </td>
+
+            <td style="display:flex;gap:6px">
+                <button
+                    class="act-btn"
+                    data-id="${escapeHtml(id)}"
+                    data-username="${escapeHtml(username)}"
+                    data-name="${escapeHtml(name)}"
+                    data-email="${escapeHtml(email)}"
+                    data-role="${escapeHtml(role)}"
+                    data-active="${active}"
+                    onclick="
+                        editUser(
+                            this.dataset.id,
+                            this.dataset.username,
+                            this.dataset.name,
+                            this.dataset.email,
+                            this.dataset.role,
+                            this.dataset.active === 'true'
+                        )
+                    "
+                >
+                    Edit
+                </button>
+
+                <button
+                    class="act-btn danger"
+                    data-id="${escapeHtml(id)}"
+                    data-username="${escapeHtml(username)}"
+                    onclick="
+                        delUser(
+                            this.dataset.id,
+                            this.dataset.username
+                        )
+                    "
+                >
+                    Delete
+                </button>
+            </td>
+        </tr>
+    `;
+}).join('');
   }catch(e){tbody.innerHTML='<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--rd);font-family:var(--mo);font-size:12px">'+e.message+'</td></tr>';}
 }
 function showAdminMsg(msg,type){
