@@ -4,433 +4,1003 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Felix Happy Michael — ACA, FMVA | Finance Leader</title>
-<meta name="description" content="Felix Happy Michael — Chartered Accountant, Financial Strategist.">
+<meta name="description" content="Felix Happy Michael — Chartered Accountant, Financial Strategist & FinTech Builder based in Lagos, Nigeria.">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%2300c9a7'/><text x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' font-family='Arial' font-weight='700' font-size='12' fill='%230a1628'>FM</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Syne:wght@500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Syne:wght@500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
 <style>
+
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --n:#050d1a;--n2:#0a1628;--n3:#0f1f3d;--n4:#162747;
-  --t:#00c9a7;--t2:#00a98e;--am:#f5a623;--rd:#e05252;--gr:#22c55e;--bl:#63b3ed;
-  --tx:#e8edf5;--tx2:#8fa3bf;--tx3:#4a6080;
-  --b:rgba(255,255,255,.06);--b2:rgba(255,255,255,.11);
+  --n:#050d1a;--n2:#071020;--n3:#0f1f3d;--n4:#162747;--n5:#1c3052;
+  --t:#00c9a7;--t2:#00a98e;--t3:rgba(0,201,167,.12);
+  --am:#f5a623;--rd:#e05252;--gr:#22c55e;--bl:#63b3ed;--pu:#a78bfa;
+  --tx:#e8edf5;--tx2:#8fa3bf;--tx3:#4a6080;--tx4:#2a3f58;
+  --b:rgba(255,255,255,.05);--b2:rgba(255,255,255,.09);--b3:rgba(255,255,255,.14);
   --mo:'IBM Plex Mono',monospace;--sa:'DM Sans',sans-serif;--di:'Syne',sans-serif;
+  --nav-h:64px;
 }
-html{font-size:15px;scroll-behavior:smooth}
-body{font-family:var(--sa);background:var(--n);color:var(--tx);line-height:1.6;overflow-x:hidden}
-/* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;height:62px;display:flex;align-items:center;justify-content:space-between;padding:0 2.5rem;background:rgba(5,13,26,.88);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.06);transition:all .3s}
-.nav-brand{display:flex;align-items:center;gap:11px;text-decoration:none}
-.nav-mark{width:34px;height:34px;background:var(--t);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--di);font-size:11px;font-weight:700;color:var(--n)}
-.nav-name{font-family:var(--di);font-size:15px;font-weight:700;letter-spacing:-.03em;color:var(--tx)}
-.nav-name span{color:var(--t)}
-.nav-links{display:flex;align-items:center;gap:1.75rem}
-.nav-links a{font-size:12px;color:var(--tx3);text-decoration:none;font-family:var(--mo);letter-spacing:.03em;transition:color .2s}
-.nav-links a:hover{color:var(--t)}
-.btn-nav{padding:8px 18px;border-radius:8px;font-size:13px;font-family:var(--di);font-weight:600;text-decoration:none;transition:all .2s;background:var(--t);color:var(--n)}
-.btn-nav:hover{background:var(--t2);transform:translateY(-1px)}
-@media(max-width:768px){.nav-links{display:none}nav{padding:0 1.25rem}}
-/* HERO */
-#hero{min-height:100vh;display:flex;align-items:center;padding:7rem 2.5rem 4rem;position:relative;overflow:hidden}
-.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% -10%,rgba(0,201,167,.07) 0%,transparent 65%),radial-gradient(ellipse 50% 50% at 90% 60%,rgba(99,179,237,.04) 0%,transparent 60%),radial-gradient(ellipse 40% 40% at 10% 80%,rgba(245,166,35,.03) 0%,transparent 60%);pointer-events:none}
-.hero-grid{position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(255,255,255,.014) 59px,rgba(255,255,255,.014) 60px),repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(255,255,255,.014) 59px,rgba(255,255,255,.014) 60px);pointer-events:none}
-.hero-inner{max-width:1100px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr 400px;gap:4rem;align-items:center}
-@media(max-width:900px){.hero-inner{grid-template-columns:1fr}.hero-right{display:none}}
-.hero-left{position:relative;z-index:1}
-.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(0,201,167,.08);border:1px solid rgba(0,201,167,.18);border-radius:20px;padding:6px 16px;font-family:var(--mo);font-size:11px;color:var(--t);margin-bottom:1.75rem;animation:fadeUp .6s ease both}
-.hero-badge-dot{width:6px;height:6px;border-radius:50%;background:var(--t);animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
-@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
-/* HERO NAME — single line, stylish */
-.hero-name{font-family:var(--di);font-size:clamp(2rem,4.2vw,3.2rem);font-weight:800;letter-spacing:-.05em;line-height:1.08;margin-bottom:1.1rem;animation:fadeUp .6s .1s ease both;white-space:nowrap}
-.hero-name .first{color:var(--tx)}
-.hero-name .middle{color:var(--t)}
-.hero-name .last{color:var(--tx);font-style:italic}
-.hero-name .sep{color:var(--tx3);font-weight:400;margin:0 .18em;font-size:.75em;vertical-align:middle}
-.hero-sub{font-size:15px;color:var(--tx2);max-width:520px;line-height:1.7;margin-bottom:2.25rem;animation:fadeUp .6s .2s ease both}
-.hero-actions{display:flex;gap:.85rem;flex-wrap:wrap;animation:fadeUp .6s .3s ease both}
-.btn-hero{padding:12px 26px;border-radius:10px;font-family:var(--di);font-size:14px;font-weight:600;text-decoration:none;transition:all .25s;display:inline-flex;align-items:center;gap:8px;letter-spacing:-.01em}
-.btn-hero.primary{background:var(--t);color:var(--n)}
-.btn-hero.primary:hover{background:var(--t2);transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,201,167,.3)}
-.btn-hero.ghost{background:transparent;border:1px solid var(--b2);color:var(--tx2)}
-.btn-hero.ghost:hover{background:rgba(255,255,255,.06);color:var(--tx);transform:translateY(-2px)}
-.hero-stats{display:flex;gap:2.25rem;margin-top:2.75rem;animation:fadeUp .6s .4s ease both}
-.stat-num{font-family:var(--di);font-size:26px;font-weight:700;letter-spacing:-.04em;color:var(--t)}
-.stat-label{font-size:11px;color:var(--tx3);font-family:var(--mo);margin-top:2px}
-/* profile card */
-.hero-right{position:relative;z-index:1;animation:fadeUp .7s .2s ease both}
-.profile-card{background:linear-gradient(135deg,var(--n3) 0%,var(--n4) 100%);border:1px solid var(--b2);border-radius:20px;padding:1.75rem;position:relative;overflow:hidden}
-.profile-card::before{content:'';position:absolute;top:-40px;right:-40px;width:150px;height:150px;border-radius:50%;background:rgba(0,201,167,.06)}
-.profile-avatar{width:64px;height:64px;background:linear-gradient(135deg,var(--t) 0%,var(--t2) 100%);border-radius:14px;display:flex;align-items:center;justify-content:center;font-family:var(--di);font-size:22px;font-weight:800;color:var(--n);margin-bottom:1.1rem;position:relative;z-index:1}
-.profile-name{font-family:var(--di);font-size:18px;font-weight:700;letter-spacing:-.03em;margin-bottom:3px;position:relative;z-index:1}
-.profile-role{font-size:12px;color:var(--t);font-family:var(--mo);margin-bottom:1.25rem;position:relative;z-index:1}
-.profile-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:1.25rem;position:relative;z-index:1}
-.tag{padding:3px 9px;border-radius:6px;font-size:10px;font-family:var(--mo);font-weight:500}
-.tag.teal{background:rgba(0,201,167,.1);color:var(--t);border:1px solid rgba(0,201,167,.2)}
-.tag.amber{background:rgba(245,166,35,.1);color:var(--am);border:1px solid rgba(245,166,35,.2)}
-.tag.blue{background:rgba(99,179,237,.1);color:var(--bl);border:1px solid rgba(99,179,237,.2)}
-.profile-loc{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--tx3);font-family:var(--mo);position:relative;z-index:1}
-/* SECTIONS */
-section{padding:4.5rem 2.5rem}
-.section-inner{max-width:1100px;margin:0 auto}
-.section-label{font-family:var(--mo);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--t);margin-bottom:.6rem}
-.section-title{font-family:var(--di);font-size:clamp(1.7rem,3vw,2.4rem);font-weight:700;letter-spacing:-.04em;margin-bottom:.85rem;line-height:1.1}
-/* ABOUT */
-#about{background:var(--n2)}
-.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:2.75rem;align-items:start}
-@media(max-width:768px){.about-grid{grid-template-columns:1fr}}
-.about-text p{font-size:13.5px;color:var(--tx2);line-height:1.8;margin-bottom:.9rem}
-.about-text p strong{color:var(--tx)}
-.skills-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
-.skill-item{background:var(--n3);border:1px solid var(--b);border-radius:7px;padding:9px 13px;font-size:11.5px;font-family:var(--mo);color:var(--tx2);display:flex;align-items:center;gap:7px}
-.skill-dot{width:5px;height:5px;border-radius:50%;background:var(--t);flex-shrink:0}
-/* EXPERIENCE */
-.timeline{position:relative;padding-left:1.75rem}
-.timeline::before{content:'';position:absolute;left:0;top:8px;bottom:0;width:1px;background:linear-gradient(to bottom,var(--t),transparent)}
-.tl-item{position:relative;margin-bottom:2.25rem}
-.tl-item::before{content:'';position:absolute;left:-1.75rem;top:6px;width:9px;height:9px;border-radius:50%;background:var(--t);border:2px solid var(--n);box-shadow:0 0 0 3px rgba(0,201,167,.18)}
-.tl-header{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:.4rem;margin-bottom:.4rem}
-.tl-company{font-family:var(--di);font-size:15px;font-weight:700;letter-spacing:-.02em}
-.tl-period{font-size:10px;font-family:var(--mo);color:var(--t);background:rgba(0,201,167,.08);border:1px solid rgba(0,201,167,.15);padding:3px 9px;border-radius:20px;white-space:nowrap}
-.tl-role{font-size:12px;color:var(--tx2);font-family:var(--mo);margin-bottom:.65rem}
-.tl-points{list-style:none;display:flex;flex-direction:column;gap:4px}
-.tl-points li{font-size:12.5px;color:var(--tx3);padding-left:1.1rem;position:relative;line-height:1.6}
-.tl-points li::before{content:'→';position:absolute;left:0;color:var(--t);font-size:10px;top:2px}
-/* CERTS */
-#certifications{background:var(--n2)}
-.certs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.9rem}
-.cert-card{background:var(--n3);border:1px solid var(--b);border-radius:11px;padding:1.1rem;transition:all .2s}
-.cert-card:hover{border-color:rgba(0,201,167,.3);background:rgba(0,201,167,.04);transform:translateY(-2px)}
-.cert-abbr{font-family:var(--di);font-size:16px;font-weight:700;color:var(--t);margin-bottom:3px}
-.cert-name{font-size:11.5px;color:var(--tx2);line-height:1.4;margin-bottom:5px}
-.cert-body{font-size:10.5px;font-family:var(--mo);color:var(--tx3)}
-/* COURSES */
-#courses{background:var(--n)}
-.courses-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:.9rem}
-.course-card{background:var(--n3);border:1px solid var(--b);border-radius:11px;padding:1.1rem 1.25rem;transition:all .2s;display:flex;align-items:flex-start;gap:12px}
-.course-card:hover{border-color:rgba(245,166,35,.25);transform:translateY(-2px)}
-.course-icon{width:36px;height:36px;border-radius:8px;background:rgba(245,166,35,.1);border:1px solid rgba(245,166,35,.2);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
-.course-title{font-size:12.5px;font-weight:600;color:var(--tx);line-height:1.35;margin-bottom:3px}
-.course-body{font-size:11px;font-family:var(--mo);color:var(--tx3)}
-/* TOOLS */
-.tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:.65rem}
-.tool-pill{background:var(--n3);border:1px solid var(--b);border-radius:7px;padding:10px 14px;font-size:11.5px;font-family:var(--mo);color:var(--tx2);text-align:center;transition:all .2s}
-.tool-pill:hover{border-color:rgba(0,201,167,.3);color:var(--t)}
-/* PORTFOLIO CTA */
-#portfolio{background:linear-gradient(135deg,var(--n3) 0%,rgba(0,201,167,.05) 50%,var(--n3) 100%);border-top:1px solid var(--b);border-bottom:1px solid var(--b)}
-.portfolio-inner{text-align:center;max-width:660px;margin:0 auto}
-.portfolio-sub{font-size:13.5px;color:var(--tx2);line-height:1.7;margin-bottom:2rem}
-.apps-preview{display:flex;justify-content:center;gap:.85rem;margin-bottom:2rem;flex-wrap:wrap}
-.app-chip{display:flex;align-items:center;gap:7px;background:var(--n4);border:1px solid var(--b2);border-radius:9px;padding:9px 16px;font-size:12.5px;color:var(--tx2);transition:all .2s}
-.app-chip:hover{border-color:var(--t);color:var(--t)}
-/* CONTACT */
-#contact{background:var(--n2)}
-.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:2.75rem;align-items:start}
-@media(max-width:768px){.contact-grid{grid-template-columns:1fr}}
-.contact-info{display:flex;flex-direction:column;gap:1rem}
-.contact-item{display:flex;align-items:center;gap:13px;padding:.9rem 1.1rem;background:var(--n3);border:1px solid var(--b);border-radius:9px;transition:all .2s}
-.contact-item:hover{border-color:rgba(0,201,167,.3)}
-.contact-icon{width:36px;height:36px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
-.contact-label{font-size:10px;font-family:var(--mo);color:var(--tx3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px}
-.contact-value{font-size:12.5px;color:var(--tx)}
-.contact-links{display:flex;flex-direction:column;gap:.7rem}
-.contact-link{display:flex;align-items:center;gap:9px;padding:11px 14px;background:var(--n3);border:1px solid var(--b);border-radius:9px;text-decoration:none;color:var(--tx2);font-size:12.5px;transition:all .2s}
-.contact-link:hover{border-color:var(--t);color:var(--t);transform:translateX(4px)}
-/* FOOTER */
-footer{padding:1.75rem 2.5rem;border-top:1px solid var(--b);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem}
-.footer-copy{font-size:11px;color:var(--tx3);font-family:var(--mo)}
-.footer-copy span{color:var(--t)}
-.footer-links{display:flex;gap:1.25rem}
-.footer-links a{font-size:11px;font-family:var(--mo);color:var(--tx3);text-decoration:none;transition:color .2s}
-.footer-links a:hover{color:var(--t)}
-/* REVEAL */
-.reveal{opacity:0;transform:translateY(22px);transition:opacity .6s ease,transform .6s ease}
-.reveal.visible{opacity:1;transform:none}
-</style>
+html{font-size:15px;scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:var(--sa);background:var(--n);color:var(--tx);line-height:1.65;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+button{cursor:pointer;border:none;background:none;font-family:inherit}
 
-  <!-- Brevo Conversations {literal} -->
-<script>
-    (function(d, w, c) {
-        w.BrevoConversationsID = '6a16a206fe7245e5520c2ebe';
-        w[c] = w[c] || function() {
-            (w[c].q = w[c].q || []).push(arguments);
-        };
-        var s = d.createElement('script');
-        s.async = true;
-        s.src = 'https://conversations-widget.brevo.com/brevo-conversations.js';
-        if (d.head) d.head.appendChild(s);
-    })(document, window, 'BrevoConversations');
-</script>
-<!-- /Brevo Conversations {/literal} -->
-  
+
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  opacity:.45;mix-blend-mode:overlay;
+}
+
+
+#nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;height:var(--nav-h);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 clamp(1.25rem,4vw,2.75rem);
+  background:rgba(5,13,26,0);
+  transition:background .4s,box-shadow .4s,border-color .4s;
+  border-bottom:1px solid transparent;
+}
+#nav.scrolled{background:rgba(5,13,26,.96);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-color:rgba(255,255,255,.06);box-shadow:0 4px 32px rgba(0,0,0,.35)}
+.nav-brand{display:flex;align-items:center;gap:11px;text-decoration:none;flex-shrink:0}
+.nav-mark{
+  width:36px;height:36px;background:var(--t);border-radius:9px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--di);font-size:11.5px;font-weight:800;color:var(--n);
+  transition:transform .3s;flex-shrink:0;
+}
+.nav-brand:hover .nav-mark{transform:rotate(-8deg) scale(1.05)}
+.nav-wordmark{font-family:var(--di);font-size:15px;font-weight:700;letter-spacing:-.04em;color:var(--tx)}
+.nav-wordmark em{font-style:normal;color:var(--t)}
+.nav-links{display:flex;align-items:center;gap:2rem}
+.nav-links a{font-size:11.5px;color:var(--tx3);font-family:var(--mo);letter-spacing:.04em;transition:color .2s;position:relative}
+.nav-links a::after{content:'';position:absolute;bottom:-3px;left:0;width:0;height:1px;background:var(--t);transition:width .25s}
+.nav-links a:hover{color:var(--t)}
+.nav-links a:hover::after{width:100%}
+.btn-nav{
+  padding:9px 20px;border-radius:9px;font-family:var(--di);font-size:12.5px;font-weight:600;
+  background:var(--t);color:var(--n);transition:all .25s;white-space:nowrap;flex-shrink:0;
+}
+.btn-nav:hover{background:var(--t2);transform:translateY(-2px);box-shadow:0 6px 24px rgba(0,201,167,.28)}
+.btn-nav:active{transform:translateY(0)}
+
+/* hamburger */
+.hamburger{display:none;flex-direction:column;gap:5px;padding:6px;border-radius:7px;cursor:pointer;transition:background .2s}
+.hamburger:hover{background:var(--b2)}
+.ham-bar{width:22px;height:2px;background:var(--tx);border-radius:2px;transition:transform .3s,opacity .3s}
+.hamburger.open .ham-bar:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.hamburger.open .ham-bar:nth-child(2){opacity:0}
+.hamburger.open .ham-bar:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+/* mobile nav overlay */
+.mobile-nav{
+  position:fixed;top:var(--nav-h);left:0;right:0;bottom:0;z-index:199;
+  background:rgba(5,13,26,.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2rem;
+  transform:translateX(100%);transition:transform .4s cubic-bezier(.77,0,.18,1);
+}
+.mobile-nav.open{transform:none}
+.mobile-nav a{font-family:var(--di);font-size:clamp(1.5rem,6vw,2rem);font-weight:700;color:var(--tx2);letter-spacing:-.03em;transition:color .2s}
+.mobile-nav a:hover{color:var(--t)}
+
+@media(max-width:900px){.nav-links{display:none}}
+@media(max-width:640px){.hamburger{display:flex}.btn-nav{display:none}}
+
+
+#hero{
+  min-height:100dvh;display:flex;flex-direction:column;justify-content:center;
+  padding:calc(var(--nav-h) + 3rem) clamp(1.25rem,5vw,3rem) 4rem;
+  position:relative;overflow:hidden;
+}
+
+/* animated mesh bg */
+.hero-mesh{
+  position:absolute;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(ellipse 90% 60% at 60% -10%,rgba(0,201,167,.08) 0%,transparent 60%),
+    radial-gradient(ellipse 55% 55% at 95% 65%,rgba(99,179,237,.06) 0%,transparent 55%),
+    radial-gradient(ellipse 45% 45% at 5% 85%,rgba(167,139,250,.04) 0%,transparent 55%),
+    radial-gradient(ellipse 30% 30% at 45% 50%,rgba(245,166,35,.03) 0%,transparent 50%);
+}
+
+/* orbiting blobs */
+.blob{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:0;animation:orbit 18s ease-in-out infinite}
+.blob-1{width:500px;height:500px;background:rgba(0,201,167,.05);top:-120px;right:-80px;animation-delay:0s}
+.blob-2{width:400px;height:400px;background:rgba(99,179,237,.04);bottom:-100px;left:-60px;animation-delay:-6s}
+.blob-3{width:300px;height:300px;background:rgba(167,139,250,.04);top:40%;left:35%;animation-delay:-12s}
+@keyframes orbit{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(30px,-25px) scale(1.04)}66%{transform:translate(-20px,20px) scale(.97)}}
+
+/* hero grid texture */
+.hero-grid-tex{
+  position:absolute;inset:0;pointer-events:none;z-index:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);
+  background-size:60px 60px;
+  mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 30%,transparent 80%);
+  -webkit-mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 30%,transparent 80%);
+}
+
+.hero-inner{
+  max-width:1200px;margin:0 auto;width:100%;
+  display:grid;grid-template-columns:1fr 380px;gap:5rem;align-items:center;
+  position:relative;z-index:1;
+}
+@media(max-width:1000px){.hero-inner{grid-template-columns:1fr;gap:3rem}.hero-card-wrap{display:none}}
+@media(max-width:640px){.hero-inner{gap:2rem}}
+
+.hero-content{}
+
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:9px;
+  background:rgba(0,201,167,.07);border:1px solid rgba(0,201,167,.2);
+  border-radius:20px;padding:6px 16px;margin-bottom:1.75rem;
+  font-family:var(--mo);font-size:10.5px;color:var(--t);letter-spacing:.04em;
+  opacity:0;animation:fadeUp .7s .1s cubic-bezier(.22,1,.36,1) forwards;
+}
+.eyebrow-dot{width:7px;height:7px;border-radius:50%;background:var(--t);animation:breathe 2.2s ease-in-out infinite;flex-shrink:0}
+@keyframes breathe{0%,100%{box-shadow:0 0 0 0 rgba(0,201,167,.5),0 0 0 4px rgba(0,201,167,.1)}50%{box-shadow:0 0 0 5px rgba(0,201,167,.2),0 0 0 10px rgba(0,201,167,.04)}}
+
+/* name block */
+.hero-name-block{margin-bottom:1.5rem;opacity:0;animation:fadeUp .8s .22s cubic-bezier(.22,1,.36,1) forwards}
+.hero-name{
+  font-family:var(--di);font-size:clamp(2.6rem,6.5vw,5rem);font-weight:800;
+  letter-spacing:-.055em;line-height:1.02;
+  display:flex;flex-wrap:wrap;align-items:baseline;gap:.12em;
+}
+.hn-first{color:var(--tx)}
+.hn-middle{color:var(--t);position:relative}
+.hn-last{color:var(--tx);font-style:italic;font-weight:700}
+.hero-title-line{
+  margin-top:.6rem;font-family:var(--mo);font-size:clamp(.7rem,1.5vw,1rem);
+  color:var(--tx3);letter-spacing:.06em;
+  display:flex;flex-wrap:wrap;align-items:center;gap:.5em;
+}
+.title-sep{color:var(--tx4)}
+
+.hero-desc{
+  font-size:clamp(13.5px,1.6vw,15.5px);color:var(--tx2);max-width:540px;
+  line-height:1.75;margin-bottom:2.25rem;
+  opacity:0;animation:fadeUp .8s .34s cubic-bezier(.22,1,.36,1) forwards;
+}
+
+.hero-actions{
+  display:flex;flex-wrap:wrap;gap:.85rem;margin-bottom:3rem;
+  opacity:0;animation:fadeUp .8s .44s cubic-bezier(.22,1,.36,1) forwards;
+}
+.btn-cta{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:13px 28px;border-radius:11px;font-family:var(--di);font-size:14px;font-weight:600;
+  transition:all .28s cubic-bezier(.22,1,.36,1);letter-spacing:-.015em;position:relative;overflow:hidden;
+}
+.btn-cta::before{content:'';position:absolute;inset:0;background:rgba(255,255,255,0);transition:background .2s}
+.btn-cta:hover::before{background:rgba(255,255,255,.06)}
+.btn-cta:active{transform:translateY(1px) scale(.98)}
+.btn-primary{background:var(--t);color:var(--n)}
+.btn-primary:hover{background:var(--t2);transform:translateY(-3px);box-shadow:0 10px 34px rgba(0,201,167,.32)}
+.btn-secondary{background:transparent;border:1px solid var(--b3);color:var(--tx2)}
+.btn-secondary:hover{background:var(--b2);color:var(--tx);transform:translateY(-3px)}
+.btn-icon{width:18px;height:18px;flex-shrink:0}
+
+/* stats row */
+.hero-stats{
+  display:flex;flex-wrap:wrap;gap:clamp(1.5rem,3vw,2.75rem);
+  opacity:0;animation:fadeUp .8s .56s cubic-bezier(.22,1,.36,1) forwards;
+}
+.stat{position:relative}
+.stat+.stat::before{content:'';position:absolute;left:calc(-1 * clamp(.75rem,1.5vw,1.375rem));top:10%;height:80%;width:1px;background:var(--tx4);display:block}
+.stat-val{font-family:var(--di);font-size:clamp(1.4rem,2.8vw,2rem);font-weight:800;letter-spacing:-.05em;color:var(--t);line-height:1}
+.stat-lbl{font-size:10.5px;color:var(--tx3);font-family:var(--mo);margin-top:5px;letter-spacing:.02em;line-height:1.4;max-width:100px}
+
+/* hero card */
+.hero-card-wrap{opacity:0;animation:fadeUp .9s .2s cubic-bezier(.22,1,.36,1) forwards}
+.profile-float{
+  background:linear-gradient(145deg,var(--n3) 0%,var(--n4) 100%);
+  border:1px solid var(--b3);border-radius:22px;padding:1.75rem;
+  position:relative;overflow:hidden;
+}
+.profile-float::before{
+  content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;
+  border-radius:50%;background:radial-gradient(circle,rgba(0,201,167,.1),transparent 70%);
+}
+.profile-float::after{
+  content:'';position:absolute;bottom:-40px;left:-40px;width:160px;height:160px;
+  border-radius:50%;background:radial-gradient(circle,rgba(99,179,237,.07),transparent 70%);
+}
+.pf-avatar{
+  width:68px;height:68px;border-radius:16px;
+  background:linear-gradient(135deg,var(--t) 0%,var(--t2) 100%);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--di);font-size:24px;font-weight:800;color:var(--n);
+  margin-bottom:1.1rem;position:relative;z-index:1;
+  box-shadow:0 8px 28px rgba(0,201,167,.3);
+}
+.pf-name{font-family:var(--di);font-size:17px;font-weight:700;letter-spacing:-.035em;margin-bottom:3px;position:relative;z-index:1}
+.pf-role{font-size:11.5px;color:var(--t);font-family:var(--mo);margin-bottom:1.25rem;position:relative;z-index:1}
+.pf-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:1.35rem;position:relative;z-index:1}
+.ptag{padding:4px 10px;border-radius:7px;font-size:10px;font-family:var(--mo);font-weight:500;transition:transform .2s}
+.ptag:hover{transform:scale(1.05)}
+.ptag.t{background:rgba(0,201,167,.1);color:var(--t);border:1px solid rgba(0,201,167,.22)}
+.ptag.a{background:rgba(245,166,35,.1);color:var(--am);border:1px solid rgba(245,166,35,.22)}
+.ptag.b{background:rgba(99,179,237,.1);color:var(--bl);border:1px solid rgba(99,179,237,.22)}
+.ptag.p{background:rgba(167,139,250,.1);color:var(--pu);border:1px solid rgba(167,139,250,.22)}
+.pf-loc{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--tx3);font-family:var(--mo);position:relative;z-index:1}
+.pf-divider{height:1px;background:var(--b2);margin:1.1rem 0;position:relative;z-index:1}
+.pf-avail{display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--gr);font-family:var(--mo);position:relative;z-index:1}
+.avail-dot{width:7px;height:7px;border-radius:50%;background:var(--gr);animation:breathe 2s infinite;flex-shrink:0}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+
+
+.marquee-band{
+  overflow:hidden;border-top:1px solid var(--b2);border-bottom:1px solid var(--b2);
+  background:var(--n2);padding:.7rem 0;position:relative;z-index:1;
+}
+.marquee-track{display:flex;width:max-content;animation:marqMove 28s linear infinite}
+.marquee-track:hover{animation-play-state:paused}
+.mitem{
+  display:flex;align-items:center;gap:.6rem;padding:0 2rem;white-space:nowrap;
+  font-family:var(--mo);font-size:11.5px;color:var(--tx3);letter-spacing:.03em;
+}
+.mitem-dot{width:4px;height:4px;border-radius:50%;background:var(--t);opacity:.6}
+@keyframes marqMove{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+
+section{padding:clamp(3.5rem,6vw,6rem) clamp(1.25rem,5vw,3rem);position:relative;z-index:1}
+.section-inner{max-width:1100px;margin:0 auto;width:100%}
+.s-label{
+  font-family:var(--mo);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--t);margin-bottom:.55rem;display:flex;align-items:center;gap:.5rem;
+}
+.s-label::before{content:'//';opacity:.5}
+.s-title{font-family:var(--di);font-size:clamp(1.8rem,3.5vw,2.6rem);font-weight:700;letter-spacing:-.048em;line-height:1.08;margin-bottom:1rem}
+.s-sub{font-size:14px;color:var(--tx2);max-width:540px;line-height:1.7}
+
+
+#about{background:var(--n2)}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,4vw,3.5rem);align-items:start;margin-top:2.5rem}
+@media(max-width:720px){.about-grid{grid-template-columns:1fr}}
+.about-prose p{font-size:13.5px;color:var(--tx2);line-height:1.82;margin-bottom:.95rem}
+.about-prose p strong{color:var(--tx);font-weight:600}
+.about-prose p:last-child{margin-bottom:0}
+.skills-label{font-family:var(--mo);font-size:10.5px;color:var(--tx3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.85rem}
+.skills-flex{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
+.sk{
+  background:var(--n3);border:1px solid var(--b);border-radius:7px;
+  padding:8px 12px;font-size:11.5px;font-family:var(--mo);color:var(--tx2);
+  display:flex;align-items:center;gap:8px;transition:all .22s;cursor:default;
+}
+.sk:hover{border-color:rgba(0,201,167,.3);color:var(--t);background:rgba(0,201,167,.04);transform:translateX(3px)}
+.sk-dot{width:5px;height:5px;border-radius:50%;background:var(--t);flex-shrink:0}
+
+
+.tl{position:relative;padding-left:2rem;margin-top:2.5rem}
+.tl::before{content:'';position:absolute;left:0;top:10px;bottom:0;width:1px;background:linear-gradient(to bottom,var(--t) 0%,rgba(0,201,167,.2) 60%,transparent 100%)}
+.tl-item{position:relative;margin-bottom:2.5rem;opacity:0;transform:translateX(-15px);transition:opacity .5s,transform .5s}
+.tl-item.vis{opacity:1;transform:none}
+.tl-dot{
+  position:absolute;left:-2rem;top:7px;width:10px;height:10px;border-radius:50%;
+  background:var(--t);border:2px solid var(--n);
+  box-shadow:0 0 0 3px rgba(0,201,167,.2),0 0 14px rgba(0,201,167,.3);
+  transition:box-shadow .3s;
+}
+.tl-item:hover .tl-dot{box-shadow:0 0 0 5px rgba(0,201,167,.18),0 0 20px rgba(0,201,167,.4)}
+.tl-company{font-family:var(--di);font-size:clamp(14px,1.6vw,16px);font-weight:700;letter-spacing:-.025em;margin-bottom:3px}
+.tl-meta{display:flex;flex-wrap:wrap;align-items:center;gap:.6rem;margin-bottom:.6rem}
+.tl-role{font-size:12px;color:var(--tx2);font-family:var(--mo)}
+.tl-badge{font-size:10px;font-family:var(--mo);color:var(--t);background:rgba(0,201,167,.08);border:1px solid rgba(0,201,167,.18);padding:2px 9px;border-radius:20px;white-space:nowrap}
+.tl-pts{list-style:none;display:flex;flex-direction:column;gap:4px}
+.tl-pts li{font-size:12.5px;color:var(--tx3);padding-left:1.1rem;position:relative;line-height:1.6}
+.tl-pts li::before{content:'→';position:absolute;left:0;color:rgba(0,201,167,.5);font-size:9px;top:4px}
+
+
+#certifications{background:var(--n2)}
+.certs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.85rem;margin-top:2.25rem}
+.cert-card{
+  background:var(--n3);border:1px solid var(--b);border-radius:13px;
+  padding:1.15rem 1.25rem;transition:all .25s;cursor:default;
+  position:relative;overflow:hidden;
+}
+.cert-card::before{
+  content:'';position:absolute;inset:0;border-radius:13px;
+  background:radial-gradient(circle at var(--mx,50%) var(--my,50%),rgba(0,201,167,.08) 0%,transparent 55%);
+  opacity:0;transition:opacity .3s;
+}
+.cert-card:hover{border-color:rgba(0,201,167,.3);transform:translateY(-3px);box-shadow:0 8px 28px rgba(0,0,0,.25)}
+.cert-card:hover::before{opacity:1}
+.cert-abbr{font-family:var(--di);font-size:17px;font-weight:700;color:var(--t);margin-bottom:4px;position:relative;z-index:1}
+.cert-name{font-size:11.5px;color:var(--tx2);line-height:1.4;margin-bottom:5px;position:relative;z-index:1}
+.cert-body{font-size:10px;font-family:var(--mo);color:var(--tx3);position:relative;z-index:1}
+
+/* Education */
+.edu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:.6rem;margin-top:.85rem}
+.edu-item{
+  background:var(--n3);border:1px solid var(--b);border-radius:9px;
+  padding:12px 15px;display:flex;flex-direction:column;gap:3px;transition:all .2s;
+}
+.edu-item:hover{border-color:rgba(99,179,237,.3);transform:translateX(3px)}
+.edu-deg{font-size:13px;font-family:var(--di);font-weight:600;color:var(--tx)}
+.edu-inst{font-size:11px;font-family:var(--mo);color:var(--tx3)}
+
+
+#courses{background:var(--n)}
+.courses-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:.8rem;margin-top:2.25rem}
+.course-card{
+  background:var(--n3);border:1px solid var(--b);border-radius:12px;
+  padding:1.1rem 1.25rem;display:flex;align-items:flex-start;gap:12px;
+  transition:all .25s;
+}
+.course-card:hover{border-color:rgba(245,166,35,.25);transform:translateY(-2px);box-shadow:0 6px 24px rgba(0,0,0,.2)}
+.course-ic{
+  width:38px;height:38px;border-radius:9px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(245,166,35,.08);border:1px solid rgba(245,166,35,.18);
+}
+.course-ic svg{width:18px;height:18px;color:var(--am);stroke:var(--am)}
+.course-ttl{font-size:12.5px;font-weight:600;color:var(--tx);line-height:1.35;margin-bottom:3px}
+.course-org{font-size:10.5px;font-family:var(--mo);color:var(--tx3)}
+
+
+#tools{background:var(--n2)}
+.tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:.55rem;margin-top:2.25rem}
+.tool-pill{
+  background:var(--n3);border:1px solid var(--b);border-radius:8px;
+  padding:10px 14px;font-size:11.5px;font-family:var(--mo);color:var(--tx2);
+  text-align:center;transition:all .22s;cursor:default;
+}
+.tool-pill:hover{border-color:rgba(0,201,167,.3);color:var(--t);transform:translateY(-2px)}
+
+
+#portfolio{
+  background:linear-gradient(160deg,var(--n3) 0%,rgba(0,201,167,.04) 40%,var(--n3) 100%);
+  border-top:1px solid var(--b2);border-bottom:1px solid var(--b2);
+}
+.port-inner{text-align:center;max-width:680px;margin:0 auto}
+.port-apps{display:flex;justify-content:center;flex-wrap:wrap;gap:.75rem;margin:2rem 0}
+.app-chip{
+  display:flex;align-items:center;gap:9px;
+  background:var(--n4);border:1px solid var(--b3);border-radius:10px;
+  padding:10px 18px;font-size:12.5px;color:var(--tx2);transition:all .25s;
+}
+.app-chip svg{width:16px;height:16px;flex-shrink:0;stroke:var(--t)}
+.app-chip:hover{border-color:var(--t);color:var(--t);transform:translateY(-3px)}
+.port-sub{font-size:14px;color:var(--tx2);line-height:1.75;margin-bottom:0}
+
+
+#contact{background:var(--n2)}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,4vw,3.5rem);margin-top:2.5rem;align-items:start}
+@media(max-width:720px){.contact-grid{grid-template-columns:1fr}}
+.contact-note{font-size:13.5px;color:var(--tx2);line-height:1.75;margin-bottom:1.5rem}
+.contact-card{
+  background:var(--n3);border:1px solid var(--b2);border-radius:11px;
+  padding:1rem 1.25rem;display:flex;align-items:center;gap:13px;transition:all .22s;
+}
+.contact-card:hover{border-color:rgba(0,201,167,.3);transform:translateX(4px)}
+.cc-icon{width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.cc-label{font-size:10px;font-family:var(--mo);color:var(--tx3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px}
+.cc-value{font-size:13px;color:var(--tx)}
+.cc-value a{color:var(--bl);transition:color .2s}
+.cc-value a:hover{color:var(--t)}
+.contact-links{display:flex;flex-direction:column;gap:.65rem}
+.c-link{
+  display:flex;align-items:center;gap:10px;
+  padding:12px 16px;background:var(--n3);border:1px solid var(--b);border-radius:10px;
+  font-size:12.5px;color:var(--tx2);transition:all .22s;
+}
+.c-link:hover{border-color:var(--t);color:var(--t);transform:translateX(5px)}
+.c-link svg{width:16px;height:16px;flex-shrink:0;stroke:currentColor}
+
+
+footer{
+  padding:1.5rem clamp(1.25rem,5vw,3rem);
+  border-top:1px solid var(--b);
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem;
+  position:relative;z-index:1;
+}
+.footer-copy{font-size:10.5px;color:var(--tx3);font-family:var(--mo)}
+.footer-copy span{color:var(--t)}
+.footer-links{display:flex;flex-wrap:wrap;gap:1.25rem}
+.footer-links a{font-size:10.5px;font-family:var(--mo);color:var(--tx3);transition:color .2s}
+.footer-links a:hover{color:var(--t)}
+
+
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .65s cubic-bezier(.22,1,.36,1),transform .65s cubic-bezier(.22,1,.36,1)}
+.reveal.vis{opacity:1;transform:none}
+.reveal-d1{transition-delay:.1s}
+.reveal-d2{transition-delay:.2s}
+.reveal-d3{transition-delay:.3s}
+
+#typed-role{border-right:2px solid var(--t);padding-right:2px;white-space:nowrap;overflow:hidden;display:inline}
+
+
+#btt{
+  position:fixed;bottom:1.75rem;right:1.75rem;z-index:150;
+  width:42px;height:42px;border-radius:11px;
+  background:var(--n3);border:1px solid var(--b3);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--tx2);transition:all .3s;opacity:0;pointer-events:none;
+}
+#btt.show{opacity:1;pointer-events:auto}
+#btt:hover{background:var(--t);color:var(--n);border-color:var(--t);transform:translateY(-3px)}
+#btt svg{width:18px;height:18px}
+
+
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--n)}
+::-webkit-scrollbar-thumb{background:var(--n4);border-radius:6px}
+::-webkit-scrollbar-thumb:hover{background:var(--t2)}
+
+
+:focus-visible{outline:2px solid var(--t);outline-offset:3px;border-radius:4px}
+
+
+::selection{background:rgba(0,201,167,.25);color:var(--tx)}
+
+
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms!important;transition-duration:.01ms!important}
+}
+</style>
 </head>
 <body>
+
+<!-- ── NAVIGATION ── -->
 <nav id="nav">
   <a class="nav-brand" href="#">
     <div class="nav-mark">FM</div>
-    <div class="nav-name">Felix <span>Michael</span></div>
+    <div class="nav-wordmark">Felix <em>Michael</em></div>
   </a>
   <div class="nav-links">
     <a href="#about">About</a>
     <a href="#experience">Experience</a>
     <a href="#certifications">Credentials</a>
-    <a href="#courses">Courses</a>
+    <a href="#courses">Training</a>
     <a href="#portfolio">Portfolio</a>
     <a href="#contact">Contact</a>
   </div>
   <a href="portal/" class="btn-nav">Access Resources →</a>
+  <button class="hamburger" id="ham" aria-label="Toggle menu">
+    <span class="ham-bar"></span>
+    <span class="ham-bar"></span>
+    <span class="ham-bar"></span>
+  </button>
 </nav>
 
+<!-- mobile nav -->
+<nav class="mobile-nav" id="mobile-nav">
+  <a href="#about">About</a>
+  <a href="#experience">Experience</a>
+  <a href="#certifications">Credentials</a>
+  <a href="#portfolio">Portfolio</a>
+  <a href="#contact">Contact</a>
+  <a href="portal/" style="color:var(--t)">Access Resources →</a>
+</nav>
+
+<!-- ── HERO ── -->
 <section id="hero">
-  <div class="hero-bg"></div><div class="hero-grid"></div>
+  <div class="hero-mesh"></div>
+  <div class="hero-grid-tex"></div>
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+
   <div class="hero-inner">
-    <div class="hero-left">
-      <div class="hero-badge"><span class="hero-badge-dot"></span>Finance Leader · FinTech Builder</div>
-      <h1 class="hero-name">
-        <span class="first">Felix</span><span class="sep">·</span><span class="middle">Happy</span><span class="sep">·</span><span class="last">Michael</span>
-      </h1>
-      <p class="hero-sub">Chartered Accountant · Financial Strategist · FinTech Builder.<br>Driving financial excellence, regulatory compliance and digital transformation across complex organisations in Nigeria.</p>
+    <div class="hero-content">
+      <div class="hero-eyebrow">
+        <span class="eyebrow-dot"></span>
+        Finance Leader &nbsp;·&nbsp; FinTech Builder &nbsp;·&nbsp; Lagos, Nigeria
+      </div>
+
+      <div class="hero-name-block">
+        <h1 class="hero-name">
+          <span class="hn-first">Felix</span>
+          <span class="hn-middle">Happy</span>
+          <span class="hn-last">Michael</span>
+        </h1>
+        <div class="hero-title-line">
+          <span id="typed-role"></span>
+        </div>
+      </div>
+
+      <p class="hero-desc">
+        Chartered Accountant driving financial excellence, regulatory compliance, and digital transformation across complex organisations. I build the tools others only talk about.
+      </p>
+
       <div class="hero-actions">
-        <a href="portal/" class="btn-hero primary">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        <a href="portal/" class="btn-cta btn-primary" id="hero-cta">
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
           Access Resources
         </a>
-        <a href="#contact" class="btn-hero ghost">Get in Touch</a>
+        <a href="#contact" class="btn-cta btn-secondary">
+          Get in Touch
+        </a>
       </div>
+
       <div class="hero-stats">
-        <div><div class="stat-num">12+</div><div class="stat-label">Years Experience</div></div>
-        <div><div class="stat-num">10+</div><div class="stat-label">Certifications</div></div>
-        <div><div class="stat-num">₦600M+</div><div class="stat-label">Tax Savings Led</div></div>
-        <div><div class="stat-num">20+</div><div class="stat-label">WebApps, Excel Apps & Fin-Models</div></div>
+        <div class="stat"><div class="stat-val" data-count="12">0</div><div class="stat-lbl">Years Experience</div></div>
+        <div class="stat"><div class="stat-val" data-count="10">0</div><div class="stat-lbl">Certifications</div></div>
+        <div class="stat"><div class="stat-val" data-prefix="₦" data-count="600" data-suffix="M+">₦0M+</div><div class="stat-lbl">Tax Savings Led</div></div>
+        <div class="stat"><div class="stat-val" data-count="20" data-suffix="+">0</div><div class="stat-lbl">Apps &amp; Models Built</div></div>
       </div>
     </div>
-    <div class="hero-right">
-      <div class="profile-card">
-        <div class="profile-avatar">FM</div>
-        <div class="profile-name">Felix Happy Michael</div>
-        <div class="profile-role">Chartered Accountant</div>
-        <div class="profile-tags">
-          <span class="tag teal">ACA</span><span class="tag teal">ACTI</span>
-          <span class="tag amber">FMVA®</span><span class="tag amber">BIDA™</span>
-          <span class="tag blue">CBCA™</span><span class="tag blue">CMSA®</span>
-          <span class="tag teal">CFO — FRC</span><span class="tag amber">ACFE</span>
-          <span class="tag amber">OSSA</span><span class="tag amber">OLSA</span>
-          <span class="tag blue">ODSA</span><span class="tag blue">YDF-CIoD</span>
-          <span class="tag blue">MBA Finance</span>
+
+    <div class="hero-card-wrap">
+      <div class="profile-float" id="profile-float">
+        <div class="pf-avatar">FM</div>
+        <div class="pf-name">Felix Happy Michael</div>
+        <div class="pf-role">// Chartered Accountant</div>
+        <div class="pf-tags">
+          <span class="ptag t">ACA</span><span class="ptag t">ACTI</span>
+          <span class="ptag a">FMVA®</span><span class="ptag a">BIDA™</span>
+          <span class="ptag b">CBCA™</span><span class="ptag b">CMSA®</span>
+          <span class="ptag t">CFO — FRC</span><span class="ptag a">ACFE</span>
+          <span class="ptag p">MBA Finance</span>
+          <span class="ptag a">FPWMP®</span>
+        </div>
+        <div class="pf-divider"></div>
+        <div class="pf-avail">
+          <span class="avail-dot"></span>
+          Available for strategic engagements
+        </div>
+        <div style="height:.65rem"></div>
+        <div class="pf-loc">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Victoria Island, Lagos, Nigeria
         </div>
       </div>
     </div>
   </div>
 </section>
 
+<!-- ── MARQUEE ── -->
+<div class="marquee-band" aria-hidden="true">
+  <div class="marquee-track" id="marquee-track">
+    <!-- items injected by JS -->
+  </div>
+</div>
+
+<!-- ── ABOUT ── -->
 <section id="about">
   <div class="section-inner">
-    <div class="section-label">About</div>
-    <div class="section-title">Financial Excellence Meets Digital Innovation</div>
-    <div class="about-grid reveal">
-      <div class="about-text">
+    <div class="s-label reveal">About</div>
+    <h2 class="s-title reveal">Financial Excellence<br>Meets Digital Innovation</h2>
+    <div class="about-grid">
+      <div class="about-prose reveal">
         <p>A <strong>proven finance professional</strong> with extensive experience in financial management, operational oversight, and organisational governance. Proven ability to lead cross-functional teams, strengthen internal controls, and support executive decision-making through robust financial insight and disciplined planning.</p>
         <p>Brings a comprehensive understanding of <strong>budgeting, reporting, compliance and process optimisation,</strong> with a consistent focus on <strong>efficiency, accountability, and sustainable growth</strong>. Adept at aligning financial strategy with organisational objectives while ensuring adherence to regulatory standards and best practices.</p>
-        <p>Beyond core finance functions, I build <strong>bespoke financial solutions including advanced Excel models and VBA-driven applications, as well as web-based tools such as bank reconciliation engines, expected credit loss (ECL) models, receivables tracking and ageing systems, and automated reporting platforms</strong> — leveraging deep domain knowledge to solve real business problems with technology.</p>
+        <p>Beyond core finance functions, I build <strong>bespoke financial solutions</strong> — advanced Excel/VBA applications, web-based bank reconciliation engines, ECL models, receivables trackers, and automated reporting platforms — leveraging deep domain knowledge to solve real business problems with technology.</p>
       </div>
-      <div>
-        <p style="font-size:11px;font-family:var(--mo);color:var(--tx3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.9rem">Core Competencies</p>
-        <div class="skills-grid">
-          <div class="skill-item"><span class="skill-dot"></span>Financial Reporting</div>
-          <div class="skill-item"><span class="skill-dot"></span>Treasury Management</div>
-          <div class="skill-item"><span class="skill-dot"></span>IFRS Compliance</div>
-          <div class="skill-item"><span class="skill-dot"></span>Tax Management</div>
-          <div class="skill-item"><span class="skill-dot"></span>Financial Modelling</div>
-          <div class="skill-item"><span class="skill-dot"></span>Data Analysis</div>
-          <div class="skill-item"><span class="skill-dot"></span>Budgeting &amp; Forecasting</div>
-          <div class="skill-item"><span class="skill-dot"></span>Internal Controls</div>
-          <div class="skill-item"><span class="skill-dot"></span>Audit Coordination</div>
-          <div class="skill-item"><span class="skill-dot"></span>Investment Appraisal</div>
-          <div class="skill-item"><span class="skill-dot"></span>Stakeholder Reporting</div>
-          <div class="skill-item"><span class="skill-dot"></span>FinTech Development</div>
+      <div class="reveal reveal-d2">
+        <div class="skills-label">Core Competencies</div>
+        <div class="skills-flex">
+          <div class="sk"><span class="sk-dot"></span>Financial Reporting</div>
+          <div class="sk"><span class="sk-dot"></span>Treasury Management</div>
+          <div class="sk"><span class="sk-dot"></span>IFRS Compliance</div>
+          <div class="sk"><span class="sk-dot"></span>Tax Management</div>
+          <div class="sk"><span class="sk-dot"></span>Financial Modelling</div>
+          <div class="sk"><span class="sk-dot"></span>Data Analysis</div>
+          <div class="sk"><span class="sk-dot"></span>Budgeting &amp; Forecasting</div>
+          <div class="sk"><span class="sk-dot"></span>Internal Controls</div>
+          <div class="sk"><span class="sk-dot"></span>Audit Coordination</div>
+          <div class="sk"><span class="sk-dot"></span>Investment Appraisal</div>
+          <div class="sk"><span class="sk-dot"></span>Stakeholder Reporting</div>
+          <div class="sk"><span class="sk-dot"></span>FinTech Development</div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
+<!-- ── EXPERIENCE ── -->
 <section id="experience">
   <div class="section-inner">
-    <div class="section-label">Experience</div>
-    <div class="section-title">Career Journey</div>
-    <div class="timeline reveal">
+    <div class="s-label reveal">Experience</div>
+    <h2 class="s-title reveal">Career Journey</h2>
+    <div class="tl" id="timeline">
       <div class="tl-item">
-        <div class="tl-header"><div><div class="tl-company">Factoring &amp; Supply Chain Finance Ltd</div><div class="tl-role">Head, Finance and Admin (DGM)&nbsp;·&nbsp; Pan-African Capital Holdings Subsidiary</div></div>
+        <div class="tl-dot"></div>
+        <div class="tl-company">Factoring &amp; Supply Chain Finance Ltd</div>
+        <div class="tl-meta">
+          <div class="tl-role">Head, Finance and Admin (DGM)</div>
+          <span class="tl-badge">Pan-African Capital Holdings Subsidiary</span>
         </div>
-      <div class="tl-item">
-        <div class="tl-header"><div><div class="tl-company">Catamaran Group Nigeria Limited</div><div class="tl-role">Group Finance Manager</div></div>
+        <ul class="tl-pts">
+          <li>Oversees all financial operations, treasury management, and regulatory reporting for a CBN-licensed factoring company</li>
+          <li>Leads ERM oversight, GL reconciliation, and digital transformation initiatives including core banking migration</li>
+        </ul>
       </div>
       <div class="tl-item">
-        <div class="tl-header"><div><div class="tl-company">Max International</div><div class="tl-role">Performance Reporting Manager · Lagos</div></div>
-        </div>
+        <div class="tl-dot"></div>
+        <div class="tl-company">Catamaran Group Nigeria Limited</div>
+        <div class="tl-meta"><div class="tl-role">Group Finance Manager</div></div>
+        <ul class="tl-pts">
+          <li>Managed group-wide financial consolidation, FP&amp;A, and reporting across subsidiaries</li>
+          <li>Implemented robust budgeting frameworks and strengthened internal control environment</li>
+        </ul>
+      </div>
       <div class="tl-item">
-        <div class="tl-header"><div><div class="tl-company">Max International</div><div class="tl-role">Regional Head of Accounts · PortHarcourt</div></div>
+        <div class="tl-dot"></div>
+        <div class="tl-company">Max International Nigeria</div>
+        <div class="tl-meta">
+          <div class="tl-role">Performance Reporting Manager · Lagos</div>
         </div>
+        <ul class="tl-pts"><li>Drove performance analytics and management reporting for a multi-regional operation</li></ul>
+      </div>
       <div class="tl-item">
-        <div class="tl-header"><div><div class="tl-company">Adewale Semiu &amp; Co Chartered Accountants</div><div class="tl-role">Audit Associate</div></div>
-        </div>
+        <div class="tl-dot"></div>
+        <div class="tl-company">Max International Nigeria</div>
+        <div class="tl-meta"><div class="tl-role">Regional Head of Accounts · Port Harcourt</div></div>
+      </div>
       <div class="tl-item">
-        <div class="tl-header"><div><div class="tl-company">NNPC/DPR RSA — Lagos Branch</div><div class="tl-role">Account Officer</div></div>
-        </div>
+        <div class="tl-dot"></div>
+        <div class="tl-company">Adewale Semiu &amp; Co Chartered Accountants</div>
+        <div class="tl-meta"><div class="tl-role">Audit Associate</div></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-company">NNPC/DPR RSA — Lagos Branch</div>
+        <div class="tl-meta"><div class="tl-role">Account Officer</div></div>
+      </div>
     </div>
   </div>
 </section>
 
+<!-- ── CERTIFICATIONS ── -->
 <section id="certifications">
   <div class="section-inner">
-    <div class="section-label">Credentials</div>
-    <div class="section-title">Certifications &amp; Education</div>
-    <div class="certs-grid reveal">
-      <div class="cert-card"><div class="cert-abbr">ACA</div><div class="cert-name">Associate Chartered Accountant</div><div class="cert-body">Institute of Chartered Accountants of Nigeria (ICAN)</div></div>
-      <div class="cert-card"><div class="cert-abbr">ACTI</div><div class="cert-name">Associate Chartered Tax Institute</div><div class="cert-body">Chartered Institute of Taxation of Nigeria (CITN)</div></div>
-      <div class="cert-card"><div class="cert-abbr">FMVA®</div><div class="cert-name">Financial Modelling &amp; Valuation Analyst</div><div class="cert-body">Corporate Finance Institute (CFI) — Canada</div></div>
-      <div class="cert-card"><div class="cert-abbr">BIDA™</div><div class="cert-name">Business Intelligence &amp; Data Analyst</div><div class="cert-body">Corporate Finance Institute (CFI) — Canada</div></div>
-      <div class="cert-card"><div class="cert-abbr">CBCA™</div><div class="cert-name">Commercial Banking &amp; Credit Analyst</div><div class="cert-body">Corporate Finance Institute (CFI) — Canada</div></div>
-      <div class="cert-card"><div class="cert-abbr">CMSA®</div><div class="cert-name">Capital Markets &amp; Securities Analyst</div><div class="cert-body">Corporate Finance Institute (CFI) — Canada</div></div>
-      <div class="cert-card"><div class="cert-abbr">FPWMP®</div><div class="cert-name">Financial Planning &amp; Wealth Management Professional</div><div class="cert-body">Corporate Finance Institute (CFI) — Canada</div></div>
-      <div class="cert-card"><div class="cert-abbr">CFO</div><div class="cert-name">Chief Financial Officer Certified</div><div class="cert-body">Federal Reporting Council of Nigeria (FRC)</div></div>
-      <div class="cert-card"><div class="cert-abbr">ACFE</div><div class="cert-name">Associate Chartered Fraud Examiner</div><div class="cert-body">Association of Certified Fraud Examiners (CFE) — USA</div></div>
-      <div class="cert-card"><div class="cert-abbr">YDF</div><div class="cert-name">Young Directors Forum</div><div class="cert-body">Chartered Institute of Directors Nigeria (CIoD)</div></div>
+    <div class="s-label reveal">Credentials</div>
+    <h2 class="s-title reveal">Certifications &amp; Education</h2>
+    <div class="certs-grid reveal" id="certs-grid">
+      <div class="cert-card"><div class="cert-abbr">ACA</div><div class="cert-name">Associate Chartered Accountant</div><div class="cert-body">ICAN — Nigeria</div></div>
+      <div class="cert-card"><div class="cert-abbr">ACTI</div><div class="cert-name">Associate Chartered Tax Institute</div><div class="cert-body">CITN — Nigeria</div></div>
+      <div class="cert-card"><div class="cert-abbr">FMVA®</div><div class="cert-name">Financial Modelling &amp; Valuation Analyst</div><div class="cert-body">Corporate Finance Institute — Canada</div></div>
+      <div class="cert-card"><div class="cert-abbr">BIDA™</div><div class="cert-name">Business Intelligence &amp; Data Analyst</div><div class="cert-body">Corporate Finance Institute — Canada</div></div>
+      <div class="cert-card"><div class="cert-abbr">CBCA™</div><div class="cert-name">Commercial Banking &amp; Credit Analyst</div><div class="cert-body">Corporate Finance Institute — Canada</div></div>
+      <div class="cert-card"><div class="cert-abbr">CMSA®</div><div class="cert-name">Capital Markets &amp; Securities Analyst</div><div class="cert-body">Corporate Finance Institute — Canada</div></div>
+      <div class="cert-card"><div class="cert-abbr">FPWMP®</div><div class="cert-name">Financial Planning &amp; Wealth Management Professional</div><div class="cert-body">Corporate Finance Institute — Canada</div></div>
+      <div class="cert-card"><div class="cert-abbr">CFO</div><div class="cert-name">Chief Financial Officer Certified</div><div class="cert-body">Federal Reporting Council — Nigeria</div></div>
+      <div class="cert-card"><div class="cert-abbr">ACFE</div><div class="cert-name">Associate Chartered Fraud Examiner</div><div class="cert-body">ACFE — USA</div></div>
+      <div class="cert-card"><div class="cert-abbr">YDF</div><div class="cert-name">Young Directors Forum</div><div class="cert-body">CIoD — Nigeria</div></div>
       <div class="cert-card"><div class="cert-abbr">OSSA</div><div class="cert-name">OPSWAT Secure Storage Associate</div><div class="cert-body">OPSWAT Academy</div></div>
       <div class="cert-card"><div class="cert-abbr">OLSA</div><div class="cert-name">OPSWAT Legacy-System Security Associate</div><div class="cert-body">OPSWAT Academy</div></div>
     </div>
-    <div style="margin-top:2rem" class="reveal">
-      <p style="font-size:11px;font-family:var(--mo);color:var(--tx3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.85rem">Education</p>
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:.65rem">
-        <div class="skill-item" style="flex-direction:column;align-items:flex-start;gap:2px;padding:12px"><span style="color:var(--tx);font-size:13px;font-family:var(--di);font-weight:600">MBA - Finance</span><span style="font-size:11px">University of Lagos.</span></div>
-        <div class="skill-item" style="flex-direction:column;align-items:flex-start;gap:2px;padding:12px"><span style="color:var(--tx);font-size:13px;font-family:var(--di);font-weight:600">BSc - Accounting (In View)</span><span style="font-size:11px">Southwestern University.</span></div>
-        <div class="skill-item" style="flex-direction:column;align-items:flex-start;gap:2px;padding:12px"><span style="color:var(--tx);font-size:13px;font-family:var(--di);font-weight:600">HND - Accounting</span><span style="font-size:11px">Lagos State Polytechnic.</span></div>
-        <div class="skill-item" style="flex-direction:column;align-items:flex-start;gap:2px;padding:12px"><span style="color:var(--tx);font-size:13px;font-family:var(--di);font-weight:600">ND - Accounting</span><span style="font-size:11px">Lagos State Polytechnic.</span></div>
+    <div style="margin-top:2rem" class="reveal reveal-d1">
+      <div class="skills-label">Education</div>
+      <div class="edu-grid">
+        <div class="edu-item"><div class="edu-deg">MBA — Finance</div><div class="edu-inst">University of Lagos</div></div>
+        <div class="edu-item"><div class="edu-deg">BSc — Accounting (In View)</div><div class="edu-inst">Southwestern University Nigeria</div></div>
+        <div class="edu-item"><div class="edu-deg">HND — Accounting</div><div class="edu-inst">Lagos State Polytechnic</div></div>
+        <div class="edu-item"><div class="edu-deg">ND — Accounting</div><div class="edu-inst">Lagos State Polytechnic</div></div>
       </div>
     </div>
   </div>
 </section>
 
+<!-- ── COURSES ── -->
 <section id="courses">
   <div class="section-inner">
-    <div class="section-label">Training</div>
-    <div class="section-title">Other Courses &amp; Programmes</div>
+    <div class="s-label reveal">Training</div>
+    <h2 class="s-title reveal">Other Courses &amp; Programmes</h2>
     <div class="courses-grid reveal">
-      <div class="course-card"><div class="course-icon">📊</div><div><div class="course-title">Advanced Financial Instrument &amp; ECL Modeling Workshop</div><div class="course-body">GODP Consulting</div></div></div>
-      <div class="course-card"><div class="course-icon">📋</div><div><div class="course-title">Advanced Diploma in Taxation &amp; Fiscal Policy</div><div class="course-body">OGE Business School in conjuction with ATPL</div></div></div>
-      <div class="course-card"><div class="course-icon">🔍</div><div><div class="course-title">Advanced Diploma in Forensic Accounting &amp; Fraud Investigation</div><div class="course-body">OGE Business School in conjuction with AFAR</div></div></div>
-      <div class="course-card"><div class="course-icon">🌐</div><div><div class="course-title">International Financial Reporting Standard (IFRS) Masterclass</div><div class="course-body">GODP Consulting</div></div></div>
-      <div class="course-card"><div class="course-icon">🛡️</div><div><div class="course-title">IT Masters Short-Course in Cyber Defence Strategies</div><div class="course-body">Charles Sturt University, Australia</div></div></div>
-      <div class="course-card"><div class="course-icon">📈</div><div><div class="course-title">Google Data Analytics Professional Certificate</div><div class="course-body">Google Incorporation</div></div></div>
-      <div class="course-card"><div class="course-icon">🛡️</div><div><div class="course-title">Executive Diploma in Strategy and Innovation</div><div class="course-body">Institute of Management, Technology and Finance</div></div></div>
-      <div class="course-card"><div class="course-icon">📈</div><div><div class="course-title">Leadership Excellence in Business Management</div><div class="course-body">Institute of Management, Technology and Finance</div></div></div>
-      <div class="course-card"><div class="course-icon">🛡️</div><div><div class="course-title">Executive Diploma in Finance Management</div><div class="course-body">Institute of Management, Technology and Finance</div></div></div>
-      <div class="course-card"><div class="course-icon">📈</div><div><div class="course-title">QuickBooks Online International Certification</div><div class="course-body">Intuit Incorporation.</div></div></div>
-      <div class="course-card"><div class="course-icon">🛡️</div><div><div class="course-title">Financial Analyst Professional Certification</div><div class="course-body">Institute of Management, Technology and Finance</div></div></div>
-      <div class="course-card"><div class="course-icon">📈</div><div><div class="course-title">Diploma in Digital Forensic Investigation</div><div class="course-body">Alison Academics (CPD-UK) Certified</div></div></div>
-      <div class="course-card"><div class="course-icon">🔍</div><div><div class="course-title">Mastering Internal Controls: Operations, Financial and Management</div><div class="course-body">Tom Associates</div></div></div>
-      <div class="course-card"><div class="course-icon">🌐</div><div><div class="course-title">Junior Cybersecurity Analyst</div><div class="course-body">CISCO Networking Academy</div></div></div>
-      <div class="course-card"><div class="course-icon">🛡️</div><div><div class="course-title">Investigating online fraud</div><div class="course-body">Association of Certified Fraud Examiners (ACFE)</div></div></div>
-      <div class="course-card"><div class="course-icon">📈</div><div><div class="course-title">Cybersecurity Fundamentals</div><div class="course-body">IBM Incorporation</div></div></div>
-      <div class="course-card"><div class="course-icon">📈</div><div><div class="course-title">OPSWAT Data Transfer Security Associate (ODSA)</div><div class="course-body">OPSWAT Academy.</div></div></div>
-      <div class="course-card"><div class="course-icon">🛡️</div><div><div class="course-title">OPSWAT File Security Associate (OFSA)</div><div class="course-body">OPSWAT Academy.</div></div></div>
-      <div class="course-card"><div class="course-icon">📊</div><div><div class="course-title">Oracle Cloud Infrastructure</div><div class="course-body">Oracle University</div></div></div>
-      <div class="course-card"><div class="course-icon">📋</div><div><div class="course-title">IT Masters Short-Course in the Internet of Things</div><div class="course-body">Charles Sturt University (Australia)</div></div></div> 
-       <div class="course-card"><div class="course-icon">📊</div><div><div class="course-title">IT Masters Short-Course in Penetration Testing</div><div class="course-body">Charles Sturt University (Australia)</div></div></div>
-      <div class="course-card"><div class="course-icon">📋</div><div><div class="course-title">IT Masters Short-Course in Practical AI for Non-Coder</div><div class="course-body">Charles Sturt University (Australia)</div></div></div>
-      <div class="course-card"><div class="course-icon">🔍</div><div><div class="course-title">Using AI to Identify Patterns in Tax Fraud</div><div class="course-body">Association of Certified Fraud Examiners (ACFE)</div></div></div>
-      <div class="course-card"><div class="course-icon">🌐</div><div><div class="course-title">Occupational H&S Management System Auditor Training-ISO 45001:2018</div><div class="course-body">HQSE CPD (UK) Certified</div></div></div>
+      <div class="course-card"><div class="course-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M16 8v5l3 3M3 12a9 9 0 1 0 18 0 9 9 0 0 0-18 0"/></svg></div><div><div class="course-ttl">Advanced Financial Instrument &amp; ECL Modeling</div><div class="course-org">GODP Consulting</div></div></div>
+      <div class="course-card"><div class="course-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div><div><div class="course-ttl">Advanced Diploma in Taxation &amp; Fiscal Policy</div><div class="course-org">OGE Business School / ATPL</div></div></div>
+      <div class="course-card"><div class="course-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div><div><div class="course-ttl">Advanced Diploma in Forensic Accounting &amp; Fraud Investigation</div><div class="course-org">OGE Business School / AFAR</div></div></div>
+      <div class="course-card"><div class="course-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div><div><div class="course-ttl">International Financial Reporting Standards Masterclass</div><div class="course-org">GODP Consulting</div></div></div>
+      <div class="course-card"><div class="course-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div><div class="course-ttl">IT Short-Course in Cyber Defence Strategies</div><div class="course-org">Charles Sturt University, Australia</div></div></div>
+      <div class="course-card"><div class="course-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><div><div class="course-ttl">Google Data Analytics Professional Certificate</div><div class="course-org">Google Incorporation</div></div></div>
+      <div class="course-card"><div class="course-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><div><div class="course-ttl">Executive Diploma in Strategy and Innovation</div><div class="course-org">Institute of Management, Technology &amp; Finance</div></div></div>
+      <div class="course-card"><div class="course-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div><div class="course-ttl">Leadership Excellence in Business Management</div><div class="course-org">Institute of Management, Technology &amp; Finance</div></div></div>
+      <div class="course-card"><div class="course-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div><div><div class="course-ttl">QuickBooks Online International Certification</div><div class="course-org">Intuit Incorporation</div></div></div>
+      <div class="course-card"><div class="course-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg></div><div><div class="course-ttl">Junior Cybersecurity Analyst</div><div class="course-org">CISCO Networking Academy</div></div></div>
+      <div class="course-card"><div class="course-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><div><div class="course-ttl">Oracle Cloud Infrastructure</div><div class="course-org">Oracle University</div></div></div>
+      <div class="course-card"><div class="course-ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div><div><div class="course-ttl">Cybersecurity Fundamentals</div><div class="course-org">IBM Incorporation</div></div></div>
     </div>
   </div>
 </section>
 
-<section id="tools" style="background:var(--n2)">
+<!-- ── TOOLS ── -->
+<section id="tools">
   <div class="section-inner">
-    <div class="section-label">Tech Stack</div>
-    <div class="section-title">Tools &amp; Platforms</div>
+    <div class="s-label reveal">Tech Stack</div>
+    <h2 class="s-title reveal">Tools &amp; Platforms</h2>
     <div class="tools-grid reveal">
-      <div class="tool-pill">Microsoft Excel</div><div class="tool-pill">PowerPoint</div>
-      <div class="tool-pill">Sage Accounting</div><div class="tool-pill">QuickBooks</div>
-      <div class="tool-pill">Microsoft Dynamics</div><div class="tool-pill">Oracle NetSuite</div>
-      <div class="tool-pill">Gemini Core-Banking</div><div class="tool-pill">BankOne Core-Banking</div>
-      <div class="tool-pill">NIBSS</div><div class="tool-pill">Remita</div>
-      <div class="tool-pill">VBA / Macros</div><div class="tool-pill">Wordpress</div>
-      <div class="tool-pill">Power Query</div><div class="tool-pill">MongoDB</div>
-      <div class="tool-pill">Power BI</div><div class="tool-pill">Google Analytics</div>
-      <div class="tool-pill">Tableau</div><div class="tool-pill">My SQL</div>
+      <div class="tool-pill">Microsoft Excel</div>
+      <div class="tool-pill">PowerPoint</div>
+      <div class="tool-pill">Sage Accounting</div>
+      <div class="tool-pill">QuickBooks</div>
+      <div class="tool-pill">MS Dynamics</div>
+      <div class="tool-pill">Oracle NetSuite</div>
+      <div class="tool-pill">Gemini Core-Banking</div>
+      <div class="tool-pill">BankOne Core-Banking</div>
+      <div class="tool-pill">NIBSS</div>
+      <div class="tool-pill">Remita</div>
+      <div class="tool-pill">VBA / Macros</div>
+      <div class="tool-pill">Power Query</div>
+      <div class="tool-pill">MongoDB</div>
+      <div class="tool-pill">Power BI</div>
+      <div class="tool-pill">Tableau</div>
+      <div class="tool-pill">Node.js / Express</div>
+      <div class="tool-pill">MySQL</div>
+      <div class="tool-pill">Google Analytics</div>
     </div>
   </div>
 </section>
 
+<!-- ── PORTFOLIO ── -->
 <section id="portfolio">
   <div class="section-inner">
-    <div class="portfolio-inner">
-      <div class="section-label">Portfolio</div>
-      <div class="section-title">Tools &amp; Applications</div>
-      <p class="portfolio-sub">Tools &amp; Resources built from deep domain expertise. Sign in to access the full suite.</p>
-      <div class="apps-preview">
-        <div class="app-chip"><span>💼</span> Live Job Search Engine</div>
-        <div class="app-chip"><span>🏦</span> Bank Reconciliation Engine</div>
-        <div class="app-chip"><span>🧾</span> Receivables Tracker</div>
+    <div class="port-inner">
+      <div class="s-label reveal" style="justify-content:center">Portfolio</div>
+      <h2 class="s-title reveal" style="text-align:center">Tools &amp; Applications</h2>
+      <p class="port-sub reveal">Bespoke financial tools built from deep domain expertise. Sign in to access the full suite.</p>
+      <div class="port-apps reveal reveal-d1">
+        <div class="app-chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          Live Job Search Engine
+        </div>
+        <div class="app-chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+          Bank Reconciliation Engine
+        </div>
+        <div class="app-chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+          Receivables Tracker
+        </div>
+        <div class="app-chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          Treasury Intelligence Platform
+        </div>
+        <div class="app-chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          Capital Market &amp; FX Console
+        </div>
       </div>
-      <a href="portal/" class="btn-hero primary" style="display:inline-flex">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      <a href="portal/" class="btn-cta btn-primary reveal reveal-d2" style="display:inline-flex;margin:0 auto">
+        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
         Sign In to Access Resources
       </a>
     </div>
   </div>
 </section>
 
+<!-- ── CONTACT ── -->
 <section id="contact">
   <div class="section-inner">
-    <div class="section-label">Contact</div>
-
-    <div class="contact-grid reveal">
-      <div>
-        <div class="section-title" style="margin-bottom:.85rem">Let's Connect</div>
-        <div class="section-title" style="font-size:1.3rem;margin-bottom:.75rem">
-          Open to Opportunities
-        </div>
-        <p style="font-size:13px;color:var(--tx2);line-height:1.7;margin-bottom:1.25rem">
-          Available for strategic CFO engagements, financial consulting, and collaboration on fintech projects.
-        </p>
-
-        <div class="contact-info">
-          <div class="contact-item">
-            <div class="contact-icon" style="background:rgba(0,119,181,.1)">💼</div>
+    <div class="s-label reveal">Contact</div>
+    <h2 class="s-title reveal">Let's Connect</h2>
+    <div class="contact-grid">
+      <div class="reveal">
+        <p class="contact-note">Available for strategic CFO engagements, financial consulting, and collaboration on fintech projects. Open to board advisory roles.</p>
+        <div style="display:flex;flex-direction:column;gap:.65rem">
+          <div class="contact-card">
+            <div class="cc-icon" style="background:rgba(0,119,181,.1)">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#63b3ed" stroke-width="1.75"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            </div>
             <div>
-              <div class="contact-label">LinkedIn</div>
-              <div class="contact-value">
-                <a href="https://www.linkedin.com/in/fhmichael" target="_blank" rel="noopener noreferrer" style="color:#0077b5;text-decoration:none;">
-                  View Profile
-                </a>
-              </div>
+              <div class="cc-label">LinkedIn</div>
+              <div class="cc-value"><a href="https://www.linkedin.com/in/fhmichael" target="_blank" rel="noopener">linkedin.com/in/fhmichael</a></div>
+            </div>
+          </div>
+          <div class="contact-card">
+            <div class="cc-icon" style="background:rgba(0,201,167,.1)">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--t)" stroke-width="1.75"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+            </div>
+            <div>
+              <div class="cc-label">Portfolio Suite</div>
+              <div class="cc-value"><a href="portal/" style="color:var(--t)">Access Resources Portal</a></div>
             </div>
           </div>
         </div>
-
+      </div>
+      <div class="reveal reveal-d2">
+        <div class="skills-label">Quick Links</div>
+        <div class="contact-links">
+          <a href="#about" class="c-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a6 6 0 0 1 12 0v2"/></svg>
+            About &amp; Profile
+          </a>
+          <a href="#experience" class="c-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+            Work Experience
+          </a>
+          <a href="#certifications" class="c-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
+            Certifications &amp; Education
+          </a>
+          <a href="#portfolio" class="c-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            Tools &amp; Applications
+          </a>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-
+<!-- ── FOOTER ── -->
 <footer>
   <div class="footer-copy">&copy; <span id="yr"></span> <span>Felix Happy Michael</span> · All rights reserved</div>
-  <div class="footer-links"><a href="#hero">Home</a><a href="#about">About</a><a href="#experience">Experience</a><a href="portal/">Portal</a></div>
+  <div class="footer-links">
+    <a href="#hero">Home</a>
+    <a href="#about">About</a>
+    <a href="#experience">Experience</a>
+    <a href="portal/">Portal</a>
+  </div>
 </footer>
 
+<!-- Back to Top -->
+<button id="btt" aria-label="Back to top">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"/></svg>
+</button>
+
 <script>
-document.getElementById('yr').textContent=new Date().getFullYear();
-var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:.1});
-document.querySelectorAll('.reveal').forEach(function(el){obs.observe(el);});
-window.addEventListener('scroll',function(){
-  var nav=document.getElementById('nav');
-  nav.style.background=window.scrollY>50?'rgba(5,13,26,.97)':'rgba(5,13,26,.88)';
-  nav.style.boxShadow=window.scrollY>50?'0 4px 24px rgba(0,0,0,.4)':'none';
+// ── YEAR ──
+document.getElementById('yr').textContent = new Date().getFullYear();
+
+// ── HAMBURGER ──
+const ham = document.getElementById('ham');
+const mobileNav = document.getElementById('mobile-nav');
+ham.addEventListener('click', () => {
+  ham.classList.toggle('open');
+  mobileNav.classList.toggle('open');
+  document.body.style.overflow = mobileNav.classList.contains('open') ? 'hidden' : '';
 });
+mobileNav.querySelectorAll('a').forEach(a => {
+  a.addEventListener('click', () => {
+    ham.classList.remove('open');
+    mobileNav.classList.remove('open');
+    document.body.style.overflow = '';
+  });
+});
+
+// ── NAV SCROLL ──
+const nav = document.getElementById('nav');
+const btt = document.getElementById('btt');
+window.addEventListener('scroll', () => {
+  const y = window.scrollY;
+  nav.classList.toggle('scrolled', y > 40);
+  btt.classList.toggle('show', y > 600);
+}, {passive: true});
+btt.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
+
+// ── REVEAL OBSERVER ──
+const revObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting) { e.target.classList.add('vis'); revObs.unobserve(e.target); }});
+}, {threshold: 0.1, rootMargin: '0px 0px -40px 0px'});
+document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
+
+// ── TIMELINE OBSERVER ──
+const tlObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting) { e.target.classList.add('vis'); tlObs.unobserve(e.target); }});
+}, {threshold: 0.15});
+document.querySelectorAll('.tl-item').forEach((el, i) => {
+  el.style.transitionDelay = (i * 0.1) + 's';
+  tlObs.observe(el);
+});
+
+// ── TYPEWRITER ──
+const roles = [
+  'Chartered Accountant',
+  'Financial Strategist',
+  'FinTech Builder',
+  'Treasury Specialist',
+  'IFRS Expert',
+  'CFO — FRC Certified'
+];
+const typedEl = document.getElementById('typed-role');
+let ri = 0, ci = 0, deleting = false, wait = 0;
+function type() {
+  const cur = roles[ri];
+  if (!deleting) {
+    typedEl.textContent = cur.slice(0, ci + 1);
+    ci++;
+    if (ci === cur.length) { deleting = true; wait = 60; setTimeout(type, 1800); return; }
+  } else {
+    if (wait-- > 0) { setTimeout(type, 20); return; }
+    typedEl.textContent = cur.slice(0, ci - 1);
+    ci--;
+    if (ci === 0) { deleting = false; ri = (ri + 1) % roles.length; }
+  }
+  setTimeout(type, deleting ? 45 : 75);
+}
+setTimeout(type, 900);
+
+// ── MARQUEE CONTENT ──
+const marqueeItems = [
+  'Chartered Accountant', 'Financial Strategist', 'IFRS Expert',
+  'Treasury Management', 'FinTech Builder', 'ECL Modelling',
+  'Bank Reconciliation', 'FMVA® Certified', 'CBN Compliance',
+  'Tax Optimisation', 'Investment Appraisal', 'VBA & Excel Expert',
+  'Web App Developer', 'Receivables Management', 'ERM Oversight',
+  'CFO — FRC Certified', 'Lagos, Nigeria'
+];
+const track = document.getElementById('marquee-track');
+// Duplicate for seamless loop
+[...marqueeItems, ...marqueeItems].forEach(item => {
+  const div = document.createElement('div');
+  div.className = 'mitem';
+  div.innerHTML = `<span class="mitem-dot"></span>${item}`;
+  track.appendChild(div);
+});
+
+// ── COUNTER ANIMATION ──
+function animateCounter(el) {
+  const target = parseInt(el.dataset.count, 10);
+  const prefix = el.dataset.prefix || '';
+  const suffix = el.dataset.suffix || '+';
+  const dur = 1800;
+  const step = dur / target;
+  let cur = 0;
+  const iv = setInterval(() => {
+    cur = Math.min(cur + Math.max(1, Math.round(target/40)), target);
+    el.textContent = prefix + cur + (cur === target ? suffix : '');
+    if (cur >= target) clearInterval(iv);
+  }, step);
+}
+const counterObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('[data-count]').forEach(animateCounter);
+      counterObs.unobserve(e.target);
+    }
+  });
+}, {threshold: 0.5});
+counterObs.observe(document.querySelector('.hero-stats'));
+
+// ── CERT CARD SPOTLIGHT ──
+document.querySelectorAll('.cert-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const r = card.getBoundingClientRect();
+    card.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100) + '%');
+    card.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100) + '%');
+  });
+});
+
+// ── MAGNETIC HERO CTA (desktop only) ──
+if (window.matchMedia('(hover:hover) and (pointer:fine)').matches) {
+  const magBtn = document.getElementById('hero-cta');
+  magBtn.addEventListener('mousemove', e => {
+    const r = magBtn.getBoundingClientRect();
+    const dx = (e.clientX - r.left - r.width/2) * 0.22;
+    const dy = (e.clientY - r.top - r.height/2) * 0.22;
+    magBtn.style.transform = `translate(${dx}px,${dy}px) translateY(-3px)`;
+  });
+  magBtn.addEventListener('mouseleave', () => {
+    magBtn.style.transform = '';
+  });
+}
+
+// ── PROFILE FLOAT TILT (desktop) ──
+const pfloat = document.getElementById('profile-float');
+if (pfloat && window.matchMedia('(hover:hover) and (pointer:fine)').matches) {
+  pfloat.addEventListener('mousemove', e => {
+    const r = pfloat.getBoundingClientRect();
+    const nx = (e.clientX - r.left) / r.width - .5;
+    const ny = (e.clientY - r.top) / r.height - .5;
+    pfloat.style.transform = `perspective(700px) rotateY(${nx*8}deg) rotateX(${-ny*6}deg) scale(1.02)`;
+  });
+  pfloat.addEventListener('mouseleave', () => {
+    pfloat.style.transform = 'perspective(700px) rotateY(0) rotateX(0) scale(1)';
+    pfloat.style.transition = 'transform .5s cubic-bezier(.22,1,.36,1)';
+  });
+  pfloat.addEventListener('mouseenter', () => {
+    pfloat.style.transition = 'transform .1s';
+  });
+}
 </script>
+
+<!-- Brevo Conversations -->
+<script>
+(function(d,w,c){
+  w.BrevoConversationsID='6a16a206fe7245e5520c2ebe';
+  w[c]=w[c]||function(){(w[c].q=w[c].q||[]).push(arguments);};
+  var s=d.createElement('script');s.async=true;
+  s.src='https://conversations-widget.brevo.com/brevo-conversations.js';
+  if(d.head)d.head.appendChild(s);
+})(document,window,'BrevoConversations');
+</script>
+
 </body>
 </html>
