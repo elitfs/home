@@ -79,79 +79,54 @@ body::before{
 @media(max-width:640px){.hamburger{display:flex}.btn-nav{display:none}}
 #hero{
   min-height:100dvh;display:flex;flex-direction:column;justify-content:center;
-  padding:calc(var(--nav-h) + 2rem) clamp(1.25rem,5vw,3rem) 4rem;
+  padding:calc(var(--nav-h) + 3rem) clamp(1.25rem,5vw,3rem) 4rem;
   position:relative;overflow:hidden;
 }
-.hero-bg-img{
-  position:absolute;inset:0;z-index:0;
-  background:url('pix.jpg') center 20% / cover no-repeat;
-  filter:brightness(.18) saturate(.4);
-  transform:scale(1.04);
-  animation:heroZoom 22s ease-in-out infinite alternate;
-}
-@keyframes heroZoom{from{transform:scale(1.04)}to{transform:scale(1.10)}}
-.hero-overlay{
-  position:absolute;inset:0;z-index:1;
+.hero-mesh{
+  position:absolute;inset:0;pointer-events:none;z-index:0;
   background:
-    linear-gradient(to right,rgba(5,13,26,.92) 0%,rgba(5,13,26,.65) 60%,rgba(5,13,26,.3) 100%),
-    linear-gradient(to top,rgba(5,13,26,.9) 0%,transparent 50%);
+    radial-gradient(ellipse 90% 60% at 60% -10%,rgba(0,201,167,.08) 0%,transparent 60%),
+    radial-gradient(ellipse 55% 55% at 95% 65%,rgba(99,179,237,.06) 0%,transparent 55%),
+    radial-gradient(ellipse 45% 45% at 5% 85%,rgba(167,139,250,.04) 0%,transparent 55%),
+    radial-gradient(ellipse 30% 30% at 45% 50%,rgba(245,166,35,.03) 0%,transparent 50%);
+}
+.blob{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:0;animation:orbit 18s ease-in-out infinite}
+.blob-1{width:500px;height:500px;background:rgba(0,201,167,.05);top:-120px;right:-80px;animation-delay:0s}
+.blob-2{width:400px;height:400px;background:rgba(99,179,237,.04);bottom:-100px;left:-60px;animation-delay:-6s}
+.blob-3{width:300px;height:300px;background:rgba(167,139,250,.04);top:40%;left:35%;animation-delay:-12s}
+@keyframes orbit{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(30px,-25px) scale(1.04)}66%{transform:translate(-20px,20px) scale(.97)}}
+.hero-grid-tex{
+  position:absolute;inset:0;pointer-events:none;z-index:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);
+  background-size:60px 60px;
+  mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 30%,transparent 80%);
+  -webkit-mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 30%,transparent 80%);
 }
 .hero-inner{
-  max-width:1100px;margin:0 auto;width:100%;
-  display:flex;align-items:center;gap:clamp(2rem,5vw,4rem);
-  position:relative;z-index:2;
+  max-width:1200px;margin:0 auto;width:100%;
+  display:grid;grid-template-columns:1fr 380px;gap:5rem;align-items:center;
+  position:relative;z-index:1;
 }
-@media(max-width:640px){.hero-inner{flex-direction:column;text-align:center;gap:1.75rem}}
-.hero-photo-wrap{flex-shrink:0}
-.hero-photo{
-  width:clamp(110px,16vw,170px);height:clamp(110px,16vw,170px);
-  border-radius:50%;object-fit:cover;object-position:center top;
-  border:3px solid rgba(0,201,167,.5);
-  box-shadow:0 0 0 6px rgba(0,201,167,.1),0 12px 48px rgba(0,0,0,.6);
-  display:block;
-  animation:fadeUp .8s .1s cubic-bezier(.22,1,.36,1) both;
-}
-.hero-content{flex:1;min-width:0}
-.hero-name-block{margin-bottom:1rem;opacity:0;animation:fadeUp .8s .2s cubic-bezier(.22,1,.36,1) forwards}
-.hero-name{
-  font-family:var(--di);font-size:clamp(2rem,5.5vw,4.2rem);font-weight:800;
-  letter-spacing:-.04em;line-height:1.0;color:var(--tx);
-  text-transform:uppercase;
-}
-.hn-middle{color:var(--t)}
-.hero-title-line{
-  margin-top:.65rem;font-family:var(--sa);font-size:clamp(.95rem,1.8vw,1.3rem);
-  color:var(--tx2);letter-spacing:.01em;font-style:italic;font-weight:300;
-}
-.hero-desc{
-  font-size:clamp(13px,1.4vw,14.5px);color:var(--tx3);max-width:520px;
-  line-height:1.75;margin-bottom:2rem;
-  opacity:0;animation:fadeUp .8s .34s cubic-bezier(.22,1,.36,1) forwards;
-}
-@media(max-width:640px){.hero-desc{margin-left:auto;margin-right:auto}}
-.hero-actions{
-  display:flex;flex-wrap:wrap;gap:.85rem;margin-bottom:2.75rem;
-  opacity:0;animation:fadeUp .8s .44s cubic-bezier(.22,1,.36,1) forwards;
-}
-@media(max-width:640px){.hero-actions{justify-content:center}}
-.hero-stats{
-  display:flex;flex-wrap:wrap;gap:clamp(1.25rem,2.5vw,2.5rem);
-  opacity:0;animation:fadeUp .8s .56s cubic-bezier(.22,1,.36,1) forwards;
-}
-@media(max-width:640px){.hero-stats{justify-content:center}}
-.stat{position:relative}
-.stat+.stat::before{content:'';position:absolute;left:calc(-1 * clamp(.625rem,1.25vw,1.25rem));top:10%;height:80%;width:1px;background:var(--tx4);display:block}
-.stat-val{font-family:var(--di);font-size:clamp(1.3rem,2.5vw,1.85rem);font-weight:800;letter-spacing:-.05em;color:var(--t);line-height:1}
-.stat-lbl{font-size:10.5px;color:var(--tx3);font-family:var(--mo);margin-top:5px;letter-spacing:.02em;line-height:1.4;max-width:100px}
+@media(max-width:1000px){.hero-inner{grid-template-columns:1fr;gap:3rem}.hero-card-wrap{display:none}}
+@media(max-width:640px){.hero-inner{gap:2rem}}
+.hero-content{}
 .hero-eyebrow{
   display:inline-flex;align-items:center;gap:9px;
   background:rgba(0,201,167,.07);border:1px solid rgba(0,201,167,.2);
-  border-radius:20px;padding:5px 14px;margin-bottom:1.25rem;
-  font-family:var(--mo);font-size:10px;color:var(--t);letter-spacing:.04em;
+  border-radius:20px;padding:6px 16px;margin-bottom:1.75rem;
+  font-family:var(--mo);font-size:10.5px;color:var(--t);letter-spacing:.04em;
   opacity:0;animation:fadeUp .7s .1s cubic-bezier(.22,1,.36,1) forwards;
 }
 .eyebrow-dot{width:7px;height:7px;border-radius:50%;background:var(--t);animation:breathe 2.2s ease-in-out infinite;flex-shrink:0}
-  
+@keyframes breathe{0%,100%{box-shadow:0 0 0 0 rgba(0,201,167,.5),0 0 0 4px rgba(0,201,167,.1)}50%{box-shadow:0 0 0 5px rgba(0,201,167,.2),0 0 0 10px rgba(0,201,167,.04)}}
+.hero-name-block{margin-bottom:1.5rem;opacity:0;animation:fadeUp .8s .22s cubic-bezier(.22,1,.36,1) forwards}
+.hero-name{
+  font-family:var(--di);font-size:clamp(2.6rem,6.5vw,5rem);font-weight:800;
+  letter-spacing:-.055em;line-height:1.02;
+  display:flex;flex-wrap:wrap;align-items:baseline;gap:.12em;
+}
 .hn-first{color:var(--tx)}
 .hn-middle{color:var(--t);position:relative}
 .hn-last{color:var(--tx);font-style:italic;font-weight:700}
@@ -191,10 +166,42 @@ body::before{
 .stat+.stat::before{content:'';position:absolute;left:calc(-1 * clamp(.75rem,1.5vw,1.375rem));top:10%;height:80%;width:1px;background:var(--tx4);display:block}
 .stat-val{font-family:var(--di);font-size:clamp(1.4rem,2.8vw,2rem);font-weight:800;letter-spacing:-.05em;color:var(--t);line-height:1}
 .stat-lbl{font-size:10.5px;color:var(--tx3);font-family:var(--mo);margin-top:5px;letter-spacing:.02em;line-height:1.4;max-width:100px}
-
-
-
-
+.hero-card-wrap{opacity:0;animation:fadeUp .9s .2s cubic-bezier(.22,1,.36,1) forwards}
+.profile-float{
+  background:linear-gradient(145deg,var(--n3) 0%,var(--n4) 100%);
+  border:1px solid var(--b3);border-radius:22px;padding:1.75rem;
+  position:relative;overflow:hidden;
+}
+.profile-float::before{
+  content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;
+  border-radius:50%;background:radial-gradient(circle,rgba(0,201,167,.1),transparent 70%);
+}
+.profile-float::after{
+  content:'';position:absolute;bottom:-40px;left:-40px;width:160px;height:160px;
+  border-radius:50%;background:radial-gradient(circle,rgba(99,179,237,.07),transparent 70%);
+}
+.pf-avatar{
+  width:68px;height:68px;border-radius:16px;
+  background:linear-gradient(135deg,var(--t) 0%,var(--t2) 100%);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--di);font-size:24px;font-weight:800;color:var(--n);
+  margin-bottom:1.1rem;position:relative;z-index:1;
+  box-shadow:0 8px 28px rgba(0,201,167,.3);
+}
+.pf-name{font-family:var(--di);font-size:17px;font-weight:700;letter-spacing:-.035em;margin-bottom:3px;position:relative;z-index:1}
+.pf-role{font-size:11.5px;color:var(--t);font-family:var(--mo);margin-bottom:1.25rem;position:relative;z-index:1}
+.pf-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:1.35rem;position:relative;z-index:1}
+.ptag{padding:4px 10px;border-radius:7px;font-size:10px;font-family:var(--mo);font-weight:500;transition:transform .2s}
+.ptag:hover{transform:scale(1.05)}
+.ptag.t{background:rgba(0,201,167,.1);color:var(--t);border:1px solid rgba(0,201,167,.22)}
+.ptag.a{background:rgba(245,166,35,.1);color:var(--am);border:1px solid rgba(245,166,35,.22)}
+.ptag.b{background:rgba(99,179,237,.1);color:var(--bl);border:1px solid rgba(99,179,237,.22)}
+.ptag.p{background:rgba(167,139,250,.1);color:var(--pu);border:1px solid rgba(167,139,250,.22)}
+.pf-loc{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--tx3);font-family:var(--mo);position:relative;z-index:1}
+.pf-divider{height:1px;background:var(--b2);margin:1.1rem 0;position:relative;z-index:1}
+.pf-avail{display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--gr);font-family:var(--mo);position:relative;z-index:1}
+.avail-dot{width:7px;height:7px;border-radius:50%;background:var(--gr);animation:breathe 2s infinite;flex-shrink:0}
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
 .marquee-band{
   overflow:hidden;border-top:1px solid var(--b2);border-bottom:1px solid var(--b2);
   background:var(--n2);padding:.7rem 0;position:relative;z-index:1;
@@ -410,23 +417,24 @@ footer{
 </nav>
 
 <section id="hero">
-  <div class="hero-bg-img"></div>
-  <div class="hero-overlay"></div>
+  <div class="hero-mesh"></div>
+  <div class="hero-grid-tex"></div>
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
 
   <div class="hero-inner">
-    <div class="hero-photo-wrap">
-      <img src="pix.jpg" alt="Felix Happy Michael" class="hero-photo">
-    </div>
-
     <div class="hero-content">
       <div class="hero-eyebrow">
         <span class="eyebrow-dot"></span>
-        Finance Leader &nbsp;·&nbsp; FinTech Builder &nbsp;·&nbsp; Lagos, Nigeria
+        Finance Leader &nbsp;·&nbsp; FinTech Builder
       </div>
 
       <div class="hero-name-block">
         <h1 class="hero-name">
-          Felix H. Michael
+          <span class="hn-first">Felix</span>
+          <span class="hn-middle">Happy</span>
+          <span class="hn-last">Michael</span>
         </h1>
         <div class="hero-title-line">
           <span id="typed-role"></span>
@@ -434,7 +442,7 @@ footer{
       </div>
 
       <p class="hero-desc">
-        Chartered Accountant driving financial excellence, regulatory compliance, and digital transformation across complex organisations in Nigeria. I build the tools others only talk about.
+        Chartered Accountant driving financial excellence, regulatory compliance, and digital transformation across complex organisations. I build the tools others only talk about.
       </p>
 
       <div class="hero-actions">
@@ -442,7 +450,9 @@ footer{
           <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
           Access Resources
         </a>
-        <a href="#contact" class="btn-cta btn-secondary">Get in Touch</a>
+        <a href="#contact" class="btn-cta btn-secondary">
+          Get in Touch
+        </a>
       </div>
 
       <div class="hero-stats">
@@ -450,6 +460,32 @@ footer{
         <div class="stat"><div class="stat-val" data-count="10">0</div><div class="stat-lbl">Certifications</div></div>
         <div class="stat"><div class="stat-val" data-prefix="₦" data-count="600" data-suffix="M+">₦0M+</div><div class="stat-lbl">Tax Savings Led</div></div>
         <div class="stat"><div class="stat-val" data-count="20" data-suffix="+">0</div><div class="stat-lbl">Apps &amp; Models Built</div></div>
+      </div>
+    </div>
+
+    <div class="hero-card-wrap">
+      <div class="profile-float" id="profile-float">
+        <div class="pf-avatar">FM</div>
+        <div class="pf-name">Felix Happy Michael</div>
+        <div class="pf-role">// Chartered Accountant</div>
+        <div class="pf-tags">
+          <span class="ptag t">ACA</span><span class="ptag t">ACTI</span>
+          <span class="ptag a">FMVA®</span><span class="ptag a">BIDA™</span>
+          <span class="ptag b">CBCA™</span><span class="ptag b">CMSA®</span>
+          <span class="ptag t">CFO — FRC</span><span class="ptag a">ACFE</span>
+          <span class="ptag p">MBA Finance</span>
+          <span class="ptag a">FPWMP®</span>
+        </div>
+        <div class="pf-divider"></div>
+        <div class="pf-avail">
+          <span class="avail-dot"></span>
+          Available for strategic engagements
+        </div>
+        <div style="height:.65rem"></div>
+        <div class="pf-loc">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Contact me using the chatbot
+        </div>
       </div>
     </div>
   </div>
@@ -863,6 +899,21 @@ if (window.matchMedia('(hover:hover) and (pointer:fine)').matches) {
   });
 }
 
+const pfloat = document.getElementById('profile-float');
+if (pfloat && window.matchMedia('(hover:hover) and (pointer:fine)').matches) {
+  pfloat.addEventListener('mousemove', e => {
+    const r = pfloat.getBoundingClientRect();
+    const nx = (e.clientX - r.left) / r.width - .5;
+    const ny = (e.clientY - r.top) / r.height - .5;
+    pfloat.style.transform = `perspective(700px) rotateY(${nx*8}deg) rotateX(${-ny*6}deg) scale(1.02)`;
+  });
+  pfloat.addEventListener('mouseleave', () => {
+    pfloat.style.transform = 'perspective(700px) rotateY(0) rotateX(0) scale(1)';
+    pfloat.style.transition = 'transform .5s cubic-bezier(.22,1,.36,1)';
+  });
+  pfloat.addEventListener('mouseenter', () => {
+    pfloat.style.transition = 'transform .1s';
+  });
 }
 </script>
 
