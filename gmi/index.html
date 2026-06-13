@@ -756,21 +756,24 @@ function _bfit(){
 
 window._sd=function(sym,name){
   var st=_STOCKS.find(function(s){return s.sym===sym;})||_SP500.find(function(s){return s.s===sym;});
+  var ng=_NGX.find(function(s){return s.sym===sym;});
   var cr=_CRYPTO.find(function(c){return c.s===sym;});
+  var item=st||ng;
   var m=_$('_sdm');var mb=_$('_sdmb');var mt=_$('_sdmt');
   if(!m||!mb||!mt)return;
-  mt.textContent=(st?(st.sym||st.s):cr?cr.s:sym)+' — '+(name||'');
-  var price=st?(st.price||0):cr?cr.price:0;
-  var pct=st?(st.pct||0):cr?cr.pct:0;
-  var chg=st?(st.chg||0):cr?cr.chg:0;
+  mt.textContent=(item?(item.sym||item.s):cr?cr.s:sym)+' — '+(name||'');
+  var price=item?(item.price||0):cr?cr.price:0;
+  var pct=item?(item.pct||0):cr?cr.pct:0;
+  var chg=item?(item.chg||0):cr?cr.chg:0;
+  var isNGX=!!ng&&!st;
   var cl=_cc(pct);
-  var sig=st?st.sig:cr?cr.sig:'neutral';
+  var sig=item?item.sig:cr?cr.sig:'neutral';
   var sglab={'strong-buy':'Strong Buy','buy':'Buy','neutral':'Neutral','sell':'Sell','strong-sell':'Strong Sell'}[sig]||'Neutral';
   var canvasId='det-spk-'+sym;
   mb.innerHTML='<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem;margin-bottom:1rem">'
-    +'<div><div style="font-family:var(--di);font-size:32px;font-weight:800;letter-spacing:-.04em">'+(cr?'$'+_fNK(price):'$'+_fN(price,2))+'</div>'
+    +'<div><div style="font-family:var(--di);font-size:32px;font-weight:800;letter-spacing:-.04em">'+(cr?'$'+_fNK(price):isNGX?'₦'+(price>=1000?_fNK(price):_fN(price,2)):'$'+_fN(price,2))+'</div>'
     +'<div style="display:flex;align-items:center;gap:8px;margin-top:4px"><span class="_cp '+cl+'" style="font-size:13px">'+_cs(chg)+_fN(Math.abs(chg),2)+'</span><span class="_cp '+cl+'" style="font-size:13px">'+_cs(pct)+Math.abs(pct).toFixed(2)+'%</span><span class="_sg '+sig+'">'+sglab+'</span></div></div>'
-    +'<div style="text-align:right"><div style="font-size:10px;color:var(--tx3);font-family:var(--mo)">'+sym+'</div><div style="font-size:12px;color:var(--tx2)">'+(cr?'Cryptocurrency':'US Equity')+'</div>'+(st&&st.vol?'<div style="font-size:11px;color:var(--tx3);font-family:var(--mo)">Vol: '+_fNK(st.vol)+'</div>':'')+(cr?'<div style="font-size:11px;color:var(--tx3);font-family:var(--mo)">MCap: $'+cr.mcap+'</div>':'')+'</div></div>'
+    +'<div style="text-align:right"><div style="font-size:10px;color:var(--tx3);font-family:var(--mo)">'+sym+'</div><div style="font-size:12px;color:var(--tx2)">'+(cr?'Cryptocurrency':isNGX?'NGX — Nigerian Exchange':'US Equity')+'</div>'+(item&&item.vol?'<div style="font-size:11px;color:var(--tx3);font-family:var(--mo)">Vol: '+_fNK(item.vol)+'</div>':'')+(ng&&ng.sec?'<div style="font-size:11px;color:var(--tx3);font-family:var(--mo)">Sector: '+ng.sec+'</div>':'')+(cr?'<div style="font-size:11px;color:var(--tx3);font-family:var(--mo)">MCap: $'+cr.mcap+'</div>':'')+'</div></div>'
     +'<div style="position:relative;height:120px;margin:8px 0;background:var(--n3);border-radius:9px;overflow:hidden"><canvas id="'+canvasId+'"></canvas></div>'
     +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:.75rem">'
     +'<div style="background:var(--n3);border-radius:8px;padding:10px 13px"><div style="font-size:9px;font-family:var(--mo);color:var(--tx3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px">1-Day Change</div><div style="font-size:16px;font-weight:700;color:'+(pct>=0?'var(--gr)':'var(--rd)')+'">'+_cs(pct)+Math.abs(pct).toFixed(2)+'%</div></div>'
