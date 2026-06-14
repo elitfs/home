@@ -583,7 +583,7 @@ async function loadDashboard(){
   const totalInv=inv.reduce((s,i)=>s+i.principal,0);
   const s1=loans.filter(l=>l.stage===1),s2=loans.filter(l=>l.stage===2),s3=loans.filter(l=>l.stage===3);
   $('dash-ts').textContent=(isDemo?'Sample data  \u2014  ':'As at ')+new Date().toLocaleString('en-GB');
-  $('dash-kpis').innerHTML=(isDemo?'<div class="nt-info" style="grid-column:1/-1">Showing sample FSCF data. Upload real data in Loans, Borrowings, Investments and Cash modules.</div>':'')+
+  $('dash-kpis').innerHTML=(isDemo?'<div class="nt-info" style="grid-column:1/-1">Showing sample data. Upload real data in Loans, Borrowings, Investments and Cash modules.</div>':'')+
   [{l:'Total Cash',v:fmt(totalCash),c:'tl',ac:true,sub:'NGN accounts'},
    {l:'Net Liquidity',v:fmt(totalCash+totalInv-totalDebt*.1),c:'bl',sub:'Cash + Inv \u2212 Obligations'},
    {l:'Loan Book',v:fmt(totalLoans),c:'gr',sub:loans.length+' facilities'},
@@ -1080,8 +1080,8 @@ function openTeamMemberModal(){
   openModal('Add Team Member',
     '<div class="merr" id="tm-err"></div>'+
     '<div class="nt-info" style="margin-bottom:1rem">The new member will receive a confirmation email to set their password and join your organisation\u2019s treasury workspace. They will have access to all treasury data in your organisation.</div>'+
-    '<div class="fg"><div class="fld"><label>Full Name *</label><input class="finput" id="tm-name" placeholder="e.g. Chioma Okafor"></div>'+
-    '<div class="fld"><label>Email Address *</label><input class="finput" type="email" id="tm-email" placeholder="e.g. chioma@fscfng.com"></div></div>'+
+    '<div class="fg"><div class="fld"><label>Full Name *</label><input class="finput" id="tm-name" placeholder="e.g. Juliet Nancy"></div>'+
+    '<div class="fld"><label>Email Address *</label><input class="finput" type="email" id="tm-email" placeholder="e.g. Juliet@company.com"></div></div>'+
     '<div class="fld"><label>Role</label><select class="finput" id="tm-role"><option value="member">Member \u2014 view &amp; edit treasury data</option><option value="admin">Admin \u2014 manage team + data</option></select></div>',
     '<button onclick="closeModal()">Cancel</button><button class="bp" onclick="saveTeamMember()"><span id="tm-save-txt">Send Invitation</span></button>'
   );
@@ -1117,7 +1117,7 @@ async function loadSettings(){
       (isOrg?
         '<div class="card" style="margin-bottom:1rem"><div class="section-ttl">Organisation Profile</div>'+
         '<div class="fg"><div class="fld"><label>Organisation Name</label><input class="finput" id="s-orgname" value="'+(org.name||'')+'"></div>'+
-        '<div class="fld"><label>Domain (e.g. fscfng.com)</label><input class="finput" id="s-domain" value="'+(org.domain||'')+'" placeholder="yourcompany.com"></div></div>'+
+        '<div class="fld"><label>Domain (e.g. company.com)</label><input class="finput" id="s-domain" value="'+(org.domain||'')+'" placeholder="yourcompany.com"></div></div>'+
         '<div class="fg"><div class="fld"><label>Description</label><input class="finput" id="s-desc" value="'+(org.description||'')+'"></div>'+
         '<div class="fld"><label>Organisation Size</label><select class="finput" id="s-size">'+
         ['1-10','11-50','51-200','201-500','500+'].map(s=>'<option '+(org.size===s?'selected':'')+'>'+s+'</option>').join('')+'</select></div></div></div>':'')+
